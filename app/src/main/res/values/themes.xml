@@ -13,4 +13,28 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="Theme.HelloHi.NoActionBar" parent="Theme.HelloHi">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="InputStyle">
+        <!-- 底部线 默认颜色 -->
+        <item name="colorControlNormal">@android:color/black</item>
+        <!-- 底部线 EditText激活时颜色 -->
+        <item name="colorControlActivated">@android:color/black</item>
+        <!-- 设置光标 -->
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="CustomRadioTheme" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:button">@drawable/style_radio</item>
+    </style>
+
+<!--    圆形图片style-->
+    <style name="roundedImageViewRounded">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

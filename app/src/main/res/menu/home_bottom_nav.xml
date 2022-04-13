@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@id/wallFragment"
+        android:icon="@drawable/ic_home"
+        android:title="@string/host_wall" />
+
+    <item
+        android:id="@id/messageFragment"
+        android:icon="@drawable/ic_information"
+        android:title="@string/messages" />
+
+    <item
+        android:id="@id/userFragment"
+        android:icon="@drawable/ic_mine"
+        android:title="@string/mine" />
+</menu>

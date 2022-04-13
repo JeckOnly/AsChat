@@ -1,3 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HelloHi</string>
+    <string name="app_name" translatable="false">AsChat</string>
+    <string name="register">Registration</string>
+    <string name="input_nickname">Input your nickname</string>
+    <string name="name_title">Nick Name</string>
+    <string name="name_date">Date of Birth</string>
+    <string name="default_birthday">1995-01-01</string>
+    <string name="country_title">Country</string>
+    <string name="invitation_title">Invitation Code</string>
+    <string name="optional">Optional</string>
+    <string name="man">Man </string>
+    <string name="woman">Woman </string>
+    <string name="gender_title">Gender</string>
+    <string name="fast_login">Fast Login</string>
+    <string name="skip">skip</string>
+    <string name="host_wall">Host Wall</string>
+    <string name="messages">Messages</string>
+    <string name="mine">Mine</string>
+    <string name="argree"><![CDATA[By using our App you agree with our <font color="#972FFF">Terms & Conditions</font> and <font color="#972FFF">Privacy Policy</font>]]></string>
+    <string name="coin">MyCoins</string>
+    <string name="custom_services">Customer Service</string>
+    <string name="block_list">Blocked List</string>
+    <string name="about">About</string>
+    <string name="setting">Setting</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="type_here">Type here ...</string>
+    <string name="submit">Submit</string>
+    <string name="select_country">Select a country</string>
 </resources>

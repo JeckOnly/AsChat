@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/home_nav_graph"
+    app:startDestination="@id/wallFragment">
+
+    <fragment
+        android:id="@+id/wallFragment"
+        android:name="com.android.aschat.feature_home.presentation.wall.WallFragment"
+        android:label="WallFragment" />
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="com.android.aschat.feature_home.presentation.message.MessageFragment"
+        android:label="MessageFragment" />
+    <fragment
+        android:id="@+id/userFragment"
+        android:name="com.android.aschat.feature_home.presentation.mine.UserFragment"
+        android:label="UserFragment" >
+        <action
+            android:id="@+id/action_userFragment_to_userEditFragment"
+            app:destination="@id/userEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userEditFragment"
+        android:name="com.android.aschat.feature_home.presentation.mine.UserEditFragment"
+        android:label="UserEditFragment" />
+</navigation>

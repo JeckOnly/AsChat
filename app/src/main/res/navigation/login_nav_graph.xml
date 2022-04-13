@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/login_nav_graph"
+    app:startDestination="@id/splashFragment">
+
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="com.android.aschat.feature_home.presentation.HomeActivity"
+        android:label="HomeActivity" />
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.android.aschat.feature_login.presentation.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+        <action
+            android:id="@+id/action_splashFragment_to_fastLoginFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/login_nav_graph"
+            app:popUpToInclusive="true"
+            app:destination="@id/fastLoginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fastLoginFragment"
+        android:name="com.android.aschat.feature_login.presentation.FastLoginFragment"
+        android:label="FastLoginFragment" >
+        <action
+            android:id="@+id/action_fastLoginFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+    </fragment>
+</navigation>
