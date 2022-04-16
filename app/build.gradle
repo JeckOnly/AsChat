@@ -9,7 +9,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.maosiapps.hellohi"
+        applicationId "com.android.aschat"
         minSdk 23
         targetSdk 31
         versionCode 1
@@ -88,6 +88,11 @@ dependencies {
     // viewpager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
+    // tablayout
+//    implementation 'com.github.angcyo.DslTablayout:TabLayout:3.2.1'
+//    //可选
+//    implementation 'com.github.angcyo.DslTablayout:ViewPager2Delegate:3.2.1'
+
     // room
     implementation "androidx.room:room-runtime:2.4.2"
     implementation "androidx.room:room-ktx:2.4.2"
@@ -98,6 +103,9 @@ dependencies {
 
     // coil
     implementation 'io.coil-kt:coil:2.0.0-rc03'
+
+    // recycler view框架
+    implementation 'com.github.liangjingkanji:BRV:1.3.58'
 
 //    implementation 'com.github.bumptech.glide:glide:4.13.0'
 //    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'

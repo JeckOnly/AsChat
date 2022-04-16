@@ -2,7 +2,7 @@ package com.android.aschat.feature_home.domain.rv
 
 import androidx.recyclerview.widget.RecyclerView
 import com.android.aschat.databinding.HomeUserListItemBinding
-import com.android.aschat.feature_home.domain.model.HomeUserListItem
+import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
 
 class UserSettingRvViewHolder(private val binding: HomeUserListItemBinding) : RecyclerView.ViewHolder(binding.root) {
 

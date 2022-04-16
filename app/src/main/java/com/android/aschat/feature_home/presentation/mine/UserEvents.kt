@@ -2,7 +2,7 @@ package com.android.aschat.feature_home.presentation.mine
 
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
-import com.android.aschat.feature_home.domain.model.EditDetail
+import com.android.aschat.feature_home.domain.model.mine.EditDetail
 
 sealed class UserEvents {
     class SubmitEdit(val navController: NavController, val editDetail: EditDetail): UserEvents()

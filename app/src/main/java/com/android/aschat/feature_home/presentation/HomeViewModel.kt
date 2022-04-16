@@ -4,19 +4,23 @@ import android.content.Context
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.*
 import com.android.aschat.R
-import com.android.aschat.feature_home.domain.model.EditDetail
-import com.android.aschat.feature_home.domain.model.HomeUserListItem
+import com.android.aschat.feature_home.domain.model.mine.EditDetail
+import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
+import com.android.aschat.feature_home.domain.repo.HomeRepo
 import com.android.aschat.feature_home.presentation.mine.UserEvents
 import com.android.aschat.feature_login.domain.model.login.UserInfo
+import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
+import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.util.*
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(@Named("Context") val context: Context) : ViewModel() {
+class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: HomeRepo, @Named("Context") val context: Context) : ViewModel() {
 
     // 个人资料界面
     private val _userInfo: MutableLiveData<UserInfo> = MutableLiveData(JsonUtil.json2Any(SpUtil.get(context, SpConstants.USERINFO, "") as String, UserInfo::class.java))
@@ -59,9 +63,12 @@ class HomeViewModel @Inject constructor(@Named("Context") val context: Context) 
     )
     val userEditDetail: LiveData<EditDetail> = _userEditDetail
 
-    // 主播墙界面 策略数据
-    private val _wallStrategyData: MutableLiveData<StrategyData> = MutableLiveData(JsonUtil.json2Any(SpUtil.get(context, SpConstants.STRATEGY, "") as String, StrategyData::class.java))
-    val wallStrategyData: LiveData<StrategyData> = _wallStrategyData
+    // 主播墙界面
+    // 策略数据
+    val wallStrategyData: StrategyData = JsonUtil.json2Any(SpUtil.get(context, SpConstants.STRATEGY, "") as String, StrategyData::class.java)
+
+    // tags
+    val parentTagList: List<BroadcasterWallTag> = wallStrategyData.broadcasterWallTagList
 
     init {
         // 给coin增加监听，改变时修改rv
@@ -95,5 +102,4 @@ class HomeViewModel @Inject constructor(@Named("Context") val context: Context) 
             }
         }
     }
-
 }

@@ -1,4 +1,4 @@
-package com.android.aschat.feature_home.domain.model
+package com.android.aschat.feature_home.domain.model.mine
 
 import com.android.aschat.common.Constants
 

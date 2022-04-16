@@ -53,16 +53,16 @@ class LoginViewModel @Inject constructor(
                             // 成功
                             // 保存策略
                             SpUtil.putAndApply(event.context, SpConstants.STRATEGY, JsonUtil.any2Json(strategyResponse.data))
-                        }
-                        if (loginResponse.data.isFirstRegister) {
-                            // 第一次登录
-                            event.navController.navigate(R.id.action_splashFragment_to_fastLoginFragment)
-                        }else {
-                            // 不是第一次登录
+                            if (loginResponse.data.isFirstRegister) {
+                                // 第一次登录
+                                event.navController.navigate(R.id.action_splashFragment_to_fastLoginFragment)
+                            }else {
+                                // 不是第一次登录
 //                            event.navController.navigate(R.id.action_splashFragment_to_homeActivity)
-                            val intent = Intent(event.context, HomeActivity::class.java)
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            event.context.startActivity(intent)
+                                val intent = Intent(event.context, HomeActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                event.context.startActivity(intent)
+                            }
                         }
                     }
                 }

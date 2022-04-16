@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import com.android.aschat.R
 import com.android.aschat.databinding.HomeUserEditFragmentBinding
-import com.android.aschat.feature_home.domain.model.EditDetail
+import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.presentation.HomeViewModel
 import com.android.aschat.util.FontUtil
 import com.android.aschat.util.RadioUtil
@@ -95,7 +95,8 @@ class UserEditFragment: Fragment() {
                     gender = if (mBinding.userEditGenderMan.isChecked) 1 else 0,
                     head = 0,// 使用viewmodel中存的
                     about = mBinding.editAbout.text.toString()
-                )))
+                )
+            ))
         }
         mBinding.editAbout.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

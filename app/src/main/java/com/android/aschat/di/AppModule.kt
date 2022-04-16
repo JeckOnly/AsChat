@@ -8,6 +8,7 @@ import com.android.aschat.common.Constants
 import com.android.aschat.common.database.AppDatabase
 import com.android.aschat.common.network.ApiUrls
 import com.android.aschat.common.network.AppServices
+import com.android.aschat.feature_home.domain.repo.HomeRepo
 import com.android.aschat.feature_login.data.UserDao
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.util.AppUtil
@@ -67,7 +68,7 @@ object AppModule {
                 }else {
                     val originalRequest = chain.request();
                     //key的话以后台给的为准，我这边是叫token
-                    val updateRequest = originalRequest.newBuilder().header("token", "Bearer$token").build();
+                    val updateRequest = originalRequest.newBuilder().header("Authorization", "Bearer$token").build();
                     chain.proceed(updateRequest);
                 }
             })
@@ -134,5 +135,12 @@ object AppModule {
     @Named("LoginRepo")
     fun provideLoginRepo(@Named("AppServices") services: AppServices, @Named("UserDao") userDao: UserDao): LoginRepo{
         return LoginRepo(services, userDao)
+    }
+
+    @Singleton
+    @Provides
+    @Named("HomeRepo")
+    fun provideHomeRepo(@Named("AppServices") services: AppServices): HomeRepo{
+        return HomeRepo(services)
     }
 }

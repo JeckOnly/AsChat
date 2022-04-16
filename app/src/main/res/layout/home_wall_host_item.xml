@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="model"
+            type="com.android.aschat.feature_home.domain.model.wall.subtag.HostData" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/host_avatar"
+            tools:background="@color/black_2"
+            setImageUrl="@{model.avatar}"
+            android:scaleType="fitXY"
+            app:layout_constraintDimensionRatio="h,15:17"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRoundedTenDp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"/>
+
+        <TextView
+            android:id="@+id/host_tag"
+            android:padding="5dp"
+            android:background="@drawable/shape_pink_red"
+            tools:text = "friendly"
+            setHostTag="@{model.applicableTags}"
+            android:textColor="@color/white"
+            android:textSize="8sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/host_avatar"
+            app:layout_constraintEnd_toEndOf="@id/host_avatar"/>
+
+        <ImageView
+            android:id="@+id/host_video_call"
+            app:layout_constraintEnd_toEndOf="@id/host_avatar"
+            app:layout_constraintBottom_toBottomOf="@id/host_avatar"
+            android:layout_marginEnd="9dp"
+            android:layout_marginBottom="8dp"
+            android:src="@drawable/ic_videocall"
+            android:layout_width="24dp"
+            android:layout_height="24dp"/>
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/host_status"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            tools:src="@color/red1"
+            android:src="@color/trans"
+            setHostStatus="@{model.status}"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:layout_constraintStart_toStartOf="@id/host_avatar"
+            app:layout_constraintBottom_toBottomOf="@id/host_avatar"
+            android:layout_marginStart="9dp"
+            android:layout_marginBottom="9dp"/>
+
+        <TextView
+            android:id="@+id/host_country"
+            tools:text = "Taiwan"
+            android:textColor="@color/white"
+            android:text="@{model.country}"
+            android:textSize="8sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/host_status"
+            app:layout_constraintBottom_toBottomOf="@id/host_status"
+            app:layout_constraintStart_toEndOf="@id/host_status"
+            android:layout_marginStart="2dp"/>
+
+        <TextView
+            android:id="@+id/host_xiegang"
+            android:text="/"
+            android:textColor="@color/white"
+            android:textSize="8sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/host_country"
+            app:layout_constraintBottom_toBottomOf="@id/host_country"
+            app:layout_constraintStart_toEndOf="@id/host_country"
+            android:layout_marginStart="2dp"/>
+
+        <TextView
+            android:id="@+id/host_age"
+            tools:text = "24"
+            android:textColor="@color/white"
+            android:textSize="8sp"
+            setTextViewInt = "@{model.age}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/host_xiegang"
+            app:layout_constraintBottom_toBottomOf="@id/host_xiegang"
+            app:layout_constraintStart_toEndOf="@id/host_xiegang"
+            android:layout_marginStart="2dp"/>
+
+        <TextView
+            android:id="@+id/host_name"
+            tools:text = "Sama"
+            android:textColor="@color/white"
+            android:text="@{model.nickname}"
+            android:textSize="10sp"
+            android:layout_marginBottom="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/host_status"
+            app:layout_constraintStart_toStartOf="@id/host_status" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

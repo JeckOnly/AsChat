@@ -1,4 +1,4 @@
-package com.maosiapps.hellohi
+package com.android.aschat
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

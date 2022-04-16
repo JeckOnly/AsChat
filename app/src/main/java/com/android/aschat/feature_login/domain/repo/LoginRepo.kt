@@ -6,14 +6,30 @@ import com.android.aschat.feature_login.data.UserDao
 import com.android.aschat.feature_login.domain.model.login.LoginData
 import com.android.aschat.feature_login.domain.model.login.UserInfo
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
+import com.android.aschat.util.LogUtil
 
 class LoginRepo(private val services: AppServices, private val dao: UserDao) {
     suspend fun login(oauthType: Int,token: String): Response<LoginData> {
-        return services.login(oauthType, token)
+        var response: Response<LoginData> = services.login(oauthType, token)
+        while (response.code != 0) {
+            LogUtil.d("登录: ${response.code}")
+            response = services.login(oauthType, token)
+        }
+        return response
     }
 
+    /**
+     * 获取策略
+     *
+     * 失败会不断重试
+     */
     suspend fun getStrategy(): Response<StrategyData>{
-        return services.getStrategy()
+        var response: Response<StrategyData> = services.getStrategy()
+        while (response.code != 0) {
+            LogUtil.d("strategy: ${response.code}")
+            response = services.getStrategy()
+        }
+        return response
     }
 
     @Deprecated("改用sp")

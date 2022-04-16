@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.android.aschat.databinding.HomeUserListItemBinding
-import com.android.aschat.feature_home.domain.model.HomeUserListItem
+import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
 
 class UserSettingRvAdapter : ListAdapter<HomeUserListItem, UserSettingRvViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserSettingRvViewHolder {

@@ -1,4 +1,4 @@
-package com.maosiapps.hellohi
+package com.android.aschat
 
 import org.junit.Test
 

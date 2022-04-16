@@ -1,11 +1,10 @@
 package com.android.aschat.common.network
 
+import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
+import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_login.domain.model.login.LoginData
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface AppServices {
 
@@ -20,6 +19,6 @@ interface AppServices {
    @GET(ApiUrls.GetStrategy)
    suspend fun getStrategy(): Response<StrategyData>
    
-//   @POST(ApiUrls.GetHostList)
-//   suspend fun getHostList(): Response<// TODO: 主播实体 >
+   @POST(ApiUrls.GetHostList)
+   suspend fun getHostList(@Body getHostInfo: GetHostInfo): Response<List<HostData>>
 }

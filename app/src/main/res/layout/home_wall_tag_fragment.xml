@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/wall_tag_tablayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/trans"
+            app:tabMode="scrollable"
+            app:tabIndicatorColor="@color/trans"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <com.drake.brv.PageRefreshLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/wall_tag_fragment_page"
+            app:stateEnabled="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wall_tag_tablayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:context="com.drake.brv.sample.fragment.RefreshFragment">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/wall_tag_fragment_rv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.drake.brv.PageRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

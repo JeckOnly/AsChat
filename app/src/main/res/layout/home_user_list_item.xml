@@ -6,7 +6,7 @@
     <data>
         <variable
             name="item"
-            type="com.android.aschat.feature_home.domain.model.HomeUserListItem" />
+            type="com.android.aschat.feature_home.domain.model.mine.HomeUserListItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
