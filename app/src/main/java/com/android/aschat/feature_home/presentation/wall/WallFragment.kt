@@ -10,8 +10,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.aschat.R
 import com.android.aschat.databinding.HomeWallFragmentBinding
 import com.android.aschat.feature_home.presentation.HomeViewModel
-import com.android.aschat.feature_home.presentation.wall.subtag.TabHolder
-import com.android.aschat.feature_home.presentation.wall.subtag.WallTagFragment
+import com.android.aschat.feature_home.presentation.wall.category.TagHolder
+import com.android.aschat.feature_home.presentation.wall.category.WallCategoryFragment
 import com.android.aschat.util.FontUtil
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,7 +24,7 @@ class WallFragment: Fragment() {
     private lateinit var mBinding: HomeWallFragmentBinding
     private val mViewModel: HomeViewModel by activityViewModels()
     private lateinit var mWallPagerAdapter: WallPagerAdapter
-    private val tabHolders: MutableList<TabHolder> = mutableListOf()
+    private val tabHolders: MutableList<TagHolder> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,14 +70,14 @@ class WallFragment: Fragment() {
         })
         TabLayoutMediator(mBinding.wallTab, mBinding.wallPager) { tab, position ->
             tab.setCustomView(R.layout.home_wall_tab)
-            val tabHolder = TabHolder(tab.customView!!)
+            val tabHolder = TagHolder(tab.customView!!)
             // 给tabholders的集合加多一个
             tabHolders.add(position, tabHolder)
             setTabUnSelected(tabHolder, position)
         }.attach()
     }
 
-    private fun setTabUnSelected(tabHolder: TabHolder, position: Int) {
+    private fun setTabUnSelected(tabHolder: TagHolder, position: Int) {
         tabHolder.apply {
             setTextColor(requireContext(), R.color.tab_gray)
             setTextContent(mViewModel.parentTagList[position].tagName)
@@ -85,7 +85,7 @@ class WallFragment: Fragment() {
             setTypeface(FontUtil.getTypeface(requireContext()))
         }
     }
-    private fun setTabSelected(tabHolder: TabHolder, position: Int) {
+    private fun setTabSelected(tabHolder: TagHolder, position: Int) {
         tabHolder.apply {
             setTextColor(requireContext(), R.color.tab_black)
             setTextContent(mViewModel.parentTagList[position].tagName)
@@ -94,13 +94,21 @@ class WallFragment: Fragment() {
         }
     }
 
+    /**
+     * 每一个category做分页
+     */
     inner class WallPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
         override fun getItemCount(): Int {
             return mViewModel.parentTagList.size
         }
 
         override fun createFragment(position: Int): Fragment {
-            return WallTagFragment(mViewModel.parentTagList[position])
+            return WallCategoryFragment(mViewModel.parentTagList[position])
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+//        mBinding = null
     }
 }

@@ -34,4 +34,8 @@
     <string name="footer_finish">loaded</string>
     <string name="footer_failed">Load failed</string>
     <string name="footer_nothing">There\'s no more data</string>
+    <string name="video_call">video call</string>
+    <string name="shielding_report">Shielding report</string>
+    <string name="video">Video</string>
+    <string name="impression">Impression</string>
 </resources>

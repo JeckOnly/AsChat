@@ -11,6 +11,7 @@ import coil.load
 import com.android.aschat.databinding.HomeUserFragmentBinding
 import com.android.aschat.feature_home.domain.rv.UserSettingRvAdapter
 import com.android.aschat.feature_home.presentation.HomeViewModel
+import com.android.aschat.feature_home.presentation.HomeEvents
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -48,7 +49,7 @@ class UserFragment: Fragment() {
             mBinding.homeUserNameTv.text = nickName
         }
         mBinding.homeUserNameArea.setOnClickListener {
-            mViewModel.onEvent(UserEvents.ToEditFragment(findNavController()))
+            mViewModel.onEvent(HomeEvents.ToEditFragment(findNavController()))
         }
     }
 }

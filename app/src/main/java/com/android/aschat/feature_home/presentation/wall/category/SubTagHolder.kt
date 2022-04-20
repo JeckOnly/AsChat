@@ -1,4 +1,4 @@
-package com.android.aschat.feature_home.presentation.wall.subtag
+package com.android.aschat.feature_home.presentation.wall.category
 
 import android.content.Context
 import android.graphics.Typeface
@@ -10,7 +10,7 @@ import com.android.aschat.R
 /**
  * 目前和tabholder一样，如果要改，可以不影响tabholder
  */
-class SubTabHolder (private val tabView: View) {
+class SubTagHolder (private val tabView: View) {
     private val mText: TextView = tabView.findViewById(R.id.home_wall_tab_text)
 
     fun setTextSize(sp: Float) {

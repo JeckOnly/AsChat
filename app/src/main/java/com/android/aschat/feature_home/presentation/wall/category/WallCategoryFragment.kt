@@ -1,4 +1,4 @@
-package com.android.aschat.feature_home.presentation.wall.subtag
+package com.android.aschat.feature_home.presentation.wall.category
 
 import android.content.Context
 import android.graphics.Rect
@@ -8,11 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.android.aschat.R
 import com.android.aschat.databinding.HomeWallTagFragmentBinding
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
+import com.android.aschat.feature_home.presentation.HomeViewModel
+import com.android.aschat.feature_home.presentation.HomeEvents
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 import com.android.aschat.util.DensityUtil
 import com.android.aschat.util.LogUtil
@@ -24,13 +28,21 @@ import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WallTagFragment(private val broadcasterWallTag: BroadcasterWallTag): Fragment() {
+class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): Fragment() {
 
     private lateinit var mBinding: HomeWallTagFragmentBinding
 
-    private val mTabHolders: MutableList<SubTabHolder> = mutableListOf()
+    private val mTabHolders: MutableList<SubTagHolder> = mutableListOf()
 
+    /**
+     * 这是每一个category的viewmodel
+     */
     private val mViewModel: SubTagViewModel by viewModels()
+
+    /**
+     * 这是HomeViewModel
+     */
+    private val mViewModel2: HomeViewModel by activityViewModels()
 
     // rv的adapter
     private lateinit var mRvAdapter: BindingAdapter
@@ -81,14 +93,14 @@ class WallTagFragment(private val broadcasterWallTag: BroadcasterWallTag): Fragm
         broadcasterWallTag.subTagList.forEach {
             val tab = mBinding.wallTagTablayout.newTab().apply {
                 setCustomView(R.layout.home_wall_tab)
-                val holder = SubTabHolder(this.customView!!)
+                val holder = SubTagHolder(this.customView!!)
                 setTabUnSelected(holder, it)
                 mTabHolders.add(holder)
             }
             mBinding.wallTagTablayout.addTab(tab)
         }
 
-        // 开始设置rv todo Jeck 刷新机制
+        // 开始设置rv todo Jeck 刷新状态机制
         mRvAdapter = mBinding.wallTagFragmentRv.grid(
             spanCount = 2
         ).apply {
@@ -97,6 +109,7 @@ class WallTagFragment(private val broadcasterWallTag: BroadcasterWallTag): Fragm
            )
         }.setup {
             addType<HostData>(R.layout.home_wall_host_item)
+            // 设置数据去重判断逻辑
             itemDifferCallback = object :ItemDifferCallback {
                 override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
                     val old = oldItem as HostData
@@ -110,8 +123,17 @@ class WallTagFragment(private val broadcasterWallTag: BroadcasterWallTag): Fragm
                     return old.userId == new.userId
                 }
             }
+            // 设置点击事件
+            onClick(R.id.home_wall_host_item) {
+                // 把点击的对象传给viewmodel
+                val hostData = this.getModel() as HostData
+                mViewModel2.onEvent(HomeEvents.ClickHost(hostData))
+            }
         }
         mBinding.wallTagFragmentPage.apply {
+            // 可以开始预加载的位置：倒数第十条数据开始”执行onLoadMore逻辑“
+            preloadIndex = 10
+
             onRefresh {
                 LogUtil.d("onRefresh")
                 mViewModel.onEvent(SubTagEvents.WantRefresh)
@@ -140,7 +162,7 @@ class WallTagFragment(private val broadcasterWallTag: BroadcasterWallTag): Fragm
         }
     }
 
-    private fun setTabUnSelected(tabHolder: SubTabHolder, subTag: String = "") {
+    private fun setTabUnSelected(tabHolder: SubTagHolder, subTag: String = "") {
         tabHolder.apply {
             setTextColor(requireContext(), R.color.tab_gray)
             if (subTag.isNotEmpty())
@@ -150,7 +172,7 @@ class WallTagFragment(private val broadcasterWallTag: BroadcasterWallTag): Fragm
             setTextWeight(Typeface.NORMAL)
         }
     }
-    private fun setTabSelected(tabHolder: SubTabHolder) {
+    private fun setTabSelected(tabHolder: SubTagHolder) {
         tabHolder.apply {
             setTextColor(requireContext(), R.color.purple)
             setTextWeight(Typeface.BOLD)

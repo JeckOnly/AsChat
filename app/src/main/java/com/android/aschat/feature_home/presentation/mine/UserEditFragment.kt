@@ -14,6 +14,7 @@ import com.android.aschat.R
 import com.android.aschat.databinding.HomeUserEditFragmentBinding
 import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.presentation.HomeViewModel
+import com.android.aschat.feature_home.presentation.HomeEvents
 import com.android.aschat.util.FontUtil
 import com.android.aschat.util.RadioUtil
 
@@ -56,10 +57,10 @@ class UserEditFragment: Fragment() {
 
     private fun initWidget() {
         mBinding.userEditBirthday.setOnClickListener {
-           mViewModel.onEvent(UserEvents.ShowTimePicker(parentFragmentManager))
+           mViewModel.onEvent(HomeEvents.ShowTimePicker(parentFragmentManager))
         }
         mBinding.userEditCountry.setOnClickListener {
-            mViewModel.onEvent(UserEvents.ShowCountryPicker(parentFragmentManager))
+            mViewModel.onEvent(HomeEvents.ShowCountryPicker(parentFragmentManager))
         }
         mBinding.userEditGenderMan.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
@@ -73,19 +74,20 @@ class UserEditFragment: Fragment() {
             }
         }
         mBinding.editHead0.setOnClickListener {
-            mViewModel.onEvent(UserEvents.ChangeHead(0))
+            mViewModel.onEvent(HomeEvents.ChangeHead(0))
         }
         mBinding.editHead1.setOnClickListener {
-            mViewModel.onEvent(UserEvents.ChangeHead(1))
+            mViewModel.onEvent(HomeEvents.ChangeHead(1))
         }
         mBinding.editHead2.setOnClickListener {
-            mViewModel.onEvent(UserEvents.ChangeHead(2))
+            mViewModel.onEvent(HomeEvents.ChangeHead(2))
         }
         mBinding.editHead3.setOnClickListener {
-            mViewModel.onEvent(UserEvents.ChangeHead(3))
+            mViewModel.onEvent(HomeEvents.ChangeHead(3))
         }
         mBinding.editSubmit.setOnClickListener {
-            mViewModel.onEvent(UserEvents.SubmitEdit(
+            mViewModel.onEvent(
+                HomeEvents.SubmitEdit(
                 findNavController(),
                 EditDetail(
                     nickName = mBinding.userEditName.text.toString(),
@@ -119,7 +121,7 @@ class UserEditFragment: Fragment() {
         mBinding.editHead0.load(mViewModel.userInfo.value!!.avatarUrl)
 
         mBinding.userEditBack.setOnClickListener {
-            mViewModel.onEvent(UserEvents.ExitUserEditFragment(findNavController()))
+            mViewModel.onEvent(HomeEvents.ExitUserEditFragment(findNavController()))
         }
     }
 }

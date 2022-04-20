@@ -1,4 +1,4 @@
-package com.android.aschat.feature_home.presentation.wall.subtag
+package com.android.aschat.feature_home.presentation.wall.category
 
 import android.content.Context
 import android.graphics.Typeface
@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.TextView
 import com.android.aschat.R
 
-class TabHolder(private val tabView: View) {
+class TagHolder(private val tabView: View) {
     private val mText: TextView = tabView.findViewById(R.id.home_wall_tab_text)
 
     fun setTextSize(sp: Float) {

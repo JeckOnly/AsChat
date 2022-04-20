@@ -2,6 +2,10 @@ package com.android.aschat.common.network
 
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
+import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftAndLabel
+import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
+import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
+import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_login.domain.model.login.LoginData
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
 import retrofit2.http.*
@@ -21,4 +25,17 @@ interface AppServices {
    
    @POST(ApiUrls.GetHostList)
    suspend fun getHostList(@Body getHostInfo: GetHostInfo): Response<List<HostData>>
+
+   @POST(ApiUrls.AddFriend)
+   suspend fun addFriend(@Body addFriend: AddFriend): Response<Boolean>
+
+
+   @POST(ApiUrls.CancelFriend)
+   suspend fun cancelFriend(@Body cancelFriend: CancelFriend): Response<Boolean>
+
+   @GET(ApiUrls.GetUserInfo)
+   suspend fun getUserInfo(@Query("userId") userId: String): Response<HostInfo>
+
+   @GET(ApiUrls.GetExtraInfo)
+   suspend fun getExtraInfo(@Query("userId") userId: String): Response<GiftAndLabel>
 }

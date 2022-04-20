@@ -9,6 +9,7 @@ import com.android.aschat.common.database.AppDatabase
 import com.android.aschat.common.network.ApiUrls
 import com.android.aschat.common.network.AppServices
 import com.android.aschat.feature_home.domain.repo.HomeRepo
+import com.android.aschat.feature_host.domain.repo.HostRepo
 import com.android.aschat.feature_login.data.UserDao
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.util.AppUtil
@@ -142,5 +143,12 @@ object AppModule {
     @Named("HomeRepo")
     fun provideHomeRepo(@Named("AppServices") services: AppServices): HomeRepo{
         return HomeRepo(services)
+    }
+
+    @Singleton
+    @Provides
+    @Named("HostRepo")
+    fun provideHostRepo(@Named("AppServices") services: AppServices): HostRepo {
+        return HostRepo(services)
     }
 }

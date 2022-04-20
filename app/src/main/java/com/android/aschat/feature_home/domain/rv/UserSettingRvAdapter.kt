@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import com.android.aschat.databinding.HomeUserListItemBinding
 import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
 
-class UserSettingRvAdapter : ListAdapter<HomeUserListItem, UserSettingRvViewHolder>(diffCallback) {
+class UserSettingRvAdapter: ListAdapter<HomeUserListItem, UserSettingRvViewHolder>(diffCallback) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserSettingRvViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = HomeUserListItemBinding.inflate(layoutInflater, parent, false)

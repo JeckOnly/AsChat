@@ -1,6 +1,5 @@
-package com.android.aschat.feature_home.presentation.wall.subtag
+package com.android.aschat.feature_home.presentation.wall.category
 
-import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 
 

@@ -9,7 +9,10 @@ abstract class BaseActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(provideLayoutId())
+        // 设置状态栏纯色
         StatusBarUtil.setColorNoTranslucent(this, resources.getColor(R.color.pink1))
+//         设置状态栏透明 无效
+//        StatusBarUtil.setTransparent(this)
         init()
     }
 

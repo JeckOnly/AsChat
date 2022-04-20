@@ -1,4 +1,4 @@
-package com.android.aschat.feature_home.presentation.wall.subtag
+package com.android.aschat.feature_home.presentation.wall.category
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/host_nav_fraph"
+    app:startDestination="@id/hostDetailFragment">
+
+    <fragment
+        android:id="@+id/hostDetailFragment"
+        android:name="com.android.aschat.feature_host.presentation.hostinfo.hostdetail.HostDetailFragment"
+        android:label="HostDetailFragment" >
+        <action
+            android:id="@+id/action_hostDetailFragment_to_fullScreenImageFragment"
+            app:destination="@id/fullScreenImageFragment" />
+        <action
+            android:id="@+id/action_hostDetailFragment_to_showShortVideoFragment"
+            app:destination="@id/showShortVideoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fullScreenImageFragment"
+        android:name="com.android.aschat.feature_host.presentation.hostinfo.FillScreenImage.FullScreenImageFragment"
+        android:label="FullScreenImageFragment" />
+    <fragment
+        android:id="@+id/showShortVideoFragment"
+        android:name="com.android.aschat.feature_host.presentation.hostinfo.shortvideoshow.ShowShortVideoFragment"
+        android:label="ShowShortVideoFragment" />
+</navigation>

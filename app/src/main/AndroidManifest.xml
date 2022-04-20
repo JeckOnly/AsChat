@@ -38,6 +38,9 @@
         <activity android:name="com.android.aschat.feature_home.presentation.HomeActivity"
             android:exported="true"
             android:launchMode="singleTask"/>
+        <activity android:name=".feature_host.presentation.HostActivity"
+            android:exported="true"
+            android:launchMode="singleTask"/>
 
     </application>
 

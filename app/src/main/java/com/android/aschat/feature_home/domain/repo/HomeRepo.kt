@@ -4,6 +4,10 @@ import com.android.aschat.common.network.AppServices
 import com.android.aschat.common.network.Response
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
+import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftAndLabel
+import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
+import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
+import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.util.LogUtil
 
 class HomeRepo(private val services: AppServices) {

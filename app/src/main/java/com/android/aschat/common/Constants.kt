@@ -10,4 +10,7 @@ object Constants {
      * 每次请求主播的条数
      */
     const val HostWall_LimitPlus = 20
+
+    const val Media_Type_Video = "video"
+    const val Media_Type_Photo = "photo"
 }
