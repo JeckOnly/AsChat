@@ -37,4 +37,8 @@
     <string name="shielding_report">Shielding report</string>
     <string name="video">Video</string>
     <string name="impression">Impression</string>
+    <string name="calls">Calls</string>
+    <string name="Followed">Followed</string>
+    <string name="unfollow_success">Unfollow successfully</string>
+    <string name="follow_success">Follow successfully</string>
 </resources>

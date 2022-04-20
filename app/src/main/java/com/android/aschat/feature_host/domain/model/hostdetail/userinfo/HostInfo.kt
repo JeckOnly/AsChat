@@ -36,5 +36,6 @@ data class HostInfo(
     val unitPrice: Int,
     val userId: String,
     val userType: Int,
-    val vipUnitPrice: Int
+    val vipUnitPrice: Int,
+    val isFriend: Boolean = false
 )

@@ -18,6 +18,7 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/ic_jump.xml" value="0.3665" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/ic_ranking.xml" value="0.17" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/ic_videoer_information.xml" value="0.1935" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_button_gray_white.xml" value="0.1375" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_button_red_purple.xml" value="0.3665" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_circle.xml" value="0.238" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_edittext.xml" value="0.2325" />
@@ -40,7 +41,11 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/style_home_nav.xml" value="0.238" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/style_radio.xml" value="0.3665" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_acty.xml" value="0.365625" />
-        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_fragment.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_calls_fragment.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_followed_fragment.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_fragment.xml" value="0.22" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_message_fragment.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_tag.xml" value="0.5" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_user_edit_fragment.xml" value="0.20947630922693267" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_user_fragment.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_user_list_item.xml" value="0.16666666666666666" />
@@ -50,7 +55,7 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_wall_tag_fragment.xml" value="0.1" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_acty.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_controler.xml" value="0.365625" />
-        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_fragment.xml" value="0.3333333333333333" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_fragment.xml" value="0.22" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_image_fragment.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_label_item.xml" value="0.6" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_popupwindow.xml" value="0.365625" />

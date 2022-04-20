@@ -13,4 +13,5 @@ sealed class HostEvents {
     class JumpFullScreenVideo(val navController: NavController, val position: Int): HostEvents()
     class ExitFullScreenImage(val navController: NavController): HostEvents()
     class ExitFullScreenVideo(val navController: NavController): HostEvents()
+    object ClickFollow : HostEvents()
 }

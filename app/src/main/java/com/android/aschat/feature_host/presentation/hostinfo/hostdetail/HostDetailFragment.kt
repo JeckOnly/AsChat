@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -16,6 +18,7 @@ import com.android.aschat.feature_host.presentation.HostEvents
 import com.android.aschat.feature_host.presentation.HostViewModel
 import com.android.aschat.util.FontUtil
 import com.android.aschat.util.LogUtil
+import com.android.aschat.util.setHostStatus
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
 import razerdp.basepopup.BasePopupWindow
@@ -72,13 +75,27 @@ class HostDetailFragment : Fragment() {
     }
 
     private fun initWidget() {
-        mBinding.hostDetailBack.setOnClickListener {
-            mViewModel.onEvent(HostEvents.ExitHostDetail(requireActivity() as HostActivity))
+        mBinding.apply {
+            hostDetailBack.setOnClickListener {
+                mViewModel.onEvent(HostEvents.ExitHostDetail(requireActivity() as HostActivity))
+            }
+            hostDetailMore.setOnClickListener {
+                mPopupWindow.showPopupWindow(mBinding.hostDetailMore)
+            }
+            hostDetailVideoCallBar.typeface = FontUtil.getTypeface(requireContext())
+            hostDetailFollow.setOnClickListener {
+                mViewModel.onEvent(HostEvents.ClickFollow)
+            }
         }
-        mBinding.hostDetailMore.setOnClickListener {
-           mPopupWindow.showPopupWindow(mBinding.hostDetailMore)
+        // 观察状态变化
+        mViewModel.status.observe(viewLifecycleOwner) {
+            setHostStatus(mBinding.hostDetailStatus, it)
+            setVideoCallStatus(mBinding.hostDetailVideoCallBar, it)
         }
-        mBinding.hostDetailVideoCallBar.typeface = FontUtil.getTypeface(requireContext())
+        // 观察是否follow
+        mViewModel.follow.observe(viewLifecycleOwner) {
+            setFollowRedGray(mBinding.hostDetailFollow, it)
+        }
     }
 
     inner class HostDetailImageAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
@@ -88,6 +105,48 @@ class HostDetailFragment : Fragment() {
 
         override fun createFragment(position: Int): Fragment {
             return HostDetailImageFragment(mViewModel.pictureUrls.value?.get(position) ?: "", position)
+        }
+    }
+
+    private fun setFollowRedGray(imageView: ImageView, isFollow: Boolean) {
+        if (isFollow) {
+            imageView.setImageResource(R.mipmap.ic_love_gray)
+        }else {
+            imageView.setImageResource(R.mipmap.ic_love)
+        }
+    }
+    private fun setVideoCallStatus(button: Button, status: String) {
+        if (status == null) {
+            button.setBackgroundResource(R.drawable.shape_button_gray_white)
+            button.isClickable = false
+            return
+        }
+        when (status) {
+            "Online" -> {
+                // 只有在线状态可以点击
+                button.setBackgroundResource(R.drawable.shape_button_red_purple)
+                button.isClickable = true
+            }
+            "Busy" -> {
+                button.setBackgroundResource(R.drawable.shape_button_gray_white)
+                button.isClickable = false
+            }
+            "Incall" -> {
+                button.setBackgroundResource(R.drawable.shape_button_gray_white)
+                button.isClickable = false
+            }
+            "Offline" -> {
+                button.setBackgroundResource(R.drawable.shape_button_gray_white)
+                button.isClickable = false
+            }
+            "Available" -> {
+                button.setBackgroundResource(R.drawable.shape_button_gray_white)
+                button.isClickable = false
+            }
+            else -> {
+                button.setBackgroundResource(R.drawable.shape_button_gray_white)
+                button.isClickable = false
+            }
         }
     }
 }
