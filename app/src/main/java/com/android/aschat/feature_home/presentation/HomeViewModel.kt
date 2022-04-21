@@ -26,7 +26,7 @@ import javax.inject.Named
 @HiltViewModel
 class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: HomeRepo, @Named("Context") val context: Context) : ViewModel() {
 
-    // 个人资料界面-------------
+    // 个人资料界面------
 
     private val _userInfo: MutableLiveData<UserInfo> = MutableLiveData(JsonUtil.json2Any(SpUtil.get(context, SpConstants.USERINFO, "") as String, UserInfo::class.java))
     val userInfo: LiveData<UserInfo> = _userInfo
@@ -62,14 +62,14 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     )
     val userItemList: LiveData<List<HomeUserListItem>> = _userItemList
 
-    // 个人资料编辑页------------
+    // 个人资料编辑页------
 
     private val _userEditDetail: MutableLiveData<EditDetail> = MutableLiveData(
         EditDetail()
     )
     val userEditDetail: LiveData<EditDetail> = _userEditDetail
 
-    // 主播墙界面----------------
+    // 主播墙界面------
 
     // 策略数据
     val wallStrategyData: StrategyData = JsonUtil.json2Any(SpUtil.get(context, SpConstants.STRATEGY, "") as String, StrategyData::class.java)
@@ -77,7 +77,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     // tags
     val parentTagList: List<BroadcasterWallTag> = wallStrategyData.broadcasterWallTagList
 
-    // 关注页---------------------
+    // 关注页------
     private val _friends: MutableLiveData<MutableList<FollowFriend>> = MutableLiveData(mutableListOf())
     val friends: LiveData<MutableList<FollowFriend>> = _friends
 
@@ -123,6 +123,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
             }
+            // 关注页------
             is HomeEvents.FollowWantInit -> {
                 viewModelScope.launch {
                     followListState = ListState.REPLACE
@@ -130,7 +131,9 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                         // 数据为空就获取数据
                         friendsLimit = Constants.Follow_LimitPlus
                         val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
-                        _friends.postValue(data.toMutableList())
+                        val temp = data.toMutableList()
+                        sortFriends(temp)
+                        _friends.postValue(temp)
                     }else {
                         // 数据不为空就什么也不做
 
@@ -142,8 +145,10 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                     followListState = ListState.REPLACE
                     friendsLimit = Constants.Follow_LimitPlus
                     val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
+                    val temp = data.toMutableList()
+                    sortFriends(temp)
                     // 覆盖数据
-                    _friends.postValue(data.toMutableList())
+                    _friends.postValue(temp)
                 }
             }
             is HomeEvents.FollowWantMore -> {
@@ -156,6 +161,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                     var list = _friends.value
                     // 增加数据
                     list!!.addAll(data)
+                    sortFriends(list)
                     // 去重, 不做了，留给rv去做
 //                    list = list.distinctBy {
 //                        it.userId
@@ -167,6 +173,42 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             is HomeEvents.ClickFriend -> {
                 val friend = event.friend
             }
+        }
+    }
+
+    /**
+     * 对关注的用户进行一个排序
+     *
+     * 首先按状态，其次按首字母
+     * 按照在线状态（在线>通话中>忙碌>离线），其次按首字母
+     */
+    private fun sortFriends(friends: MutableList<FollowFriend>) {
+        friends.sortWith { o1, o2 ->
+            if (o1.onlineStatus == Constants.Online && o2.onlineStatus != Constants.Online) {
+                return@sortWith -1
+            }
+            if (o2.onlineStatus == Constants.Online && o1.onlineStatus != Constants.Online) {
+                return@sortWith 1
+            }
+            if (o1.onlineStatus == Constants.Incall && o2.onlineStatus != Constants.Incall) {
+                return@sortWith -1
+            }
+            if (o2.onlineStatus == Constants.Incall && o1.onlineStatus != Constants.Incall) {
+                return@sortWith 1
+            }
+            if (o1.onlineStatus == Constants.Busy && o2.onlineStatus != Constants.Busy) {
+                return@sortWith -1
+            }
+            if (o2.onlineStatus == Constants.Busy && o1.onlineStatus != Constants.Busy) {
+                return@sortWith 1
+            }
+            if (o1.onlineStatus == Constants.Offline && o2.onlineStatus != Constants.Offline) {
+                return@sortWith -1
+            }
+            if (o2.onlineStatus == Constants.Offline && o1.onlineStatus != Constants.Offline) {
+                return@sortWith 1
+            }
+            return@sortWith -o1.nickname.compareTo(o2.nickname)
         }
     }
 }

@@ -25,4 +25,11 @@ object Constants {
      * 消息页, 文本为id
      */
     val MCF_List = listOf<Int>(R.string.messages, R.string.calls, R.string.Followed)
+
+    // 主播状态
+    const val Online = "Online"
+    const val Busy = "Busy"
+    const val Incall = "Incall"
+    const val Offline = "Offline"
+    const val Avaliable = "Available"
 }

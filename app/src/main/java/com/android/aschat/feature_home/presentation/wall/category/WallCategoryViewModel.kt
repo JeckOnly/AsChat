@@ -17,7 +17,7 @@ import javax.inject.Named
 
 
 @HiltViewModel
-class SubTagViewModel @Inject constructor(@Named("HomeRepo") private val repo: HomeRepo): ViewModel() {
+class WallCategoryViewModel @Inject constructor(@Named("HomeRepo") private val repo: HomeRepo): ViewModel() {
 
     /**
      * 保存当前category的所有tag的list

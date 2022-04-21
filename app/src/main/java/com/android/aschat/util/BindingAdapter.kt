@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.request.videoFrameMillis
 import com.android.aschat.R
+import com.android.aschat.common.Constants
 import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
 import com.android.aschat.feature_home.domain.rv.UserSettingRvAdapter
 import com.android.aschat.feature_host.domain.customview.FlowLayout
@@ -75,19 +76,19 @@ fun setHostStatus(imageView: ImageView, status: String?) {
         return
     }
     when (status) {
-        "Online" -> {
+        Constants.Online -> {
             imageView.setBackgroundResource(R.drawable.shape_green_fill)
         }
-        "Busy" -> {
+        Constants.Busy-> {
             imageView.setBackgroundResource(R.drawable.shape_yellow_fill)
         }
-        "Incall" -> {
+        Constants.Incall -> {
             imageView.setBackgroundResource(R.drawable.shape_red_fill)
         }
-        "Offline" -> {
+        Constants.Offline -> {
             imageView.setBackgroundResource(R.drawable.shape_gray_fill)
         }
-        "Available" -> {
+        Constants.Avaliable -> {
             imageView.setBackgroundResource(R.drawable.shape_green_fill)
         }
         else -> {

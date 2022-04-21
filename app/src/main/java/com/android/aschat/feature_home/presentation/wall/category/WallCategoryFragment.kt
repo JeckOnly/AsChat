@@ -37,7 +37,7 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
     /**
      * 这是每一个category的viewmodel
      */
-    private val mViewModel: SubTagViewModel by viewModels()
+    private val mViewModel: WallCategoryViewModel by viewModels()
 
     /**
      * 这是HomeViewModel
