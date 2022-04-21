@@ -8,6 +8,7 @@ import com.android.aschat.common.Constants
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_home.domain.repo.HomeRepo
+import com.android.aschat.feature_home.domain.rv.ListState
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -146,8 +147,4 @@ class SubTagViewModel @Inject constructor(@Named("HomeRepo") private val repo: H
             }
         }
     }
-}
-
-enum class ListState{
-    REPLACE, ADD
 }

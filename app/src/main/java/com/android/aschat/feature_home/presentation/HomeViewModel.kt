@@ -7,10 +7,13 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.*
 import com.android.aschat.R
 import com.android.aschat.common.Constants
+import com.android.aschat.feature_home.domain.model.follow.FollowFriend
+import com.android.aschat.feature_home.domain.model.follow.GetFriendList
 import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_home.domain.repo.HomeRepo
+import com.android.aschat.feature_home.domain.rv.ListState
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_host.presentation.HostActivity
 import com.android.aschat.feature_login.domain.model.login.UserInfo
@@ -26,7 +29,7 @@ import javax.inject.Named
 @HiltViewModel
 class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: HomeRepo, @Named("Context") val context: Context) : ViewModel() {
 
-    // 个人资料界面
+    // 个人资料界面-------------
 
     private val _userInfo: MutableLiveData<UserInfo> = MutableLiveData(JsonUtil.json2Any(SpUtil.get(context, SpConstants.USERINFO, "") as String, UserInfo::class.java))
     val userInfo: LiveData<UserInfo> = _userInfo
@@ -62,20 +65,28 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     )
     val userItemList: LiveData<List<HomeUserListItem>> = _userItemList
 
-    // 个人资料编辑页
+    // 个人资料编辑页------------
 
     private val _userEditDetail: MutableLiveData<EditDetail> = MutableLiveData(
         EditDetail()
     )
     val userEditDetail: LiveData<EditDetail> = _userEditDetail
 
-    // 主播墙界面
+    // 主播墙界面----------------
 
     // 策略数据
     val wallStrategyData: StrategyData = JsonUtil.json2Any(SpUtil.get(context, SpConstants.STRATEGY, "") as String, StrategyData::class.java)
 
     // tags
     val parentTagList: List<BroadcasterWallTag> = wallStrategyData.broadcasterWallTagList
+
+    // 关注页---------------------
+    private val _friends: MutableLiveData<List<FollowFriend>> = MutableLiveData(mutableListOf())
+    val friends: LiveData<List<FollowFriend>> = _friends
+
+    var friendsLimit = Constants.Follow_LimitPlus
+
+    var followListState = ListState.REPLACE
 
     init {
         // 给coin增加监听，改变时修改rv
@@ -114,6 +125,41 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 intent.putExtra("hostData", JsonUtil.any2Json(hostData))
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
+            }
+            is HomeEvents.WantInit -> {
+                viewModelScope.launch {
+                    followListState = ListState.REPLACE
+                    if (_friends.value!!.isEmpty()) {
+                        // 数据为空就获取数据
+                        friendsLimit = Constants.Follow_LimitPlus
+                        val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
+                        _friends.postValue(data)
+                    }else {
+                        // 数据不为空就什么也不做
+
+                    }
+                }
+            }
+            is HomeEvents.WantRefresh -> {
+                viewModelScope.launch {
+                    followListState = ListState.REPLACE
+                    // 覆盖数据
+                    friendsLimit = Constants.Follow_LimitPlus
+                    val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
+                    _friends.postValue(data)
+                }
+            }
+            is HomeEvents.WantMore -> {
+                viewModelScope.launch {
+                    followListState = ListState.ADD
+                    // 获取更多数据
+                    friendsLimit += Constants.Follow_LimitPlus
+                    val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
+                    _friends.postValue(data)
+                }
+            }
+            is HomeEvents.ClickFriend -> {
+                val friend = event.friend
             }
         }
     }

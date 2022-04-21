@@ -2,6 +2,7 @@ package com.android.aschat.feature_home.presentation
 
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 
@@ -16,4 +17,10 @@ sealed class HomeEvents {
 
     // 首页
     data class ClickHost(val hostData: HostData): HomeEvents()
+
+    // 关注页
+    object WantInit: HomeEvents()
+    object WantRefresh: HomeEvents()
+    object WantMore: HomeEvents()
+    class ClickFriend(val friend: FollowFriend): HomeEvents()
 }

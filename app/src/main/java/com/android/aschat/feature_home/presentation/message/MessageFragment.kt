@@ -108,10 +108,10 @@ class MessageFragment: Fragment() {
                     return MessagesFragment()
                 }
                 1 -> {
-                    return FollowedFragment()
+                    return CallsFragment()
                 }
                 2 -> {
-                    return CallsFragment()
+                    return FollowedFragment()
                 }
             }
             // 不会来到这一步

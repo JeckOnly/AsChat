@@ -13,6 +13,11 @@ object Constants {
      */
     const val HostWall_LimitPlus = 20
 
+    /**
+     * 每次请求关注列表的条数
+     */
+    const val Follow_LimitPlus = 20
+
     const val Media_Type_Video = "video"
     const val Media_Type_Photo = "photo"
 

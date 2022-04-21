@@ -10,13 +10,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.android.aschat.R
 import com.android.aschat.databinding.HomeWallTagFragmentBinding
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
-import com.android.aschat.feature_home.presentation.HomeViewModel
+import com.android.aschat.feature_home.domain.rv.ListState
 import com.android.aschat.feature_home.presentation.HomeEvents
+import com.android.aschat.feature_home.presentation.HomeViewModel
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 import com.android.aschat.util.DensityUtil
 import com.android.aschat.util.LogUtil
@@ -147,7 +147,7 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
         // 设置对列表的监听
         mViewModel.nowTagHosts.observe(viewLifecycleOwner) {
             // 更改当前rv的数据
-            LogUtil.d("更改rv的数据")
+            LogUtil.d("更改wall category rv的数据")
             when (mViewModel.mListState) {
                 ListState.REPLACE -> {
 //                    PageRefreshLayout 支持自动分页加载, 自动分页不需要你调用rv.models函数去设置数据, 使用addData即可
@@ -158,7 +158,6 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
                     mBinding.wallTagFragmentPage.addData(it)
                 }
             }
-            mRvAdapter.models
         }
     }
 

@@ -42,4 +42,9 @@ object ApiUrls {
      * 获得主播额外信息：礼物，标签
      */
     const val GetExtraInfo = "$BASE_URL/user/getBroadcasterExtraInfo"
+
+    /**
+     * 获得关注的用户列表
+     */
+    const val GetFriends = "$BASE_URL/user/getFriendsListPage"
 }
