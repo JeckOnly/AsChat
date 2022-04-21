@@ -117,10 +117,11 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             }
             is HomeEvents.ClickHost -> {
                 val hostData = event.hostData
-                val intent = Intent(context, HostActivity::class.java)
-                // 把主播数据传过去
-                intent.putExtra("hostData", JsonUtil.any2Json(hostData))
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                val intent = Intent(context, HostActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(Constants.WhereFrom, Constants.FromWall)
+                    putExtra("hostData", JsonUtil.any2Json(hostData))
+                }
                 context.startActivity(intent)
             }
             // 关注页------
@@ -172,6 +173,12 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             }
             is HomeEvents.ClickFriend -> {
                 val friend = event.friend
+                val intent = Intent(context, HostActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(Constants.WhereFrom, Constants.FromFollow)
+                    putExtra("friendData", JsonUtil.any2Json(friend))
+                }
+                context.startActivity(intent)
             }
         }
     }

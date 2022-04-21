@@ -13,6 +13,7 @@ import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_host.domain.repo.HostRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.internal.notifyAll
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -126,6 +127,29 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
             is HostEvents.SendHostData -> {
                 // 更改数据
                 _hostData.postValue(event.hostData)
+            }
+            is HostEvents.SendFriendData -> {
+                // 更改数据
+                val friend = event.friendData
+                // 从关注列表过来，也只好凑一个host data了
+                val hostData = HostData(
+                    age = friend.age,
+                    applicableTags = emptyList(),
+                    avatar = friend.avatarUrl,
+                    avatarMapPath = friend.avatar,
+                    callCoins = 0,
+                    country = friend.country,
+                    followNum = 0,
+                    gender = friend.gender,
+                    isFriend = true,
+                    isMultiple = false,
+                    nickname = friend.nickname,
+                    status = friend.onlineStatus,
+                    unit = "min",
+                    userId = friend.userId,
+                    videoMapPaths = emptyList()
+                )
+                _hostData.postValue(hostData)
             }
             is HostEvents.ExitHostDetail -> {
                 // 退出该activity

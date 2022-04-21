@@ -32,4 +32,9 @@ object Constants {
     const val Incall = "Incall"
     const val Offline = "Offline"
     const val Avaliable = "Available"
+
+    // 前往主播资料页的来源
+    const val WhereFrom = "WhereFrom"
+    const val FromWall = 0
+    const val FromFollow = 1
 }

@@ -3,8 +3,8 @@ package com.android.aschat.feature_home.domain.model.wall.subtag
 data class HostData(
     val age: Int,
     val applicableTags: List<String>,
-    val avatar: String,
-    val avatarMapPath: String,
+    val avatar: String?,
+    val avatarMapPath: String?,
     val callCoins: Int,
     val country: String,
     val followNum: Int,
