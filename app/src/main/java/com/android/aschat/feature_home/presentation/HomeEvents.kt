@@ -19,8 +19,8 @@ sealed class HomeEvents {
     data class ClickHost(val hostData: HostData): HomeEvents()
 
     // 关注页
-    object WantInit: HomeEvents()
-    object WantRefresh: HomeEvents()
-    object WantMore: HomeEvents()
+    object FollowWantInit: HomeEvents()
+    object FollowWantRefresh: HomeEvents()
+    object FollowWantMore: HomeEvents()
     class ClickFriend(val friend: FollowFriend): HomeEvents()
 }

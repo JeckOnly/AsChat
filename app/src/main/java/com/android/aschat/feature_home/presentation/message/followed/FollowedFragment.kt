@@ -4,24 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.aschat.R
-import com.android.aschat.common.Constants
 import com.android.aschat.databinding.HomeMessageFollowedFragmentBinding
-import com.android.aschat.databinding.HomeMessageFragmentBinding
-import com.android.aschat.databinding.HomeWallFragmentBinding
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
-import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_home.domain.rv.ListState
 import com.android.aschat.feature_home.presentation.HomeEvents
 import com.android.aschat.feature_home.presentation.HomeViewModel
-import com.android.aschat.feature_home.presentation.wall.WallFragment
-import com.android.aschat.feature_home.presentation.wall.category.SubTagEvents
-import com.android.aschat.feature_home.presentation.wall.category.TagHolder
-import com.android.aschat.feature_home.presentation.wall.category.WallCategoryFragment
 import com.android.aschat.util.LogUtil
 import com.drake.brv.BindingAdapter
 import com.drake.brv.listener.ItemDifferCallback
@@ -60,7 +50,7 @@ class FollowedFragment: Fragment() {
 
     fun initWidget() {
         mViewModel.apply {
-            onEvent(HomeEvents.WantInit)
+            onEvent(HomeEvents.FollowWantInit)
         }
         mBinding.apply {
             mRvAdapter = this.followRv.linear().setup {
@@ -78,6 +68,10 @@ class FollowedFragment: Fragment() {
                         val new = newItem as FollowFriend
                         return old.userId == new.userId
                     }
+
+                    override fun getChangePayload(oldItem: Any, newItem: Any): Any {
+                        return true
+                    }
                 }
                 // 设置点击事件
                 onClick(R.id.home_message_followed_item) {
@@ -92,12 +86,12 @@ class FollowedFragment: Fragment() {
 
                 onRefresh {
                     LogUtil.d("onRefresh")
-                    mViewModel.onEvent(HomeEvents.WantRefresh)
-                }.autoRefresh()
+                    mViewModel.onEvent(HomeEvents.FollowWantRefresh)
+                }
 
                 onLoadMore {
                     LogUtil.d("loadmore")
-                    mViewModel.onEvent(HomeEvents.WantMore)
+                    mViewModel.onEvent(HomeEvents.FollowWantMore)
                 }
             }
         }
@@ -109,14 +103,16 @@ class FollowedFragment: Fragment() {
                 ListState.REPLACE -> {
                     //PageRefreshLayout 支持自动分页加载, 自动分页不需要你调用rv.models函数去设置数据, 使用addData即可
                     mRvAdapter.models = mutableListOf()
-                    mBinding.followPage.addData(it)
+//                    mBinding.followPage.addData(it)
+                    mRvAdapter.setDifferModels(newModels = it, detectMoves = false)
+                    mBinding.followPage.finish()
                 }
                 ListState.ADD -> {
-                    mBinding.followPage.addData(it)
+//                    mBinding.followPage.addData(it)
+                    mRvAdapter.setDifferModels(newModels = it, detectMoves = false)
+                    mBinding.followPage.finish()
                 }
             }
-            // 测试
-            mBinding.testText.text = it.size.toString()
         }
     }
 }

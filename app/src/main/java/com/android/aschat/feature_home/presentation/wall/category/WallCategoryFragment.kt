@@ -137,7 +137,7 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
             onRefresh {
                 LogUtil.d("onRefresh")
                 mViewModel.onEvent(SubTagEvents.WantRefresh)
-            }.autoRefresh()
+            }
 
             onLoadMore {
                 LogUtil.d("loadmore")
@@ -152,10 +152,15 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
                 ListState.REPLACE -> {
 //                    PageRefreshLayout 支持自动分页加载, 自动分页不需要你调用rv.models函数去设置数据, 使用addData即可
                     mRvAdapter.models = mutableListOf()
-                    mBinding.wallTagFragmentPage.addData(it)
+//                    mBinding.wallTagFragmentPage.addData(it)
+                    mRvAdapter.setDifferModels(it, false)
+                    // 要自己结束状态
+                    mBinding.wallTagFragmentPage.finish()
                 }
                 ListState.ADD -> {
-                    mBinding.wallTagFragmentPage.addData(it)
+//                    mBinding.wallTagFragmentPage.addData(it)
+                    mRvAdapter.setDifferModels(it, false)
+                    mBinding.wallTagFragmentPage.finish()
                 }
             }
         }

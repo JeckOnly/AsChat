@@ -2,7 +2,6 @@ package com.android.aschat.feature_home.presentation
 
 import android.content.Context
 import android.content.Intent
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.*
 import com.android.aschat.R
@@ -11,10 +10,8 @@ import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
 import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
-import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_home.domain.repo.HomeRepo
 import com.android.aschat.feature_home.domain.rv.ListState
-import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_host.presentation.HostActivity
 import com.android.aschat.feature_login.domain.model.login.UserInfo
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
@@ -81,8 +78,8 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     val parentTagList: List<BroadcasterWallTag> = wallStrategyData.broadcasterWallTagList
 
     // 关注页---------------------
-    private val _friends: MutableLiveData<List<FollowFriend>> = MutableLiveData(mutableListOf())
-    val friends: LiveData<List<FollowFriend>> = _friends
+    private val _friends: MutableLiveData<MutableList<FollowFriend>> = MutableLiveData(mutableListOf())
+    val friends: LiveData<MutableList<FollowFriend>> = _friends
 
     var friendsLimit = Constants.Follow_LimitPlus
 
@@ -126,36 +123,45 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 context.startActivity(intent)
             }
-            is HomeEvents.WantInit -> {
+            is HomeEvents.FollowWantInit -> {
                 viewModelScope.launch {
                     followListState = ListState.REPLACE
                     if (_friends.value!!.isEmpty()) {
                         // 数据为空就获取数据
                         friendsLimit = Constants.Follow_LimitPlus
                         val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
-                        _friends.postValue(data)
+                        _friends.postValue(data.toMutableList())
                     }else {
                         // 数据不为空就什么也不做
 
                     }
                 }
             }
-            is HomeEvents.WantRefresh -> {
+            is HomeEvents.FollowWantRefresh -> {
                 viewModelScope.launch {
                     followListState = ListState.REPLACE
-                    // 覆盖数据
                     friendsLimit = Constants.Follow_LimitPlus
                     val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
-                    _friends.postValue(data)
+                    // 覆盖数据
+                    _friends.postValue(data.toMutableList())
                 }
             }
-            is HomeEvents.WantMore -> {
+            is HomeEvents.FollowWantMore -> {
                 viewModelScope.launch {
                     followListState = ListState.ADD
                     // 获取更多数据
                     friendsLimit += Constants.Follow_LimitPlus
                     val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
-                    _friends.postValue(data)
+                    // 旧数据
+                    var list = _friends.value
+                    // 增加数据
+                    list!!.addAll(data)
+                    // 去重, 不做了，留给rv去做
+//                    list = list.distinctBy {
+//                        it.userId
+//                    }.toMutableList()
+                    // 提交数据
+                    _friends.postValue(list)
                 }
             }
             is HomeEvents.ClickFriend -> {
