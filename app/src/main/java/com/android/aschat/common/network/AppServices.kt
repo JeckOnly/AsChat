@@ -5,6 +5,7 @@ import com.android.aschat.feature_home.domain.model.follow.GetFriendList
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftAndLabel
+import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
@@ -43,4 +44,7 @@ interface AppServices {
 
    @POST(ApiUrls.GetFriends)
    suspend fun getFriendList(@Body getFriendList: GetFriendList): Response<List<FollowFriend>>
+
+   @GET(ApiUrls.GetGiftInfo)
+   suspend fun getGiftInfo(): Response<List<GiftInfo>>
 }

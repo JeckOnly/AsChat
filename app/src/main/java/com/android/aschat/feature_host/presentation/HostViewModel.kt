@@ -5,15 +5,20 @@ import android.widget.Toast
 import androidx.lifecycle.*
 import com.android.aschat.R
 import com.android.aschat.common.Constants
+import com.android.aschat.common.Gift
+import com.android.aschat.common.giftAndNum2Gift
+import com.android.aschat.common.giftStr2Gift
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
-import com.android.aschat.feature_home.domain.repo.HomeRepo
+import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_host.domain.repo.HostRepo
+import com.android.aschat.util.JsonUtil
+import com.android.aschat.util.SpConstants
+import com.android.aschat.util.SpUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import okhttp3.internal.notifyAll
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -72,6 +77,12 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
     val labelList: LiveData<List<String>> = _labelList
 
     /**
+     * 礼物map
+     */
+    private val _giftMap: MutableLiveData<Map<Gift, String>> = MutableLiveData(mutableMapOf())
+    val giftMap: LiveData<Map<Gift, String>> = _giftMap
+
+    /**
      * 当前点击的图片position
      */
     var picturePositionClicked = -1
@@ -111,7 +122,10 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                     val response = repo.getExtraInfo(hostData.userId)
                     if (response.code == 0) {
                         // 成功
+                        // 设置标签
                         _labelList.postValue(response.data.labelsList)
+                        // 设置礼物
+                        _giftMap.postValue(giftAndNumList2Map(response.data.giftList))
                     }else {
                         // 失败
                     }
@@ -194,5 +208,48 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                  }
             }
         }
+    }
+
+    private suspend fun giftAndNumList2Map(giftAndNumList: List<String>): Map<Gift, String> {
+        val map = mutableMapOf<Gift, String>()
+        // 往map中写数据
+        giftAndNumList.forEach {
+            giftAndNum2Gift(map, it)
+        }
+        // 获取礼物策略数据
+        val giftStrategy = getGiftStrategy()
+        // 对map中的数据进行排序
+        val sortedMap = map.toSortedMap { o1, o2 ->
+            val order1 = giftStrategy.indexOfFirst {
+                giftStr2Gift(it.code) == o1
+            }
+            val order2 = giftStrategy.indexOfFirst {
+                giftStr2Gift(it.code) == o2
+            }
+            return@toSortedMap order1 - order2
+        }
+        return sortedMap
+    }
+
+    /**
+     * 获取gift info
+     */
+    private suspend fun getGiftStrategy(): List<GiftInfo>{
+        val giftStrategyStr = SpUtil.get(context, SpConstants.GIFT_STRATEGY, "") as String
+        var giftStrategy: List<GiftInfo>? = null
+        if (giftStrategyStr.isEmpty()) {
+            var data: List<GiftInfo> = repo.getGiftInfo().data
+            // 排序，数值越大越靠前
+            data = data.sortedWith { o1, o2 ->
+                if (o1.sortNo - o2.sortNo > 0) return@sortedWith -1
+                else return@sortedWith 1
+            }
+            // 存好数据
+            SpUtil.putAndApply(context, SpConstants.GIFT_STRATEGY, JsonUtil.any2Json(data))
+            giftStrategy = data
+        }else {
+            giftStrategy = JsonUtil.json2Any(giftStrategyStr, List::class.java, GiftInfo::class.java)
+        }
+        return giftStrategy!!
     }
 }

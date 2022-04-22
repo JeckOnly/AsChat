@@ -87,7 +87,7 @@ class FollowedFragment: Fragment() {
                 onRefresh {
                     LogUtil.d("onRefresh")
                     mViewModel.onEvent(HomeEvents.FollowWantRefresh)
-                }
+                }.autoRefresh()
 
                 onLoadMore {
                     LogUtil.d("loadmore")

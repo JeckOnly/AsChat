@@ -22,6 +22,7 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_button_red_purple.xml" value="0.3665" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_circle.xml" value="0.238" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_edittext.xml" value="0.2325" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_gift_number.xml" value="0.1875" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_gray_circle.xml" value="0.3665" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_gray_fill.xml" value="0.17" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_green_fill.xml" value="0.17" />
@@ -56,7 +57,8 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_wall_tag_fragment.xml" value="0.1" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_acty.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_controler.xml" value="0.365625" />
-        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_fragment.xml" value="0.4466666666666667" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_fragment.xml" value="0.3333333333333333" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_gift_item.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_image_fragment.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_label_item.xml" value="0.6" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/host_detail_popupwindow.xml" value="0.365625" />

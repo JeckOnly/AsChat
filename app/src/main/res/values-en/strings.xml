@@ -41,4 +41,5 @@
     <string name="Followed">Followed</string>
     <string name="unfollow_success">Unfollow successfully</string>
     <string name="follow_success">Follow successfully</string>
+    <string name="gift">Gift</string>
 </resources>

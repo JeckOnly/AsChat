@@ -3,6 +3,7 @@ package com.android.aschat.feature_host.domain.repo
 import com.android.aschat.common.network.AppServices
 import com.android.aschat.common.network.Response
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftAndLabel
+import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
@@ -49,4 +50,10 @@ class HostRepo(private val services: AppServices) {
         return response
     }
 
+    /**
+     * 获取礼物策略
+     */
+    suspend fun getGiftInfo(): Response<List<GiftInfo>> {
+        return services.getGiftInfo()
+    }
 }

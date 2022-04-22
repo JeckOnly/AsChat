@@ -12,6 +12,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.aschat.R
 import com.android.aschat.databinding.HostDetailFragmentBinding
+import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
+import com.android.aschat.feature_home.presentation.HomeEvents
+import com.android.aschat.feature_home.presentation.wall.category.MainSpaceDecoration
+import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftAndNumber
 import com.android.aschat.feature_host.domain.rv.HostDetailVideoRvAdapter
 import com.android.aschat.feature_host.presentation.HostActivity
 import com.android.aschat.feature_host.presentation.HostEvents
@@ -19,6 +23,9 @@ import com.android.aschat.feature_host.presentation.HostViewModel
 import com.android.aschat.util.FontUtil
 import com.android.aschat.util.LogUtil
 import com.android.aschat.util.setHostStatus
+import com.drake.brv.listener.ItemDifferCallback
+import com.drake.brv.utils.grid
+import com.drake.brv.utils.setup
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
 import razerdp.basepopup.BasePopupWindow
@@ -87,6 +94,16 @@ class HostDetailFragment : Fragment() {
                 mViewModel.onEvent(HostEvents.ClickFollow)
             }
         }
+        // 礼物列表设置
+        val giftRvAdapter = mBinding.hostDetailGiftRv.grid(
+            spanCount = 4
+        ).apply {
+            this.addItemDecoration(
+                MainSpaceDecoration(requireContext(), 6)
+            )
+        }.setup {
+            addType<GiftAndNumber>(R.layout.host_detail_gift_item)
+        }
         // 观察状态变化
         mViewModel.status.observe(viewLifecycleOwner) {
             setHostStatus(mBinding.hostDetailStatus, it)
@@ -95,6 +112,14 @@ class HostDetailFragment : Fragment() {
         // 观察是否follow
         mViewModel.follow.observe(viewLifecycleOwner) {
             setFollowRedGray(mBinding.hostDetailFollow, it)
+        }
+        // 观察礼物列表
+        mViewModel.giftMap.observe(viewLifecycleOwner) {
+            val giftAndNumberList = mutableListOf<GiftAndNumber>()
+            for (gift in it.keys) {
+                giftAndNumberList.add(GiftAndNumber(gift, it[gift] ?:"0"))
+            }
+            giftRvAdapter.models = giftAndNumberList
         }
     }
 

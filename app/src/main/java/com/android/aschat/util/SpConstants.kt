@@ -21,4 +21,9 @@ object SpConstants {
      * 策略
      */
     const val STRATEGY = "strategy"
+
+    /**
+     * 礼物策略
+     */
+    const val GIFT_STRATEGY = "gift_strategy"
 }

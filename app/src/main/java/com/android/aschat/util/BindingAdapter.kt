@@ -9,6 +9,8 @@ import coil.load
 import coil.request.videoFrameMillis
 import com.android.aschat.R
 import com.android.aschat.common.Constants
+import com.android.aschat.common.Gift
+import com.android.aschat.common.gift2ImageId
 import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
 import com.android.aschat.feature_home.domain.rv.UserSettingRvAdapter
 import com.android.aschat.feature_host.domain.customview.FlowLayout
@@ -61,6 +63,18 @@ fun setImageUrl(imageView: ImageView, url: String?) {
         return
     }
     imageView.load(url)
+}
+
+@BindingAdapter("setGiftImage")
+fun setGiftImage(imageView: ImageView, gift: Gift?) {
+    if (gift == null) return
+    imageView.setImageResource(gift2ImageId(gift))
+}
+
+@BindingAdapter("setGiftNumber")
+fun setGiftNumber(textView: TextView, giftNumber: String?) {
+    if (giftNumber == null) return
+    textView.text = "x$giftNumber"
 }
 
 @BindingAdapter("setHostTag")

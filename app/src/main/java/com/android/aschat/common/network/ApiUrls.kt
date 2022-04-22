@@ -9,6 +9,11 @@ object ApiUrls {
     const val BASE_URL: String = "http://52.11.57.160:2030"
 
     /**
+     * base 长连url
+     */
+    const val BASE_SOCKET_URL: String = "http://52.11.57.160:9001"
+
+    /**
      * 登录
      */
     const val Login: String = "$BASE_URL/security/oauth"
@@ -47,4 +52,9 @@ object ApiUrls {
      * 获得关注的用户列表
      */
     const val GetFriends = "$BASE_URL/user/getFriendsListPage"
+
+    /**
+     * 获取礼物策略
+     */
+    const val GetGiftInfo = "$BASE_URL/gift/list"
 }

@@ -2,6 +2,7 @@ package com.android.aschat.feature_login.domain.repo
 
 import com.android.aschat.common.network.AppServices
 import com.android.aschat.common.network.Response
+import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
 import com.android.aschat.feature_login.data.UserDao
 import com.android.aschat.feature_login.domain.model.login.LoginData
 import com.android.aschat.feature_login.domain.model.login.UserInfo
