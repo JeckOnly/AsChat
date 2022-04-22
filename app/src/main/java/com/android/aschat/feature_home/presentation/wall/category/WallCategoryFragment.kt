@@ -100,7 +100,7 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
             mBinding.wallTagTablayout.addTab(tab)
         }
 
-        // 开始设置rv todo Jeck 刷新状态机制
+        // 开始设置rv todo Jeck 刷新状态机制 Android11返回白屏
         mRvAdapter = mBinding.wallTagFragmentRv.grid(
             spanCount = 2
         ).apply {

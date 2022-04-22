@@ -237,6 +237,7 @@
                 android:layout_marginTop="35dp"
                 android:background="@{viewmodel.userEditDetail.head == 0 ? @drawable/shape_purple_circle : @drawable/shape_gray_circle}"
                 tools:src="@color/black_3"
+                app:contentPadding="2dp"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"/>
 
             <ImageView
