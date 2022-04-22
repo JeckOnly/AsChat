@@ -7,6 +7,7 @@ import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInf
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
+import com.android.aschat.util.LogUtil
 
 class HostRepo(private val services: AppServices) {
 
@@ -15,10 +16,10 @@ class HostRepo(private val services: AppServices) {
      */
     suspend fun addFriend(addFriend: AddFriend): Response<Boolean> {
         var response: Response<Boolean> = services.addFriend(addFriend)
-//        while (response.code != 0) {
-//            LogUtil.d("关注主播 ${response.code}")
-//            response = services.addFriend(addFriend)
-//        }
+        while (response.code != 0) {
+            LogUtil.d("关注主播 ${response.code}")
+            response = services.addFriend(addFriend)
+        }
         return response
     }
 
@@ -27,10 +28,10 @@ class HostRepo(private val services: AppServices) {
      */
     suspend fun cancelFriend(cancelFriend: CancelFriend): Response<Boolean> {
         var response: Response<Boolean> = services.cancelFriend(cancelFriend)
-//        while (response.code != 0) {
-//            LogUtil.d("取消关注主播 ${response.code}")
-//            response = services.cancelFriend(cancelFriend)
-//        }
+        while (response.code != 0) {
+            LogUtil.d("取消关注主播 ${response.code}")
+            response = services.cancelFriend(cancelFriend)
+        }
         return response
     }
 

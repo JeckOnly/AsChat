@@ -57,4 +57,9 @@ object ApiUrls {
      * 获取礼物策略
      */
     const val GetGiftInfo = "$BASE_URL/gift/list"
+
+    /**
+     * oss信息获取
+     */
+    const val GetOssInfo = "$BASE_URL/user/oss/policy"
 }

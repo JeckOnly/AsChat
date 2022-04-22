@@ -13,6 +13,7 @@ import com.android.aschat.feature_host.domain.repo.HostRepo
 import com.android.aschat.feature_login.data.UserDao
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.util.AppUtil
+import com.android.aschat.util.LogUtil
 import com.android.aschat.util.SpConstants
 import com.android.aschat.util.SpUtil
 import dagger.Module
@@ -74,13 +75,19 @@ object AppModule {
                 }
             })
             .addInterceptor(Interceptor { chain ->
+                // 添加重试，以及报错处理
                 var retryNum = 0
                 val request: Request = chain.request()
-                var response: Response = chain.proceed(request)
-                while (!response.isSuccessful && retryNum < Constants.Max_Retry) {
+                var response: Response
+                do {
                     retryNum++
-                    response = chain.proceed(request)
-                }
+                    try {
+                        response = chain.proceed(request)
+                    } catch (e: Exception) {
+                        LogUtil.e(e.stackTraceToString())
+                        response = Response.Builder().code(404).build()// 在这里设置了code为404，循环时会再次请求
+                    }
+                }while (!response.isSuccessful && retryNum < Constants.Max_Retry)
                 return@Interceptor response
             })
             .build()
