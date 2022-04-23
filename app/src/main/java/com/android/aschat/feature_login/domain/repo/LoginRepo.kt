@@ -4,6 +4,9 @@ import com.android.aschat.common.network.AppServices
 import com.android.aschat.common.network.Response
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
 import com.android.aschat.feature_login.data.UserDao
+import com.android.aschat.feature_login.domain.model.coin.CoinGood
+import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
+import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.model.login.LoginData
 import com.android.aschat.feature_login.domain.model.login.UserInfo
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
@@ -30,6 +33,22 @@ class LoginRepo(private val services: AppServices, private val dao: UserDao) {
             LogUtil.d("strategy: ${response.code}")
             response = services.getStrategy()
         }
+        return response
+    }
+
+    /**
+     * 获取金币策略
+     */
+    suspend fun getCoinGoods(getCoinGood: GetCoinGood): Response<List<CoinGood>> {
+        val response: Response<List<CoinGood>> = services.getCoinGoods(getCoinGood)
+        return response
+    }
+
+    /**
+     * 获取金币策略(促销)
+     */
+    suspend fun getCoinGoodsPromotion(getCoinGood: GetCoinGood): Response<CoinGoodPromotion> {
+        val response: Response<CoinGoodPromotion> = services.getCoinGoodsPromotion(getCoinGood)
         return response
     }
 

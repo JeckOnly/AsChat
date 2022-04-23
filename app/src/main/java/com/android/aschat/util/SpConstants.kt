@@ -26,4 +26,14 @@ object SpConstants {
      * 礼物策略
      */
     const val GIFT_STRATEGY = "gift_strategy"
+
+    /**
+     * 金币商品
+     */
+    const val COIN_GOODS = "coin_goods"
+
+    /**
+     * 金币商品(促销)
+     */
+    const val COIN_GOODS_PROMOTION = "coin_goods_promotion"
 }

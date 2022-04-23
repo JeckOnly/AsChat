@@ -62,4 +62,15 @@ object ApiUrls {
      * oss信息获取
      */
     const val GetOssInfo = "$BASE_URL/user/oss/policy"
+
+    /**
+     * 获取金币商品链接
+     */
+    const val GetCoinGoods = "$BASE_URL/coin/goods/search"
+
+    /**
+     * 获取金币商品链接
+     */
+    const val GetCoinGoodsPromotion = "$BASE_URL/coin/goods/getPromotion"
+
 }

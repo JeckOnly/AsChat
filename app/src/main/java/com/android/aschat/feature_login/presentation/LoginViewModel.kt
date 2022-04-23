@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.aschat.R
 import com.android.aschat.common.Constants
 import com.android.aschat.feature_home.presentation.HomeActivity
+import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.util.AppUtil
 import com.android.aschat.util.JsonUtil
@@ -13,6 +14,7 @@ import com.android.aschat.util.SpConstants
 import com.android.aschat.util.SpUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -25,11 +27,11 @@ class LoginViewModel @Inject constructor(
         when (event) {
             is LoginEvents.LoginEvent -> {
                 viewModelScope.launch {
-                    // TODO: 处理异常
                     // 登录
                     val oldUserId = SpUtil.get(event.context, SpConstants.USERID, "")
                     val androidId = AppUtil.getAndroidId(event.context)
 
+                    // 1) 登录
                     val loginResponse = repo.login(Constants.OauthType, androidId)
                     if (loginResponse.code == 0) {
                         // 成功
@@ -48,22 +50,55 @@ class LoginViewModel @Inject constructor(
                         val token = loginResponse.data.token
                         // 保存token
                         SpUtil.putAndApply(event.context, SpConstants.TOKEN, token)
-                        val strategyResponse = repo.getStrategy()
-                        if (strategyResponse.code == 0) {
-                            // 成功
-                            // 保存策略
-                            SpUtil.putAndApply(event.context, SpConstants.STRATEGY, JsonUtil.any2Json(strategyResponse.data))
+
+                        supervisorScope {
+                            // 2) 获取策略
+                            val jobStrategy = launch {
+                                val strategyResponse = repo.getStrategy()
+                                if (strategyResponse.code == 0) {
+                                    // 成功
+                                    // 保存策略
+                                    SpUtil.putAndApply(event.context, SpConstants.STRATEGY, JsonUtil.any2Json(strategyResponse.data))
+                                }
+                            }
+
+                            // 3) 获取金币商品
+                            val jobCoinGoods = launch {
+                                val coinGoodResponse = repo.getCoinGoods(GetCoinGood(true, Constants.PayChannel))
+                                if (coinGoodResponse.code == 0) {
+                                    // 成功
+                                    // 保存金币商品信息
+                                    SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS, JsonUtil.any2Json(coinGoodResponse.data))
+                                }
+                            }
+
+                            // 4) 获取金币促销商品
+                            val jobCoinGoodPromotion = launch {
+                                val coinGoodPromotion = repo.getCoinGoodsPromotion(GetCoinGood(true, Constants.PayChannel))
+                                if (coinGoodPromotion.code == 0) {
+                                    // 成功
+                                    // 保存金币商品促销信息
+                                    SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS_PROMOTION, JsonUtil.any2Json(coinGoodPromotion.data))
+                                }
+                            }
+
+                            jobStrategy.join()
+                            jobCoinGoods.join()
+                            jobCoinGoodPromotion.join()
+
+                            // end)跳转
                             if (loginResponse.data.isFirstRegister) {
                                 // 第一次登录
                                 event.navController.navigate(R.id.action_splashFragment_to_fastLoginFragment)
                             }else {
                                 // 不是第一次登录
-//                            event.navController.navigate(R.id.action_splashFragment_to_homeActivity)
+                                //                            event.navController.navigate(R.id.action_splashFragment_to_homeActivity)
                                 val intent = Intent(event.context, HomeActivity::class.java)
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                 event.context.startActivity(intent)
                             }
                         }
+
                     }
                 }
             }

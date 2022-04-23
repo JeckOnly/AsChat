@@ -86,7 +86,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     var followListState = ListState.REPLACE
 
     init {
-        // 给coin增加监听，改变时修改rv
+        // 给coin增加监听，改变时修改rv(注：因为userinfo有其他信息，不想其他无所谓信息改变的时候更改userItemList)
         coin.observeForever {
             _userItemList.postValue(_userItemList.value.apply {
                 this!![0].cornText = it

@@ -9,6 +9,9 @@ import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInf
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
+import com.android.aschat.feature_login.domain.model.coin.CoinGood
+import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
+import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.model.login.LoginData
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
 import retrofit2.http.*
@@ -32,7 +35,6 @@ interface AppServices {
    @POST(ApiUrls.AddFriend)
    suspend fun addFriend(@Body addFriend: AddFriend): Response<Boolean>
 
-
    @POST(ApiUrls.CancelFriend)
    suspend fun cancelFriend(@Body cancelFriend: CancelFriend): Response<Boolean>
 
@@ -47,4 +49,11 @@ interface AppServices {
 
    @GET(ApiUrls.GetGiftInfo)
    suspend fun getGiftInfo(): Response<List<GiftInfo>>
+
+   @POST(ApiUrls.GetCoinGoods)
+   suspend fun getCoinGoods(@Body getCoinGood: GetCoinGood): Response<List<CoinGood>>
+
+   @POST(ApiUrls.GetCoinGoodsPromotion)
+   suspend fun getCoinGoodsPromotion(@Body getCoinGood: GetCoinGood): Response<CoinGoodPromotion>
+
 }
