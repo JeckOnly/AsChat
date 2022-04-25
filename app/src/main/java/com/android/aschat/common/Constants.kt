@@ -43,4 +43,15 @@ object Constants {
     const val HOUR_MILLIS = 1000L * 60 * 60
     const val MIN_MILLIS = 1000L * 60
     const val SECOND_MILLIS = 1000L
+
+    // 屏蔽举报模块
+    const val Block = "Block"
+    const val Report = "Report"
+
+    // 举报要传递的业务分类子项，屏蔽传“”就行
+    const val Porngraphic = "Porngraphic"
+    const val Falsegender = "False gender"
+    const val Fraud = "Fraud"
+    const val Politiclsensitive = "Politicl sensitive"
+    const val Other = "Other"
 }

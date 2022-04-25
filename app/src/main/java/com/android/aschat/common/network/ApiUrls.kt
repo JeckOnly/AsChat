@@ -73,4 +73,18 @@ object ApiUrls {
      */
     const val GetCoinGoodsPromotion = "$BASE_URL/coin/goods/getPromotion"
 
+    /**
+     * 获取屏蔽列表
+     */
+    const val GetBlockedList = "$BASE_URL/report/complain/blockList"
+
+    /**
+     * 屏蔽或举报某人
+     */
+    const val BlockOrReport = "$BASE_URL/report/complain/insertRecord"
+
+    /**
+     * 接触屏蔽
+     */
+    const val CancelBlock = "$BASE_URL/report/complain/removeBlock"
 }

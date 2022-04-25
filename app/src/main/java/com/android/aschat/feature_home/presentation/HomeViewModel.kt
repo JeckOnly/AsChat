@@ -188,11 +188,11 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                     var list = _friends.value
                     // 增加数据
                     list!!.addAll(data!!)
-                    sortFriends(list)
-                    // 去重, 不做了，留给rv去做
+                    // TODO: 为什么去重会有问题，在这里去重 
 //                    list = list.distinctBy {
 //                        it.userId
 //                    }.toMutableList()
+                    sortFriends(list)
                     // 提交数据
                     _friends.postValue(list)
                 }

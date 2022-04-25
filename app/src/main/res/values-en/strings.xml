@@ -43,4 +43,17 @@
     <string name="follow_success">Follow successfully</string>
     <string name="gift">Gift</string>
     <string name="coin_store">Coin Store</string>
+    <string name="blocked_title">Blocked List</string>
+    <string name="Follow">Follow</string>
+    <string name="Block">Block</string>
+    <string name="Report">Report</string>
+    <string name="Cancel">Cancel</string>
+    <string name="Porngraphic">Porngraphic</string>
+    <string name="Falsegender">False gender</string>
+    <string name="Fraud">Fraud</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="unBlock">Unblock</string>
+    <string name="Unblock_successfully">Unblock successfully</string>
+    <string name="Block_successfully">Block successfully</string>
+    <string name="Report_successfully">Report successfully</string>
 </resources>

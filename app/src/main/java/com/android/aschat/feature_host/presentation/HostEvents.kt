@@ -16,4 +16,6 @@ sealed class HostEvents {
     class ExitFullScreenImage(val navController: NavController): HostEvents()
     class ExitFullScreenVideo(val navController: NavController): HostEvents()
     object ClickFollow : HostEvents()
+    object ClickBlock : HostEvents()
+    class ClickReport(val subtag: String = ""): HostEvents()
 }

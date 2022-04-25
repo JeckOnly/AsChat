@@ -2,6 +2,7 @@ package com.android.aschat.feature_home.domain.repo
 
 import com.android.aschat.common.network.AppServices
 import com.android.aschat.common.network.Response
+import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
@@ -36,6 +37,14 @@ class HomeRepo(private val services: AppServices) {
             LogUtil.d("获取关注列表${getFriendList.limit}")
             response = services.getFriendList(getFriendList)
         }
+        return response
+    }
+
+    /**
+     * 获取屏蔽列表
+     */
+    suspend fun getBlockedList(): Response<List<BlockedItem>>{
+        val response = services.getBlockedList()
         return response
     }
 }

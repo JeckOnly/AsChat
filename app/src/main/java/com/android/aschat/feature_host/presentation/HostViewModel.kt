@@ -8,6 +8,8 @@ import com.android.aschat.common.Constants
 import com.android.aschat.common.Gift
 import com.android.aschat.common.giftAndNum2Gift
 import com.android.aschat.common.giftStr2Gift
+import com.android.aschat.feature_home.domain.model.blocked.BlockOrReport
+import com.android.aschat.feature_home.domain.model.blocked.CancelBlock
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
@@ -104,6 +106,12 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
     private val _follow: MutableLiveData<Boolean> = MutableLiveData(false)
     val follow: LiveData<Boolean> = _follow
 
+    /**
+     * 是否屏蔽
+     */
+    private val _blocked: MutableLiveData<Boolean> = MutableLiveData(false)
+    val blocked: LiveData<Boolean> = _blocked
+
     init {
         _hostData.observeForever { hostData ->
             viewModelScope.launch {
@@ -114,6 +122,7 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                         val hostInfo = response.data
                         _hostInfo.postValue(hostInfo)
                         _follow.postValue(hostInfo!!.isFriend)
+                        _blocked.postValue(hostInfo.isBlock)
                     }else {
                         // 失败
                     }
@@ -206,6 +215,36 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                          }
                      }
                  }
+            }
+            is HostEvents.ClickBlock -> {
+                // 屏蔽或取消屏蔽主播
+                viewModelScope.launch {
+                    if (_blocked.value!!) {
+                        // 原来屏蔽，现在取消屏蔽
+                        val response = repo.cancelBlock(CancelBlock(_hostInfo.value!!.userId.toLong()))
+                        if (response.code == 0 && response.data == true) {
+                            _blocked.postValue(false)
+                            Toast.makeText(context, context.getString(R.string.Unblock_successfully), Toast.LENGTH_SHORT).show()
+                        }
+                    }else {
+                        // 原来没有屏蔽，现在屏蔽
+                        val response = repo.blockOrReport(BlockOrReport(_hostInfo.value!!.userId.toLong(), Constants.Block))
+                        if (response.code == 0 && response.data == true) {
+                            _blocked.postValue(true)
+                            Toast.makeText(context, context.getString(R.string.Block_successfully), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            is HostEvents.ClickReport -> {
+                // 举报主播
+                viewModelScope.launch {
+                    val response = repo.blockOrReport(BlockOrReport(_hostInfo.value!!.userId.toLong(), Constants.Report, event.subtag))
+                    if (response.code == 0 && response.data == true) {
+                        _blocked.postValue(true)
+                        Toast.makeText(context, context.getString(R.string.Report_successfully), Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
     }

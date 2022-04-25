@@ -1,5 +1,6 @@
 package com.android.aschat.feature_host.presentation.hostinfo.hostdetail
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.aschat.R
+import com.android.aschat.common.Constants
 import com.android.aschat.databinding.HostDetailFragmentBinding
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_home.presentation.HomeEvents
@@ -20,6 +22,7 @@ import com.android.aschat.feature_host.domain.rv.HostDetailVideoRvAdapter
 import com.android.aschat.feature_host.presentation.HostActivity
 import com.android.aschat.feature_host.presentation.HostEvents
 import com.android.aschat.feature_host.presentation.HostViewModel
+import com.android.aschat.util.DialogUtil
 import com.android.aschat.util.FontUtil
 import com.android.aschat.util.LogUtil
 import com.android.aschat.util.setHostStatus
@@ -37,6 +40,8 @@ class HostDetailFragment : Fragment() {
     private val mPopupWindow: BasePopupWindow by lazy {
         ReportPopUp(requireContext())
     }
+    private lateinit var mFirstBlockDialog: Dialog
+    private lateinit var mSecondBlockDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,7 +92,58 @@ class HostDetailFragment : Fragment() {
                 mViewModel.onEvent(HostEvents.ExitHostDetail(requireActivity() as HostActivity))
             }
             hostDetailMore.setOnClickListener {
-                mPopupWindow.showPopupWindow(mBinding.hostDetailMore)
+//                mPopupWindow.showPopupWindow(mBinding.hostDetailMore)
+                mSecondBlockDialog = DialogUtil.createSecondBlockDialog(
+                    requireContext(),
+                    mViewModel.blocked.value?:false,
+                    {
+                        mViewModel.onEvent(HostEvents.ClickReport(Constants.Politiclsensitive))
+                        it.dismiss()
+                    },
+                    {
+                        mViewModel.onEvent(HostEvents.ClickReport(Constants.Falsegender))
+                        it.dismiss()
+                    },
+                    {
+                        mViewModel.onEvent(HostEvents.ClickReport(Constants.Fraud))
+                        it.dismiss()
+                    },
+                    {
+                        mViewModel.onEvent(HostEvents.ClickBlock)
+                        it.dismiss()
+                    },
+                    {
+                        mViewModel.onEvent(HostEvents.ClickReport())
+                        it.dismiss()
+                    },
+                    {
+                        it.dismiss()
+                    },
+                )
+                mFirstBlockDialog = DialogUtil.createFirstBlockDialog(
+                    requireContext(),
+                    mViewModel.follow.value?:false,// 一般来说不为null
+                    mViewModel.blocked.value?:false,
+                    {
+                        // 点击关注
+                        mViewModel.onEvent(HostEvents.ClickFollow)
+                        it.dismiss()
+                    },
+                    {
+                        // 屏蔽
+                        mViewModel.onEvent(HostEvents.ClickBlock)
+                        it.dismiss()
+                    },
+                    {
+                        // report
+                        it.dismiss()
+                        mSecondBlockDialog.show()
+                    },
+                    {
+                        it.dismiss()
+                    }).apply {
+                        show()
+                }
             }
             hostDetailVideoCallBar.typeface = FontUtil.getTypeface(requireContext())
             hostDetailFollow.setOnClickListener {

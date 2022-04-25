@@ -1,5 +1,8 @@
 package com.android.aschat.common.network
 
+import com.android.aschat.feature_home.domain.model.blocked.BlockOrReport
+import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
+import com.android.aschat.feature_home.domain.model.blocked.CancelBlock
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
@@ -56,4 +59,12 @@ interface AppServices {
    @POST(ApiUrls.GetCoinGoodsPromotion)
    suspend fun getCoinGoodsPromotion(@Body getCoinGood: GetCoinGood): Response<CoinGoodPromotion>
 
+   @POST(ApiUrls.GetBlockedList)
+   suspend fun getBlockedList(): Response<List<BlockedItem>>
+
+   @POST(ApiUrls.BlockOrReport)
+   suspend fun blockOrReport(@Body blockOrReport: BlockOrReport): Response<Boolean>
+
+   @POST(ApiUrls.CancelBlock)
+   suspend fun cancelBlock(@Body cancelBlock: CancelBlock): Response<Boolean>
 }

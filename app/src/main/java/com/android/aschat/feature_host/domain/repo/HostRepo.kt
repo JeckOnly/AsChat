@@ -2,6 +2,8 @@ package com.android.aschat.feature_host.domain.repo
 
 import com.android.aschat.common.network.AppServices
 import com.android.aschat.common.network.Response
+import com.android.aschat.feature_home.domain.model.blocked.BlockOrReport
+import com.android.aschat.feature_home.domain.model.blocked.CancelBlock
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftAndLabel
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
@@ -56,5 +58,19 @@ class HostRepo(private val services: AppServices) {
      */
     suspend fun getGiftInfo(): Response<List<GiftInfo>> {
         return services.getGiftInfo()
+    }
+
+    /**
+     * 屏蔽或举报一个人
+     */
+    suspend fun blockOrReport(blockOrReport: BlockOrReport): Response<Boolean> {
+        return services.blockOrReport(blockOrReport)
+    }
+
+    /**
+     * 取消屏蔽一个人
+     */
+    suspend fun cancelBlock(cancelBlock: CancelBlock): Response<Boolean> {
+        return services.cancelBlock(cancelBlock)
     }
 }
