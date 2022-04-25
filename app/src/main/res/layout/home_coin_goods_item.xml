@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="model"
+            type="com.android.aschat.feature_login.domain.model.coin.CoinGood" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_coin_goods_item"
+        android:background="@{model.isPromotion ? @drawable/shape_purple_white : @drawable/shape_shadow_purple_white}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/coin_goods_tag"
+            android:textSize="9sp"
+            setCoinGoodTagBack="@{model}"
+            android:textColor="@color/white"
+            android:paddingStart="9dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="3dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/coin_goods_item_image"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="27dp"
+            android:layout_marginBottom="27dp"
+            android:layout_marginStart="27dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_coin"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:textColor="@color/purple"
+            android:textSize="24sp"
+            setTextViewInt="@{model.exchangeCoin}"
+            app:layout_constraintStart_toEndOf="@id/coin_goods_item_image"
+            app:layout_constraintTop_toTopOf="@id/coin_goods_item_image"
+            app:layout_constraintBottom_toBottomOf="@id/coin_goods_item_image"
+            tools:text="1000"
+            android:id="@+id/coin_goods_item_number"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/coin_goods_item_guideline"
+            android:orientation="vertical"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            app:layout_constraintGuide_percent="0.6"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            setCoinGoodDiscountColor="@{model.promotion}"
+            setCoinGoodDiscountText="@{model.discount}"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/coin_goods_item_guideline"
+            app:layout_constraintTop_toTopOf="@id/coin_goods_item_image"
+            app:layout_constraintBottom_toBottomOf="@id/coin_goods_item_image"
+            tools:text="30%off"
+            android:id="@+id/coin_goods_item_discount"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            setCoinGoodText="@{model.price}"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:paddingHorizontal="7dp"
+            android:paddingVertical="4dp"
+            android:background="@drawable/shape_money"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="$4.99"
+            android:id="@+id/coin_goods_item_price"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

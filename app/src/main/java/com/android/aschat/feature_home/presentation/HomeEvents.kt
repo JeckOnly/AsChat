@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
+import com.android.aschat.feature_login.domain.model.coin.CoinGood
 
 sealed class HomeEvents {
     // 个人资料编辑页
@@ -23,4 +24,10 @@ sealed class HomeEvents {
     object FollowWantRefresh: HomeEvents()
     object FollowWantMore: HomeEvents()
     class ClickFriend(val friend: FollowFriend): HomeEvents()
+
+    // 金币商店页
+    object LoadCoin: HomeEvents()
+    class ClickCoinGood(val coinGood: CoinGood): HomeEvents()
+    object EndTimer: HomeEvents()
+    class ExitCoinGoods(val navController: NavController): HomeEvents()
 }

@@ -5,7 +5,6 @@ import com.android.aschat.R
 object Constants {
     const val Default_Birthday = "1995-1-1"
     const val OauthType = 4
-    const val Login_Success_Key = "common_success"
     const val Max_Retry = 10
 
     /**
@@ -39,4 +38,9 @@ object Constants {
     const val FromFollow = 1
 
     const val PayChannel = "GP"
+
+    // 时间相关
+    const val HOUR_MILLIS = 1000L * 60 * 60
+    const val MIN_MILLIS = 1000L * 60
+    const val SECOND_MILLIS = 1000L
 }

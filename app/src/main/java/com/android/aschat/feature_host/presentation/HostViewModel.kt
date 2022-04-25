@@ -113,7 +113,7 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                         // 成功
                         val hostInfo = response.data
                         _hostInfo.postValue(hostInfo)
-                        _follow.postValue(hostInfo.isFriend)
+                        _follow.postValue(hostInfo!!.isFriend)
                     }else {
                         // 失败
                     }
@@ -123,7 +123,7 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                     if (response.code == 0) {
                         // 成功
                         // 设置标签
-                        _labelList.postValue(response.data.labelsList)
+                        _labelList.postValue(response.data!!.labelsList)
                         // 设置礼物
                         _giftMap.postValue(giftAndNumList2Map(response.data.giftList))
                     }else {
@@ -193,14 +193,14 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                      if (_follow.value!!) {
                          // 原来关注，现在取关
                          val response = repo.cancelFriend(CancelFriend(_hostInfo.value?.userId?:""))
-                         if (response.code == 0 && response.data) {
+                         if (response.code == 0 && response.data!!) {
                              _follow.postValue(false)
                              Toast.makeText(context, context.getString(R.string.unfollow_success), Toast.LENGTH_SHORT).show()
                          }
                      }else {
                          // 原来没有关注，现在关注
                          val response = repo.addFriend(AddFriend(_hostInfo.value?.userId?:""))
-                         if (response.code == 0 && response.data) {
+                         if (response.code == 0 && response.data!!) {
                              _follow.postValue(true)
                              Toast.makeText(context, context.getString(R.string.follow_success), Toast.LENGTH_SHORT).show()
                          }
@@ -238,7 +238,7 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
         val giftStrategyStr = SpUtil.get(context, SpConstants.GIFT_STRATEGY, "") as String
         var giftStrategy: List<GiftInfo>? = null
         if (giftStrategyStr.isEmpty()) {
-            var data: List<GiftInfo> = repo.getGiftInfo().data
+            var data: List<GiftInfo> = repo.getGiftInfo().data!!
             // 排序，数值越大越靠前
             data = data.sortedWith { o1, o2 ->
                 if (o1.sortNo - o2.sortNo > 0) return@sortedWith -1

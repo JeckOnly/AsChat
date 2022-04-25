@@ -1,5 +1,6 @@
 package com.android.aschat.util
 
+import com.android.aschat.common.Constants
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -221,5 +222,18 @@ object TimeUtil {
             this[1] = m
             this[2] = d
         }
+    }
+
+    /**
+     * 格式化剩余时间
+     */
+    fun formatPromotion(millis: Long): String {
+        var last = millis
+        val hour = (last / Constants.HOUR_MILLIS).toInt()
+        last = last - hour * Constants.HOUR_MILLIS
+        val min = (last / Constants.MIN_MILLIS).toInt()
+        last = last - min * Constants.MIN_MILLIS
+        val second = last / Constants.SECOND_MILLIS
+        return "$hour:$min:$second"
     }
 }

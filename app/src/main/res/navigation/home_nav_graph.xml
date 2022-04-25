@@ -20,9 +20,16 @@
         <action
             android:id="@+id/action_userFragment_to_userEditFragment"
             app:destination="@id/userEditFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_coinFragment"
+            app:destination="@id/coinFragment" />
     </fragment>
     <fragment
         android:id="@+id/userEditFragment"
         android:name="com.android.aschat.feature_home.presentation.mine.UserEditFragment"
         android:label="UserEditFragment" />
+    <fragment
+        android:id="@+id/coinFragment"
+        android:name="com.android.aschat.feature_home.presentation.coin.CoinFragment"
+        android:label="CoinFragment" />
 </navigation>

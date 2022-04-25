@@ -38,7 +38,7 @@ class UserFragment: Fragment() {
     fun initBinding() {
         mBinding.lifecycleOwner = viewLifecycleOwner
         mBinding.viewModel = mViewModel
-        mBinding.adapter = UserSettingRvAdapter()
+        mBinding.adapter = UserSettingRvAdapter(findNavController())
     }
 
     fun initWidget() {

@@ -13,6 +13,8 @@ import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
 import com.android.aschat.feature_home.domain.repo.HomeRepo
 import com.android.aschat.feature_home.domain.rv.ListState
 import com.android.aschat.feature_host.presentation.HostActivity
+import com.android.aschat.feature_login.domain.model.coin.CoinGood
+import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.login.UserInfo
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
@@ -20,6 +22,7 @@ import com.android.aschat.util.*
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -44,7 +47,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     private val _userItemList: MutableLiveData<List<HomeUserListItem>> = MutableLiveData(
         mutableListOf(
             HomeUserListItem(imageId = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_coin, null), text = context.getString(R.string.coin), cornText = _userInfo.value!!.availableCoins.toString()) {
-                  LogUtil.d("click coin")
+                  it.navigate(R.id.action_userFragment_to_coinFragment)
             },
             HomeUserListItem(imageId = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_customer, null), text = context.getString(R.string.custom_services)) {
                 //
@@ -84,6 +87,29 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     var friendsLimit = Constants.Follow_LimitPlus
 
     var followListState = ListState.REPLACE
+
+    // 金币商店-----
+    private val _coinGoods: MutableLiveData<List<CoinGood>> = MutableLiveData(mutableListOf())
+    val coinGoods: LiveData<List<CoinGood>> = _coinGoods
+
+    private val _timer: Timer = Timer()
+    private val _timerTask: TimerTask = object :TimerTask() {
+        override fun run() {
+            val temp = _coinGoods.value
+            // 一开始列表为空不要去影响原值
+            if (temp!!.isEmpty()) return
+            var hasPromotion = false
+            temp.forEach {
+                // 只会有一个item满足
+                if (it.isPromotion) {
+                    it.surplusMillisecond = it.surplusMillisecond - (System.currentTimeMillis() - SpUtil.get(context, SpConstants.COIN_GOODS_PROMOTION_TEMP_STAMP, 0L) as Long)
+                    hasPromotion = true
+                }
+            }
+            // 若是不更改，就不更新了
+            if (hasPromotion) _coinGoods.postValue(temp) else return
+        }
+    }
 
     init {
         // 给coin增加监听，改变时修改rv(注：因为userinfo有其他信息，不想其他无所谓信息改变的时候更改userItemList)
@@ -132,7 +158,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                         // 数据为空就获取数据
                         friendsLimit = Constants.Follow_LimitPlus
                         val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
-                        val temp = data.toMutableList()
+                        val temp = data!!.toMutableList()
                         sortFriends(temp)
                         _friends.postValue(temp)
                     }else {
@@ -146,7 +172,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                     followListState = ListState.REPLACE
                     friendsLimit = Constants.Follow_LimitPlus
                     val data = repo.getFriendList(GetFriendList(friendsLimit, 1)).data
-                    val temp = data.toMutableList()
+                    val temp = data!!.toMutableList()
                     sortFriends(temp)
                     // 覆盖数据
                     _friends.postValue(temp)
@@ -161,7 +187,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                     // 旧数据
                     var list = _friends.value
                     // 增加数据
-                    list!!.addAll(data)
+                    list!!.addAll(data!!)
                     sortFriends(list)
                     // 去重, 不做了，留给rv去做
 //                    list = list.distinctBy {
@@ -179,6 +205,43 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                     putExtra("friendData", JsonUtil.any2Json(friend))
                 }
                 context.startActivity(intent)
+            }
+
+            is HomeEvents.LoadCoin -> {
+                val str1 = SpUtil.get(context, SpConstants.COIN_GOODS, "") as String
+                val str2 = SpUtil.get(context, SpConstants.COIN_GOODS_PROMOTION, "") as String
+                val coinGoodList: MutableList<CoinGood> = JsonUtil.json2Any(str1, List::class.java, CoinGood::class.java)
+                val coinGoodPromotion: CoinGoodPromotion = JsonUtil.json2Any(str2, CoinGoodPromotion::class.java)
+                var hasPromotion = false
+                // 把促销商品的倒计时赋值给对应的商品
+                coinGoodList.forEach {
+                    if (it.isPromotion) {
+                        it.surplusMillisecond = coinGoodPromotion.surplusMillisecond.toLong()
+                        hasPromotion = true
+                    }
+                }
+                if (!hasPromotion) {
+                    if (coinGoodPromotion.code.isNotEmpty()) {
+                        // 虽然coinGoods没有促销商品，却有一个独立的促销商品
+                        coinGoodList.add(
+                            coinGoodPromotion.toCoinGood()
+                        )
+                        hasPromotion = true
+                    }
+                }
+                _coinGoods.postValue(coinGoodList)
+
+                // 有需要计算倒计时的项目，就启动计时器, 1 s执行一次
+                if (hasPromotion)
+                    _timer.schedule(_timerTask, 0L, 1000L)
+            }
+
+            is HomeEvents.EndTimer -> {
+                _timerTask.cancel()
+            }
+
+            is HomeEvents.ExitCoinGoods -> {
+                event.navController.popBackStack()
             }
         }
     }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.aschat.R
 import com.android.aschat.common.Constants
 import com.android.aschat.feature_home.presentation.HomeActivity
+import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.util.AppUtil
@@ -35,7 +36,7 @@ class LoginViewModel @Inject constructor(
                     val loginResponse = repo.login(Constants.OauthType, androidId)
                     if (loginResponse.code == 0) {
                         // 成功
-                        if (loginResponse.data.isFirstRegister) {
+                        if (loginResponse.data!!.isFirstRegister) {
                             // 第一次登录，将信息写入数据库
                             SpUtil.putAndApply(event.context, SpConstants.USERINFO, JsonUtil.any2Json(loginResponse.data.userInfo))
                         }else {
@@ -58,7 +59,7 @@ class LoginViewModel @Inject constructor(
                                 if (strategyResponse.code == 0) {
                                     // 成功
                                     // 保存策略
-                                    SpUtil.putAndApply(event.context, SpConstants.STRATEGY, JsonUtil.any2Json(strategyResponse.data))
+                                    SpUtil.putAndApply(event.context, SpConstants.STRATEGY, JsonUtil.any2Json(strategyResponse.data!!))
                                 }
                             }
 
@@ -68,17 +69,25 @@ class LoginViewModel @Inject constructor(
                                 if (coinGoodResponse.code == 0) {
                                     // 成功
                                     // 保存金币商品信息
-                                    SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS, JsonUtil.any2Json(coinGoodResponse.data))
+                                    SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS, JsonUtil.any2Json(coinGoodResponse.data!!))
                                 }
                             }
 
                             // 4) 获取金币促销商品
                             val jobCoinGoodPromotion = launch {
-                                val coinGoodPromotion = repo.getCoinGoodsPromotion(GetCoinGood(true, Constants.PayChannel))
-                                if (coinGoodPromotion.code == 0) {
+                                val response = repo.getCoinGoodsPromotion(GetCoinGood(true, Constants.PayChannel))
+                                if (response.code == 0) {
                                     // 成功
                                     // 保存金币商品促销信息
-                                    SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS_PROMOTION, JsonUtil.any2Json(coinGoodPromotion.data))
+                                    val data = response.data
+                                    if (data != null) {
+                                        SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS_PROMOTION, JsonUtil.any2Json(data))
+                                    }else {
+                                        // 如果data为null，设置一个非法的默认值
+                                        SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS_PROMOTION, JsonUtil.any2Json(CoinGoodPromotion()))
+                                    }
+                                    // 保存拉取倒计时的时间戳
+                                    SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS_PROMOTION_TEMP_STAMP, System.currentTimeMillis())
                                 }
                             }
 
@@ -87,7 +96,7 @@ class LoginViewModel @Inject constructor(
                             jobCoinGoodPromotion.join()
 
                             // end)跳转
-                            if (loginResponse.data.isFirstRegister) {
+                            if (loginResponse.data!!.isFirstRegister) {
                                 // 第一次登录
                                 event.navController.navigate(R.id.action_splashFragment_to_fastLoginFragment)
                             }else {

@@ -1,5 +1,6 @@
 package com.android.aschat.util
 
+import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,6 +17,9 @@ import com.android.aschat.feature_home.domain.rv.UserSettingRvAdapter
 import com.android.aschat.feature_host.domain.customview.FlowLayout
 import com.android.aschat.feature_host.domain.rv.HostDetailLabelRvAdapter
 import com.android.aschat.feature_host.domain.rv.HostDetailVideoRvAdapter
+import com.android.aschat.feature_login.domain.model.coin.CoinGood
+import okhttp3.internal.format
+import java.sql.Time
 
 
 @BindingAdapter("setAdapter")
@@ -152,5 +156,58 @@ fun setVisibilityByListSize(view: View, data: List<*>?) {
         view.visibility = View.GONE
     }else {
         view.visibility = View.VISIBLE
+    }
+}
+
+@BindingAdapter("setCoinGoodDiscountColor")
+fun setCoinGoodDiscountColor(textView: TextView, isPromotion: Boolean) {
+    if (isPromotion) textView.setTextColor(textView.resources.getColor(R.color.white))
+    else textView.setTextColor(textView.resources.getColor(R.color.red1))
+}
+
+@BindingAdapter("setCoinGoodText")
+fun setCoinGoodText(textView: TextView, price: Double) {
+    textView.text = "$$price"
+}
+
+@BindingAdapter("setCoinGoodDiscountText")
+fun setCoinGoodDiscountText(textView: TextView, discount: Double) {
+    val percent = (discount * 100).toInt()
+    if (percent == 0) return
+    textView.text = "$percent%off"
+}
+
+@BindingAdapter("setCoinGoodTagBack")
+fun setCoinGoodTagBack(textView: TextView, coinGood: CoinGood) {
+    if (coinGood.isPromotion) {
+        // 有倒计时的商品
+        if (coinGood.surplusMillisecond > 0L) {
+            textView.apply {
+                setBackgroundResource(R.drawable.shape_button_purple_red)
+                text = TimeUtil.formatPromotion(coinGood.surplusMillisecond)
+            }
+        }else {
+            // 倒计时结束
+            textView.visibility = View.INVISIBLE
+        }
+    }else if (coinGood.tags == "Hot") {
+        textView.apply {
+            setBackgroundResource(R.drawable.shape_button_red_purple2)
+            text = coinGood.tags
+        }
+    }else if (coinGood.tags == "Big Deal") {
+        textView.apply {
+            setBackgroundResource(R.drawable.shape_button_yellow_red)
+            text = coinGood.tags
+        }
+    }else if (coinGood.tags != null && coinGood.tags.isNotEmpty()){
+        // 有tag，但不是上面那两种情况
+        textView.apply {
+            setBackgroundResource(R.drawable.shape_button_purple_red)
+            text = coinGood.tags
+        }
+    }else {
+        // 没有tag
+        textView.visibility = View.INVISIBLE
     }
 }

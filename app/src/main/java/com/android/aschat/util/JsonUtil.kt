@@ -20,7 +20,7 @@ object JsonUtil {
     /**
      * 配合getType使用
      */
-    fun <T> json2Any(json: String, type: Type): T {
+    private fun <T> json2Any(json: String, type: Type): T {
         return ClassConverters.gson.fromJson(json, type)
     }
 
@@ -39,7 +39,7 @@ object JsonUtil {
 //
 //    //Map<String,List<String>>的类型为
 //    val type = getType(Map::class.java,String::class.java, getType(List::class.java,String::class.java))
-    fun getType(raw: Class<*>, vararg args: Type) = object : ParameterizedType {
+    private fun getType(raw: Class<*>, vararg args: Type) = object : ParameterizedType {
         override fun getRawType(): Type = raw
         override fun getActualTypeArguments(): Array<out Type> = args
         override fun getOwnerType(): Type? = null

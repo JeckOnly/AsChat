@@ -85,7 +85,7 @@ class WallCategoryViewModel @Inject constructor(@Named("HomeRepo") private val r
                                 limit = Constants.HostWall_LimitPlus,
                                 page = 1,
                                 tag = mTag)
-                        ).data
+                        ).data!!
                         mTagHostsMap[mTag] = newHostData.toMutableList()
                         // 全部替换了
                         mListState = ListState.REPLACE
@@ -112,7 +112,7 @@ class WallCategoryViewModel @Inject constructor(@Named("HomeRepo") private val r
                             limit = Constants.HostWall_LimitPlus,
                             page = 1,
                             tag = mTag)
-                    ).data
+                    ).data!!
                     // 覆盖旧数据
                     mTagHostsMap[mTag] = newHostData.toMutableList()
                     _nowTagHosts.postValue(mTagHostsMap[mTag])
@@ -133,7 +133,7 @@ class WallCategoryViewModel @Inject constructor(@Named("HomeRepo") private val r
                             limit = mTagLimitMap[mTag]!!,
                             page = 1,
                             tag = mTag)
-                    ).data
+                    ).data!!
                     // 加在旧数据后面
                     mTagHostsMap[mTag]!!.apply {
                         addAll(newHostData)
