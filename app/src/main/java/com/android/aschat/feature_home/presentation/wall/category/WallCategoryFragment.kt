@@ -20,6 +20,7 @@ import com.android.aschat.feature_home.presentation.HomeViewModel
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 import com.android.aschat.util.DensityUtil
 import com.android.aschat.util.LogUtil
+import com.android.aschat.util.equilibriumAssignmentOfGrid
 import com.drake.brv.BindingAdapter
 import com.drake.brv.listener.ItemDifferCallback
 import com.drake.brv.utils.grid
@@ -104,9 +105,20 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
         mRvAdapter = mBinding.wallTagFragmentRv.grid(
             spanCount = 2
         ).apply {
-           this.addItemDecoration(
-               MainSpaceDecoration(requireContext(), 6)
-           )
+//           this.addItemDecoration(
+//               MainSpaceDecoration(requireContext(), 6)
+//           )
+            this.addItemDecoration(object :RecyclerView.ItemDecoration(){
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    super.getItemOffsets(outRect, view, parent, state)
+                    equilibriumAssignmentOfGrid(DensityUtil.dip2px(3f, requireContext()), outRect, view, parent)
+                }
+            })
         }.setup {
             addType<HostData>(R.layout.home_wall_host_item)
             // 设置数据去重判断逻辑
