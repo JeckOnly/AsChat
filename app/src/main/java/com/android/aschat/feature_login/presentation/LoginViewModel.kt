@@ -63,17 +63,7 @@ class LoginViewModel @Inject constructor(
                                 }
                             }
 
-                            // 3) 获取金币商品
-                            val jobCoinGoods = launch {
-                                val coinGoodResponse = repo.getCoinGoods(GetCoinGood(true, Constants.PayChannel))
-                                if (coinGoodResponse.code == 0) {
-                                    // 成功
-                                    // 保存金币商品信息
-                                    SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS, JsonUtil.any2Json(coinGoodResponse.data!!))
-                                }
-                            }
-
-                            // 4) 获取金币促销商品
+                            // 3) 获取金币促销商品
                             val jobCoinGoodPromotion = launch {
                                 val response = repo.getCoinGoodsPromotion(GetCoinGood(true, Constants.PayChannel))
                                 if (response.code == 0) {
@@ -92,8 +82,18 @@ class LoginViewModel @Inject constructor(
                             }
 
                             jobStrategy.join()
-                            jobCoinGoods.join()
                             jobCoinGoodPromotion.join()
+
+                            // 4) 获取金币商品 在促销接口调用之后才调用这个接口
+                            val jobCoinGoods = launch {
+                                val coinGoodResponse = repo.getCoinGoods(GetCoinGood(true, Constants.PayChannel))
+                                if (coinGoodResponse.code == 0) {
+                                    // 成功
+                                    // 保存金币商品信息
+                                    SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS, JsonUtil.any2Json(coinGoodResponse.data!!))
+                                }
+                            }
+                            jobCoinGoods.join()
 
                             // end)跳转
                             if (loginResponse.data!!.isFirstRegister) {
