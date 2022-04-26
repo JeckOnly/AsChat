@@ -36,4 +36,7 @@ sealed class HomeEvents {
     object LoadBlockList: HomeEvents()
     class ClickBlockItem(val blockedItem: BlockedItem): HomeEvents()
     class ExitBlock(val navController: NavController): HomeEvents()
+
+    // 设置页
+    class ExitSetting(val navController: NavController): HomeEvents()
 }

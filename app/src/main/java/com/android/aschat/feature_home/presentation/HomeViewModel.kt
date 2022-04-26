@@ -60,7 +60,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 //
             },
             HomeUserListItem(imageId = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_setting, null), text = context.getString(R.string.setting)) {
-                //
+                it.navigate(R.id.action_userFragment_to_settingFragment)
             }
         )
     )
@@ -271,6 +271,10 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             }
 
             is HomeEvents.ExitBlock -> {
+                event.navController.popBackStack()
+            }
+
+            is HomeEvents.ExitSetting -> {
                 event.navController.popBackStack()
             }
         }

@@ -92,4 +92,9 @@ object ApiUrls {
      * 获取一个用户的在线状态
      */
     const val GetUserStatus = "$BASE_URL/user/getUserOnlineStatus"
+
+    /**
+     * 获取APP配置
+     */
+    const val GetAppConfig = "$BASE_URL/config/getAppConfig"
 }

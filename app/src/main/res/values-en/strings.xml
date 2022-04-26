@@ -56,4 +56,8 @@
     <string name="Unblock_successfully">Unblock successfully</string>
     <string name="Block_successfully">Block successfully</string>
     <string name="Report_successfully">Report successfully</string>
+    <string name="Setting">Setting</string>
+    <string name="copy">copy</string>
+    <string name="autotrans">Auto Translate</string>
+    <string name="copy_success">Copy Successfully</string>
 </resources>
