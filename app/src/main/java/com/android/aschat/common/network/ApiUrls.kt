@@ -87,4 +87,9 @@ object ApiUrls {
      * 接触屏蔽
      */
     const val CancelBlock = "$BASE_URL/report/complain/removeBlock"
+
+    /**
+     * 获取一个用户的在线状态
+     */
+    const val GetUserStatus = "$BASE_URL/user/getUserOnlineStatus"
 }

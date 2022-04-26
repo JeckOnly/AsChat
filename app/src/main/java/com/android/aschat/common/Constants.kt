@@ -36,6 +36,7 @@ object Constants {
     const val WhereFrom = "WhereFrom"
     const val FromWall = 0
     const val FromFollow = 1
+    const val FromBlock = 2
 
     const val PayChannel = "GP"
 

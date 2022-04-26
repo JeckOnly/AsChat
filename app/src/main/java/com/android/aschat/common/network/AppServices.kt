@@ -67,4 +67,7 @@ interface AppServices {
 
    @POST(ApiUrls.CancelBlock)
    suspend fun cancelBlock(@Body cancelBlock: CancelBlock): Response<Boolean>
+
+   @GET(ApiUrls.GetUserStatus)
+   suspend fun getUserStatus(@Query("userId") userId: String): Response<String>
 }

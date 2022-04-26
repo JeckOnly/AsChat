@@ -2,6 +2,7 @@ package com.android.aschat.feature_home.presentation
 
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
+import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
@@ -30,4 +31,9 @@ sealed class HomeEvents {
     class ClickCoinGood(val coinGood: CoinGood): HomeEvents()
     object EndTimer: HomeEvents()
     class ExitCoinGoods(val navController: NavController): HomeEvents()
+
+    // 屏蔽页
+    object LoadBlockList: HomeEvents()
+    class ClickBlockItem(val blockedItem: BlockedItem): HomeEvents()
+    class ExitBlock(val navController: NavController): HomeEvents()
 }

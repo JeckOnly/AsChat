@@ -6,6 +6,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.*
 import com.android.aschat.R
 import com.android.aschat.common.Constants
+import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
 import com.android.aschat.feature_home.domain.model.mine.EditDetail
@@ -53,7 +54,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 //
             },
             HomeUserListItem(imageId = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_blocked, null), text = context.getString(R.string.block_list)) {
-                //
+                  it.navigate(R.id.action_userFragment_to_blockFragment)
             },
             HomeUserListItem(imageId = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_about, null), text = context.getString(R.string.about)) {
                 //
@@ -110,6 +111,10 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             if (hasPromotion) _coinGoods.postValue(temp) else return
         }
     }
+
+    // 屏蔽页-----
+    private val _blockList: MutableLiveData<List<BlockedItem>> = MutableLiveData(mutableListOf())
+    val blockList: LiveData<List<BlockedItem>> = _blockList
 
     init {
         // 给coin增加监听，改变时修改rv(注：因为userinfo有其他信息，不想其他无所谓信息改变的时候更改userItemList)
@@ -241,6 +246,31 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             }
 
             is HomeEvents.ExitCoinGoods -> {
+                event.navController.popBackStack()
+            }
+
+            is HomeEvents.LoadBlockList -> {
+                // TODO: 按照屏蔽时间倒序排列 
+                viewModelScope.launch {
+                    val response = repo.getBlockedList()
+                    if (response.code == 0) {
+                        // 成功
+                        _blockList.postValue(response.data)
+                    }
+                }
+            }
+
+            is HomeEvents.ClickBlockItem -> {
+                val blockItem = event.blockedItem
+                val intent = Intent(context, HostActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(Constants.WhereFrom, Constants.FromBlock)
+                    putExtra("blockData", JsonUtil.any2Json(blockItem))
+                }
+                context.startActivity(intent)
+            }
+
+            is HomeEvents.ExitBlock -> {
                 event.navController.popBackStack()
             }
         }

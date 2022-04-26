@@ -73,4 +73,11 @@ class HostRepo(private val services: AppServices) {
     suspend fun cancelBlock(cancelBlock: CancelBlock): Response<Boolean> {
         return services.cancelBlock(cancelBlock)
     }
+
+    /**
+     * 获取用户状态
+     */
+    suspend fun getUserStatus(userId: String): Response<String> {
+        return services.getUserStatus(userId)
+    }
 }

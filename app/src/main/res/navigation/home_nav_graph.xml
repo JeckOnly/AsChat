@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_userFragment_to_coinFragment"
             app:destination="@id/coinFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_blockFragment"
+            app:destination="@id/blockFragment" />
     </fragment>
     <fragment
         android:id="@+id/userEditFragment"
@@ -32,4 +35,8 @@
         android:id="@+id/coinFragment"
         android:name="com.android.aschat.feature_home.presentation.coin.CoinFragment"
         android:label="CoinFragment" />
+    <fragment
+        android:id="@+id/blockFragment"
+        android:name="com.android.aschat.feature_home.presentation.block.BlockFragment"
+        android:label="BlockFragment" />
 </navigation>

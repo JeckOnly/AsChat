@@ -21,6 +21,7 @@ import com.android.aschat.util.SpConstants
 import com.android.aschat.util.SpUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -115,33 +116,43 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
     init {
         _hostData.observeForever { hostData ->
             viewModelScope.launch {
-                launch {
-                    val response = repo.getHostInfo(hostData.userId)
-                    if (response.code == 0) {
-                        // 成功
-                        val hostInfo = response.data
-                        _hostInfo.postValue(hostInfo)
-                        _follow.postValue(hostInfo!!.isFriend)
-                        _blocked.postValue(hostInfo.isBlock)
-                    }else {
-                        // 失败
+                supervisorScope {
+                    launch {
+                        val response = repo.getHostInfo(hostData.userId)
+                        if (response.code == 0) {
+                            // 成功
+                            val hostInfo = response.data
+                            _hostInfo.postValue(hostInfo)
+                            _follow.postValue(hostInfo!!.isFriend)
+                            _blocked.postValue(hostInfo.isBlock)
+                        }else {
+                            // 失败
+                        }
                     }
-                }
-                launch {
-                    val response = repo.getExtraInfo(hostData.userId)
-                    if (response.code == 0) {
-                        // 成功
-                        // 设置标签
-                        _labelList.postValue(response.data!!.labelsList)
-                        // 设置礼物
-                        _giftMap.postValue(giftAndNumList2Map(response.data.giftList))
-                    }else {
-                        // 失败
+                    launch {
+                        val response = repo.getExtraInfo(hostData.userId)
+                        if (response.code == 0) {
+                            // 成功
+                            // 设置标签
+                            _labelList.postValue(response.data!!.labelsList)
+                            // 设置礼物
+                            _giftMap.postValue(giftAndNumList2Map(response.data.giftList))
+                        }else {
+                            // 失败
+                        }
+                    }
+                    launch {
+                        val response = repo.getUserStatus(hostData.userId)
+                        if (response.code == 0) {
+                            // 成功
+                            // 更新_status
+                            _status.postValue(response.data)
+                        }else {
+                            // 失败
+                        }
                     }
                 }
             }
-            // 更新_status
-            _status.postValue(hostData.status)
         }
     }
 
@@ -170,6 +181,27 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                     status = friend.onlineStatus,
                     unit = "min",
                     userId = friend.userId,
+                    videoMapPaths = emptyList()
+                )
+                _hostData.postValue(hostData)
+            }
+            is HostEvents.SendBlockData -> {
+                val blockItem = event.blockData
+                val hostData = HostData(
+                    age = blockItem.age,
+                    applicableTags = emptyList(),
+                    avatar = blockItem.avatar,
+                    avatarMapPath = blockItem.avatar,
+                    callCoins = 0,
+                    country = blockItem.registerCountry,
+                    followNum = 0,
+                    gender = blockItem.gender,
+                    isFriend = true,
+                    isMultiple = false,
+                    nickname = blockItem.nickName,
+                    status = "",
+                    unit = "min",
+                    userId = blockItem.broadcasterId,
                     videoMapPaths = emptyList()
                 )
                 _hostData.postValue(hostData)
