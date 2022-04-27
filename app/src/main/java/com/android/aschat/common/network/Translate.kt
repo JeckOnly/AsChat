@@ -10,9 +10,9 @@ import java.util.*
 
 object Translate {
     /**
+     *  note 在子线程运行，模拟器时间跟随网络
      *	originalText:原始文本
      *  apiKey : 微软翻译key
-     *  子线程运行
      *  lifecycleScope.launch(Dispatchers.IO) {
      *       val resultContent = async {
      *           Translate.getTrans(translateKey, "the world is beautiful")

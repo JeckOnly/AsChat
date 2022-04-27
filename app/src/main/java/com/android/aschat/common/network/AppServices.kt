@@ -17,6 +17,7 @@ import com.android.aschat.feature_login.domain.model.coin.CoinGood
 import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.model.login.LoginData
+import com.android.aschat.feature_login.domain.model.osspolicy.OssPolicy
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
 import retrofit2.http.*
 
@@ -74,4 +75,7 @@ interface AppServices {
 
    @GET(ApiUrls.GetAppConfig)
    suspend fun getAppConfig(@Query("ver") ver: Int): Response<ConfigList>
+
+   @GET(ApiUrls.GetOssInfo)
+   suspend fun getOssPolicy(): Response<OssPolicy>
 }
