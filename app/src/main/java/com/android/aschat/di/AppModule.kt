@@ -7,15 +7,20 @@ import com.android.aschat.BuildConfig
 import com.android.aschat.common.Constants
 import com.android.aschat.common.database.AppDatabase
 import com.android.aschat.common.network.ApiUrls
+import com.android.aschat.common.network.AppConfigBaseDeserializer
+import com.android.aschat.common.network.AppConfigDeserializer
 import com.android.aschat.common.network.AppServices
 import com.android.aschat.feature_home.domain.repo.HomeRepo
 import com.android.aschat.feature_host.domain.repo.HostRepo
 import com.android.aschat.feature_login.data.UserDao
+import com.android.aschat.feature_login.domain.model.appconfig.ConfigItemBase
+import com.android.aschat.feature_login.domain.model.appconfig.ConfigList
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.util.AppUtil
 import com.android.aschat.util.LogUtil
 import com.android.aschat.util.SpConstants
 import com.android.aschat.util.SpUtil
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,7 +89,7 @@ object AppModule {
                     try {
                         response = chain.proceed(request)
                     } catch (e: Exception) {
-                        LogUtil.e(e.stackTraceToString())
+                        e.printStackTrace()
                         response = Response.Builder().code(404).build()// 在这里设置了code为404，循环时会再次请求
                     }
                 }while (!response.isSuccessful && retryNum < Constants.Max_Retry)
@@ -100,7 +105,13 @@ object AppModule {
         return Retrofit.Builder()
             .baseUrl(ApiUrls.BASE_URL)
             .client(client)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    GsonBuilder()
+                        .registerTypeAdapter(ConfigList::class.java, AppConfigDeserializer())
+                        .create()
+                )
+            )
             .build()
     }
 

@@ -81,7 +81,6 @@ class LoginViewModel @Inject constructor(
                                 }
                             }
 
-                            jobStrategy.join()
                             jobCoinGoodPromotion.join()
 
                             // 4) 获取金币商品 在促销接口调用之后才调用这个接口
@@ -93,7 +92,33 @@ class LoginViewModel @Inject constructor(
                                     SpUtil.putAndApply(event.context, SpConstants.COIN_GOODS, JsonUtil.any2Json(coinGoodResponse.data!!))
                                 }
                             }
+
+                            // 5) 获取app config
+                            val jobAppConfig = launch {
+                                val configResponse = repo.getAppConfig(SpUtil.get(event.context, SpConstants.CONFIG_VER, 0) as Int)
+                                if (configResponse.code == 0) {
+                                    // 成功
+                                    // 保存配置
+                                    if (configResponse.data != null) {
+                                        // 返回的list是空，就不写入，否则覆盖写入
+                                        if (configResponse.data.items.isNotEmpty()) {
+                                            SpUtil.putAndApply(
+                                                event.context,
+                                                SpConstants.CONFIG_VER,
+                                                configResponse.data.ver.toInt()
+                                            )
+                                            SpUtil.putAndApply(
+                                                event.context,
+                                                SpConstants.CONFIG_List,
+                                                JsonUtil.any2Json(configResponse.data.items)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            jobStrategy.join()
                             jobCoinGoods.join()
+                            jobAppConfig.join()
 
                             // end)跳转
                             if (loginResponse.data!!.isFirstRegister) {

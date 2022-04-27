@@ -41,4 +41,14 @@ object SpConstants {
      * 金币商品的记录时间是什么时候更新的
      */
     const val COIN_GOODS_PROMOTION_TEMP_STAMP = "coin_goods_promotion_temp_stamp"
+
+    /**
+     * config ver
+     */
+    const val CONFIG_VER = "config_ver"
+
+    /**
+     * app config
+     */
+    const val CONFIG_List = "config_list"
 }

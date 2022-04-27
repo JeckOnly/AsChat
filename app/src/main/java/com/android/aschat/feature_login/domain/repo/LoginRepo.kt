@@ -4,6 +4,7 @@ import com.android.aschat.common.network.AppServices
 import com.android.aschat.common.network.Response
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
 import com.android.aschat.feature_login.data.UserDao
+import com.android.aschat.feature_login.domain.model.appconfig.ConfigList
 import com.android.aschat.feature_login.domain.model.coin.CoinGood
 import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
@@ -49,6 +50,14 @@ class LoginRepo(private val services: AppServices, private val dao: UserDao) {
      */
     suspend fun getCoinGoodsPromotion(getCoinGood: GetCoinGood): Response<CoinGoodPromotion> {
         val response: Response<CoinGoodPromotion> = services.getCoinGoodsPromotion(getCoinGood)
+        return response
+    }
+
+    /**
+     * 获取app config
+     */
+    suspend fun getAppConfig(ver: Int): Response<ConfigList> {
+        val response: Response<ConfigList> = services.getAppConfig(ver)
         return response
     }
 

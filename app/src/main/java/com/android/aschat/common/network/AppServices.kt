@@ -12,6 +12,7 @@ import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInf
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
+import com.android.aschat.feature_login.domain.model.appconfig.ConfigList
 import com.android.aschat.feature_login.domain.model.coin.CoinGood
 import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
@@ -70,4 +71,7 @@ interface AppServices {
 
    @GET(ApiUrls.GetUserStatus)
    suspend fun getUserStatus(@Query("userId") userId: String): Response<String>
+
+   @GET(ApiUrls.GetAppConfig)
+   suspend fun getAppConfig(@Query("ver") ver: Int): Response<ConfigList>
 }
