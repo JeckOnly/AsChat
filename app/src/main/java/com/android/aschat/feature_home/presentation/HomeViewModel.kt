@@ -93,6 +93,11 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     private val _coinGoods: MutableLiveData<List<CoinGood>> = MutableLiveData(mutableListOf())
     val coinGoods: LiveData<List<CoinGood>> = _coinGoods
 
+    val countTimeWorkingFlag: MutableLiveData<Boolean> = MutableLiveData(false)// 在true和false之间交替更改，刷新界面
+    var countTimePosition: Int = 0// 需要加上计时器的item的位置
+    var promotionTimeStamp: Long = 0L// 计时器是从什么时候开始倒数的
+    private var countDownTimeTotalStamp: Long = 0L// 需要倒计时的时间
+
     private val _timer: Timer = Timer()
     private val _timerTask: TimerTask = object :TimerTask() {
         override fun run() {
@@ -100,15 +105,19 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             // 一开始列表为空不要去影响原值
             if (temp!!.isEmpty()) return
             var hasPromotion = false
-            temp.forEach {
+            temp.forEachIndexed { index, coinGood ->
                 // 只会有一个item满足
-                if (it.isPromotion) {
-                    it.surplusMillisecond = it.surplusMillisecond - (System.currentTimeMillis() - SpUtil.get(context, SpConstants.COIN_GOODS_PROMOTION_TEMP_STAMP, 0L) as Long)
+                if (coinGood.isPromotion) {
+                    // 剩余的时间 = 总的时间 - 过去的时间
+                    coinGood.surplusMillisecond = countDownTimeTotalStamp - (System.currentTimeMillis() - promotionTimeStamp)
                     hasPromotion = true
                 }
             }
             // 若是不更改，就不更新了
-            if (hasPromotion) _coinGoods.postValue(temp) else return
+            if (hasPromotion) {
+                val old = countTimeWorkingFlag.value
+                countTimeWorkingFlag.postValue(old!!.not())
+            } else return
         }
     }
 
@@ -219,12 +228,17 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 val coinGoodPromotion: CoinGoodPromotion = JsonUtil.json2Any(str2, CoinGoodPromotion::class.java)
                 var hasPromotion = false
                 // 把促销商品的倒计时赋值给对应的商品
-                coinGoodList.forEach {
-                    if (it.isPromotion) {
-                        it.surplusMillisecond = coinGoodPromotion.surplusMillisecond.toLong()
+                coinGoodList.forEachIndexed { index, coinGood ->
+                    if (coinGood.isPromotion) {
+                        coinGood.surplusMillisecond = coinGoodPromotion.surplusMillisecond.toLong()
+                        // 保存总的时间
+                        countDownTimeTotalStamp = coinGoodPromotion.surplusMillisecond.toLong()
+                        // 保存要倒计时的位置
+                        countTimePosition = index
                         hasPromotion = true
                     }
                 }
+                // note 理论上，下面这个if不可能进去了
                 if (!hasPromotion) {
                     if (coinGoodPromotion.code.isNotEmpty()) {
                         // 虽然coinGoods没有促销商品，却有一个独立的促销商品
@@ -237,8 +251,11 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 _coinGoods.postValue(coinGoodList)
 
                 // 有需要计算倒计时的项目，就启动计时器, 1 s执行一次
-                if (hasPromotion)
+                if (hasPromotion) {
+                    // 取出倒计时对应的时间戳
+                    promotionTimeStamp = SpUtil.get(context, SpConstants.COIN_GOODS_PROMOTION_TEMP_STAMP, 0L) as Long
                     _timer.schedule(_timerTask, 0L, 1000L)
+                }
             }
 
             is HomeEvents.EndTimer -> {

@@ -2,15 +2,12 @@ package com.android.aschat.feature_home.presentation.coin
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.android.aschat.R
@@ -20,6 +17,7 @@ import com.android.aschat.feature_home.presentation.HomeViewModel
 import com.android.aschat.feature_login.domain.model.coin.CoinGood
 import com.android.aschat.util.DensityUtil
 import com.android.aschat.util.equilibriumAssignmentOfLinear
+import com.android.aschat.util.setCoinGoodTagBack
 import com.drake.brv.BindingAdapter
 import com.drake.brv.listener.ItemDifferCallback
 import com.drake.brv.utils.linear
@@ -72,6 +70,9 @@ class CoinFragment: Fragment() {
                         return old.goodsId == new.goodsId
                     }
                 }
+                onPayload {
+                    setCoinGoodTagBack(this.findView(R.id.coin_goods_tag), this.getModel())
+                }
             }
             // 添加间距
             coinGoodsRv.addItemDecoration(object :RecyclerView.ItemDecoration() {
@@ -96,6 +97,9 @@ class CoinFragment: Fragment() {
             onEvent(HomeEvents.LoadCoin)
             coinGoods.observe(viewLifecycleOwner){
                 mRvAdapter.setDifferModels(it, false)
+            }
+            countTimeWorkingFlag.observe(viewLifecycleOwner) {
+                mRvAdapter.notifyItemChanged(mViewModel.countTimePosition, 0)
             }
         }
     }

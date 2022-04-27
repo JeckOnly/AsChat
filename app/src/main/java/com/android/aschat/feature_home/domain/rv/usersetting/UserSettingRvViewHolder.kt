@@ -1,4 +1,4 @@
-package com.android.aschat.feature_home.domain.rv
+package com.android.aschat.feature_home.domain.rv.usersetting
 
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView

@@ -225,15 +225,20 @@ object TimeUtil {
     }
 
     /**
-     * 格式化剩余时间
+     * 格式化 毫秒数: 00时00分00秒
      */
-    fun formatPromotion(millis: Long): String {
-        var last = millis
-        val hour = (last / Constants.HOUR_MILLIS).toInt()
-        last = last - hour * Constants.HOUR_MILLIS
-        val min = (last / Constants.MIN_MILLIS).toInt()
-        last = last - min * Constants.MIN_MILLIS
-        val second = last / Constants.SECOND_MILLIS
-        return "$hour:$min:$second"
+    fun formatMillisSecond2(ms: Long): String {
+
+        val ss = 1000L
+        val mi = ss * 60
+        val hh = mi * 60
+        val dd = hh * 24
+
+        val day: Long = ms / dd
+        val hour: Long = (ms - day * dd) / hh
+        val minute: Long = (ms - day * dd - hour * hh) / mi
+        val second: Long = (ms - day * dd - hour * hh - minute * mi) / ss
+        val milliSecond: Long = ms - day * dd - hour * hh - minute * mi - second * ss
+        return "$hour:$minute:$second"
     }
 }

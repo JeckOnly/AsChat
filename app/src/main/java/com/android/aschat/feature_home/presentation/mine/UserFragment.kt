@@ -9,7 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
 import com.android.aschat.databinding.HomeUserFragmentBinding
-import com.android.aschat.feature_home.domain.rv.UserSettingRvAdapter
+import com.android.aschat.feature_home.domain.rv.usersetting.UserSettingRvAdapter
 import com.android.aschat.feature_home.presentation.HomeViewModel
 import com.android.aschat.feature_home.presentation.HomeEvents
 import dagger.hilt.android.AndroidEntryPoint

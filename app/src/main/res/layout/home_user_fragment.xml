@@ -9,7 +9,7 @@
             type= "com.android.aschat.feature_home.presentation.HomeViewModel" />
         <variable
             name="adapter"
-            type="com.android.aschat.feature_home.domain.rv.UserSettingRvAdapter" />
+            type="com.android.aschat.feature_home.domain.rv.usersetting.UserSettingRvAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

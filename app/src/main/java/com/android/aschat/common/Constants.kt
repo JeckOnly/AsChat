@@ -40,11 +40,6 @@ object Constants {
 
     const val PayChannel = "GP"
 
-    // 时间相关
-    const val HOUR_MILLIS = 1000L * 60 * 60
-    const val MIN_MILLIS = 1000L * 60
-    const val SECOND_MILLIS = 1000L
-
     // 屏蔽举报模块
     const val Block = "Block"
     const val Report = "Report"

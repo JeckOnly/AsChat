@@ -1,4 +1,4 @@
-package com.android.aschat.feature_home.domain.rv
+package com.android.aschat.feature_home.domain.rv.usersetting
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.ListAdapter
 import com.android.aschat.databinding.HomeUserListItemBinding
 import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
 
-class UserSettingRvAdapter(val navController: NavController): ListAdapter<HomeUserListItem, UserSettingRvViewHolder>(diffCallback) {
+class UserSettingRvAdapter(val navController: NavController): ListAdapter<HomeUserListItem, UserSettingRvViewHolder>(
+    diffCallback
+) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserSettingRvViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = HomeUserListItemBinding.inflate(layoutInflater, parent, false)

@@ -1,6 +1,5 @@
 package com.android.aschat.util
 
-import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -13,13 +12,11 @@ import com.android.aschat.common.Constants
 import com.android.aschat.common.Gift
 import com.android.aschat.common.gift2ImageId
 import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
-import com.android.aschat.feature_home.domain.rv.UserSettingRvAdapter
+import com.android.aschat.feature_home.domain.rv.usersetting.UserSettingRvAdapter
 import com.android.aschat.feature_host.domain.customview.FlowLayout
 import com.android.aschat.feature_host.domain.rv.HostDetailLabelRvAdapter
 import com.android.aschat.feature_host.domain.rv.HostDetailVideoRvAdapter
 import com.android.aschat.feature_login.domain.model.coin.CoinGood
-import okhttp3.internal.format
-import java.sql.Time
 
 
 @BindingAdapter("setAdapter")
@@ -184,7 +181,7 @@ fun setCoinGoodTagBack(textView: TextView, coinGood: CoinGood) {
         if (coinGood.surplusMillisecond > 0L) {
             textView.apply {
                 setBackgroundResource(R.drawable.shape_button_purple_red)
-                text = TimeUtil.formatPromotion(coinGood.surplusMillisecond)
+                text = TimeUtil.formatMillisSecond2(coinGood.surplusMillisecond)
             }
         }else {
             // 倒计时结束
