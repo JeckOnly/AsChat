@@ -55,4 +55,9 @@ object Constants {
     const val Fraud = "Fraud"
     const val Politiclsensitive = "Politicl sensitive"
     const val Other = "Other"
+
+    // appconfig key相关
+    const val MicroTransName = "microsoft_translation_key"
+    const val RckName = "rck"
+    const val RtckName = "rtck"
 }

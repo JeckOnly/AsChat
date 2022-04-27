@@ -51,4 +51,19 @@ object SpConstants {
      * app config
      */
     const val CONFIG_List = "config_list"
+
+    /**
+     * 微软翻译key
+     */
+    const val Microsoft_Translation_Key = "microsoft_translation_key"
+
+    /**
+     * 融云key
+     */
+    const val Rck_Key = "rck_key"
+
+    /**
+     * 声网key
+     */
+    const val Rtck_Key = "rtck_key"
 }

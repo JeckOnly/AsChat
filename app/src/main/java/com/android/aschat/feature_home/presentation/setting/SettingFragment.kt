@@ -9,13 +9,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.aschat.R
+import com.android.aschat.common.network.Translate
 import com.android.aschat.databinding.HomeSettingFragmentBinding
 import com.android.aschat.feature_home.presentation.HomeEvents
 import com.android.aschat.feature_home.presentation.HomeViewModel
-import com.android.aschat.util.AppUtil
+import com.android.aschat.util.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingFragment : Fragment() {
@@ -25,6 +30,7 @@ class SettingFragment : Fragment() {
         requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
     private val mViewModel: HomeViewModel by activityViewModels()
+    private lateinit var translateKey: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,10 +61,13 @@ class SettingFragment : Fragment() {
             settingBack.setOnClickListener {
                 mViewModel.onEvent(HomeEvents.ExitSetting(findNavController()))
             }
+            settingTranslateSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+
+            }
         }
     }
 
     fun initWidget() {
-
+        translateKey = SpUtil.get(requireContext(), SpConstants.Microsoft_Translation_Key, "") as String
     }
 }

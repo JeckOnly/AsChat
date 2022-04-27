@@ -13,8 +13,14 @@ object Translate {
      *	originalText:原始文本
      *  apiKey : 微软翻译key
      *  子线程运行
+     *  lifecycleScope.launch(Dispatchers.IO) {
+     *       val resultContent = async {
+     *           Translate.getTrans(translateKey, "the world is beautiful")
+     *       }
+     *       LogUtil.d("$translateKey    ${resultContent.await()}")
+     *   }
      */
-     fun getTrans(apiKey: String, originalText: String): String {
+    fun getTrans(apiKey: String, originalText: String): String {
         try {
             val url = HttpUrl.Builder()
                 .scheme("https")
@@ -34,6 +40,7 @@ object Translate {
                 .addHeader("Ocp-Apim-Subscription-Key", apiKey)
                 .addHeader("Content-type", "application/json")
                 .build()
+            // note hhhh
             val response = client.newCall(request).execute()
             val parser = JsonParser()
             val json = parser.parse(response.body?.string())

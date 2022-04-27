@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.aschat.R
 import com.android.aschat.common.Constants
 import com.android.aschat.feature_home.presentation.HomeActivity
+import com.android.aschat.feature_login.domain.model.appconfig.ConfigItemStrStr
 import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.repo.LoginRepo
@@ -101,16 +102,46 @@ class LoginViewModel @Inject constructor(
                                     // 保存配置
                                     if (configResponse.data != null) {
                                         // 返回的list是空，就不写入，否则覆盖写入
-                                        if (configResponse.data.items.isNotEmpty()) {
+                                        val list = configResponse.data.items
+                                        if (list.isNotEmpty()) {
+                                            // 存储配置版本号
                                             SpUtil.putAndApply(
                                                 event.context,
                                                 SpConstants.CONFIG_VER,
                                                 configResponse.data.ver.toInt()
                                             )
+                                            // 存储总的config
                                             SpUtil.putAndApply(
                                                 event.context,
                                                 SpConstants.CONFIG_List,
-                                                JsonUtil.any2Json(configResponse.data.items)
+                                                JsonUtil.any2Json(list)
+                                            )
+                                            // 存储微软翻译key
+                                            val microKey = list.first { configItemBase ->
+                                                configItemBase.name == Constants.MicroTransName
+                                            } as ConfigItemStrStr
+                                            SpUtil.putAndApply(
+                                                event.context,
+                                                SpConstants.Microsoft_Translation_Key,
+                                                microKey.data
+                                            )
+                                            // 存储融云key
+                                            val rckKey = list.first { configItemBase ->
+                                                configItemBase.name == Constants.RckName
+                                            } as ConfigItemStrStr
+                                            SpUtil.putAndApply(
+                                                event.context,
+                                                SpConstants.Rck_Key,
+                                                rckKey.data
+                                            )
+                                            // 存储声网key
+                                            val rtckKey = list.first { configItemBase ->
+                                                configItemBase.name == Constants.RtckName
+                                            } as ConfigItemStrStr
+                                            SpUtil.putAndApply(
+                                                event.context,
+                                                SpConstants.Rtck_Key,
+                                                rtckKey.data
                                             )
                                         }
                                     }
