@@ -9,6 +9,7 @@ import com.android.aschat.feature_home.presentation.HomeActivity
 import com.android.aschat.feature_login.domain.model.appconfig.ConfigItemStrStr
 import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
+import com.android.aschat.feature_login.domain.model.osspolicy.OssPolicy
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.util.AppUtil
 import com.android.aschat.util.JsonUtil
@@ -147,12 +148,31 @@ class LoginViewModel @Inject constructor(
                                     }
                                 }
                             }
+
+//                            6) 获取oss服务器相关
+                            val jobOss = launch {
+                                val ossResponse = repo.getOssPolicy()
+                                if (ossResponse.code == 0) {
+                                    SpUtil.putAndApply(
+                                        event.context,
+                                        SpConstants.Oss_Policy,
+                                        JsonUtil.any2Json(ossResponse.data!!)
+                                    )
+                                }else {
+                                    SpUtil.putAndApply(
+                                        event.context,
+                                        SpConstants.Oss_Policy,
+                                        JsonUtil.any2Json(OssPolicy())
+                                    )
+                                }
+                            }
                             jobStrategy.join()
                             jobCoinGoods.join()
                             jobAppConfig.join()
+                            jobOss.join()
 
                             // end)跳转
-                            if (loginResponse.data!!.isFirstRegister) {
+                            if (loginResponse.data.isFirstRegister) {
                                 // 第一次登录
                                 event.navController.navigate(R.id.action_splashFragment_to_fastLoginFragment)
                             }else {

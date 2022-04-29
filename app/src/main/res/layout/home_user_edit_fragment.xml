@@ -232,6 +232,7 @@
                 android:id="@+id/edit_head0"
                 android:layout_width="43dp"
                 android:layout_height="43dp"
+                android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="@id/user_edit_radiogroup"
                 app:layout_constraintTop_toBottomOf="@id/user_edit_radiogroup"
                 android:layout_marginTop="35dp"

@@ -97,4 +97,9 @@ object ApiUrls {
      * 获取APP配置
      */
     const val GetAppConfig = "$BASE_URL/config/getAppConfig"
+
+    /**
+     * 把在oss服务器的头像的相对路径上传到livechat服务器
+     */
+    const val UpdateAvatar = "$BASE_URL/user/updateAvatar"
 }

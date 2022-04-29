@@ -5,13 +5,17 @@ import com.android.aschat.common.network.Response
 import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
+import com.android.aschat.feature_home.domain.model.mine.UpdateAvatar
+import com.android.aschat.feature_home.domain.model.mine.UpdateAvatarResult
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftAndLabel
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
+import com.android.aschat.feature_login.domain.model.osspolicy.OssResult
 import com.android.aschat.util.LogUtil
+import okhttp3.MultipartBody
 import retrofit2.http.Body
 
 class HomeRepo(private val services: AppServices) {
@@ -45,6 +49,30 @@ class HomeRepo(private val services: AppServices) {
      */
     suspend fun getBlockedList(): Response<List<BlockedItem>>{
         val response = services.getBlockedList()
+        return response
+    }
+
+    /**
+     * 上传照片到oss
+     */
+    suspend fun uploadFile(host: String, part: List<MultipartBody.Part>): Response<OssResult> {
+        val response = services.uploadFile(host, part)
+        return response
+    }
+
+    /**
+     * 把上传照片到oss的结果上传到自己服务器
+     */
+    suspend fun updateAvatar(updateAvatar: UpdateAvatar): Response<UpdateAvatarResult> {
+        val response = services.updateAvatar(updateAvatar)
+        return response
+    }
+
+    /**
+     * 获得单个user信息
+     */
+    suspend fun getHostInfo(userId: String): Response<HostInfo> {
+        var response: Response<HostInfo> = services.getUserInfo(userId)
         return response
     }
 }

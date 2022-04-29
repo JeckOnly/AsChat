@@ -66,4 +66,9 @@ object SpConstants {
      * 声网key
      */
     const val Rtck_Key = "rtck_key"
+
+    /**
+     * oss服务器相关
+     */
+    const val Oss_Policy = "oss_policy"
 }

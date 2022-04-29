@@ -5,6 +5,8 @@ import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.blocked.CancelBlock
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
+import com.android.aschat.feature_home.domain.model.mine.UpdateAvatar
+import com.android.aschat.feature_home.domain.model.mine.UpdateAvatarResult
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
 import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftAndLabel
@@ -18,7 +20,10 @@ import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.model.login.LoginData
 import com.android.aschat.feature_login.domain.model.osspolicy.OssPolicy
+import com.android.aschat.feature_login.domain.model.osspolicy.OssResult
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
+import com.google.android.exoplayer2.text.span.TextAnnotation
+import okhttp3.MultipartBody
 import retrofit2.http.*
 
 interface AppServices {
@@ -78,4 +83,11 @@ interface AppServices {
 
    @GET(ApiUrls.GetOssInfo)
    suspend fun getOssPolicy(): Response<OssPolicy>
+
+   @Multipart
+   @POST
+   suspend fun uploadFile(@Url host: String, @Part parts: List<MultipartBody.Part>): Response<OssResult>
+
+   @POST(ApiUrls.UpdateAvatar)
+   suspend fun updateAvatar(@Body updateAvatar: UpdateAvatar): Response<UpdateAvatarResult>
 }
