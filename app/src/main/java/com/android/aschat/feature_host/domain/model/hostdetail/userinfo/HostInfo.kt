@@ -12,6 +12,7 @@ data class HostInfo(
     val avatarMiddleThumbUrl: String = "",
     val avatarThumbUrl: String = "",
     val avatarUrl: String = "",
+    val availableCoins: Int = 0,
     val birthday: String = "",
     val country: String = "",
     val followNum: Int = 0,

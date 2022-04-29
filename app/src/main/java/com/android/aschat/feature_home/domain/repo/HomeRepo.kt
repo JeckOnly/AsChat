@@ -5,6 +5,7 @@ import com.android.aschat.common.network.Response
 import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
+import com.android.aschat.feature_home.domain.model.mine.SaveUserInfo
 import com.android.aschat.feature_home.domain.model.mine.UpdateAvatar
 import com.android.aschat.feature_home.domain.model.mine.UpdateAvatarResult
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
@@ -73,6 +74,14 @@ class HomeRepo(private val services: AppServices) {
      */
     suspend fun getHostInfo(userId: String): Response<HostInfo> {
         var response: Response<HostInfo> = services.getUserInfo(userId)
+        return response
+    }
+
+    /**
+     * 保存用户基本信息
+     */
+    suspend fun saveUserBasicInfo(saveUserInfo: SaveUserInfo): Response<Boolean> {
+        var response: Response<Boolean> = services.saveUserBasicInfo(saveUserInfo)
         return response
     }
 }

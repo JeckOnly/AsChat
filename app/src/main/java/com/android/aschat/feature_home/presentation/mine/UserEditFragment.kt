@@ -1,6 +1,7 @@
 package com.android.aschat.feature_home.presentation.mine
 
 import android.Manifest
+import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -10,6 +11,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -22,21 +24,35 @@ import com.android.aschat.databinding.HomeUserEditFragmentBinding
 import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.presentation.HomeEvents
 import com.android.aschat.feature_home.presentation.HomeViewModel
-import com.android.aschat.util.FontUtil
-import com.android.aschat.util.LogUtil
-import com.android.aschat.util.MobileButlerUtil
-import com.android.aschat.util.RadioUtil
+import com.android.aschat.util.*
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 
+/**
+ * 这个界面的数据observe有些混乱，country birthday 紫色选择框，是观察的viewmodel里的字段，其他字段数值留在view层
+ */
 class UserEditFragment: Fragment() {
 
     private lateinit var mBinding: HomeUserEditFragmentBinding
     private val mViewModel: HomeViewModel by activityViewModels()
+    // 存储当前选择的头像的路径
+    private var mAvatarSrcPath: String = ""
+
+    private val mLoadingDialog: Dialog by lazy {
+        DialogUtil.createLoadingDialog(requireContext())
+    }
 
     /**
      * 进入相册选择照片
      */
     private val mGetImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        LogUtil.d(uri.toString())
+        if (uri == null) return@registerForActivityResult
+        // 把照片更新
+        mBinding.editHead.load(uri)
+        // 更新字段
+        val originalPath = UriUtils.getFileAbsolutePath(requireContext(), uri)!!
+        ImageUtil.compress(originalPath)?.let {
+            mAvatarSrcPath = it
+        }
     }
 
     /**
@@ -95,97 +111,103 @@ class UserEditFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setRadio()
         setTypeface()
-        initBinding()
         initWidget()
-    }
-
-    private fun setRadio() {
-
-        RadioUtil.setBounds(requireContext(), R.drawable.style_radio, mBinding.userEditGenderMan)
-        RadioUtil.setBounds(requireContext(), R.drawable.style_radio, mBinding.userEditGenderWoman)
     }
 
     private fun setTypeface() {
         mBinding.editSubmit.typeface = FontUtil.getTypeface(requireContext())
     }
 
-    private fun initBinding() {
-        mBinding.viewmodel = mViewModel
-        mBinding.lifecycleOwner = viewLifecycleOwner
-    }
-
     private fun initWidget() {
-        mBinding.userEditBirthday.setOnClickListener {
-           mViewModel.onEvent(HomeEvents.ShowTimePicker(parentFragmentManager))
-        }
-        mBinding.userEditCountry.setOnClickListener {
-            mViewModel.onEvent(HomeEvents.ShowCountryPicker(parentFragmentManager))
-        }
-        mBinding.userEditGenderMan.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                mBinding.editHead1.setImageResource(R.mipmap.ic_head_1)
-                mBinding.editHead2.setImageResource(R.mipmap.ic_head_2)
-                mBinding.editHead3.setImageResource(R.mipmap.ic_head_3)
-            }else {
-                mBinding.editHead1.setImageResource(R.mipmap.ic_head_4)
-                mBinding.editHead2.setImageResource(R.mipmap.ic_head_5)
-                mBinding.editHead3.setImageResource(R.mipmap.ic_head_6)
-            }
-        }
-        mBinding.editHead0.setOnClickListener {
-            mViewModel.onEvent(HomeEvents.ChangeHead(0))
-            getImageFromGallery()
-        }
-        mBinding.editHead1.setOnClickListener {
-            mViewModel.onEvent(HomeEvents.ChangeHead(1))
-        }
-        mBinding.editHead2.setOnClickListener {
-            mViewModel.onEvent(HomeEvents.ChangeHead(2))
-        }
-        mBinding.editHead3.setOnClickListener {
-            mViewModel.onEvent(HomeEvents.ChangeHead(3))
-        }
-        mBinding.editSubmit.setOnClickListener {
-            mViewModel.onEvent(
-                HomeEvents.SubmitEdit(
-                findNavController(),
-                EditDetail(
-                    nickName = mBinding.userEditName.text.toString(),
-                    birthday = mBinding.userEditBirthday.text.toString(),
-                    country = mBinding.userEditCountry.text.toString(),
-                    inviteCode = mBinding.userEditInvite.text.toString(),
-                    gender = if (mBinding.userEditGenderMan.isChecked) 1 else 2,
-                    head = 0,// 使用viewmodel中存的
-                    about = mBinding.editAbout.text.toString()
-                )
-            ))
-        }
-        mBinding.editAbout.addTextChangedListener(object: TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            var mNumberCount = 0
-            val mNumberCountUp = 300
-
-            override fun afterTextChanged(editable: Editable?) {
-                mNumberCount = editable!!.length // 总长度
-
-                if (mNumberCount > mNumberCountUp) {
-                    editable.delete(mNumberCountUp, mNumberCount)// 删除多余的字符
-                    mNumberCount = mNumberCountUp
+        mBinding.apply {
+            // 要更改生日
+            userEditBirthday.setOnClickListener {
+                PickerUtil.showTimePicker(parentFragmentManager) { datePickerDialog: DatePickerDialog, y: Int, m: Int, d: Int ->
+                    val year = y.toString()
+                    var month = ""
+                    var day = ""
+                    if (m+1 < 10) month = "0${m+1}" else month = "${m+1}"
+                    if (d < 10) day = "0${d}" else day = "$d"
+                    this.userEditBirthday.setText("$year-$month-$day")
                 }
-
-                mBinding.editAboutCount.text = "$mNumberCount/$mNumberCountUp"
             }
-        })
-        mBinding.editHead0.load(mViewModel.userInfo.value!!.avatarUrl)
+            // 要更改国家
+            userEditCountry.setOnClickListener {
+                PickerUtil.showCountryPicker(context = requireContext(), fm = parentFragmentManager) { name,  code,  dialCode,  flagDrawableResID ->
+                    this.userEditCountry.setText(name)
+                }
+            }
+            // 打开相册
+            editHead.setOnClickListener {
+                getImageFromGallery()
+            }
+            // 监听字数改变
+            editAbout.addTextChangedListener(object: TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+                var mNumberCount = 0
+                val mNumberCountUp = 300
 
-        mBinding.userEditBack.setOnClickListener {
-            mViewModel.onEvent(HomeEvents.ExitUserEditFragment(findNavController()))
+                override fun afterTextChanged(editable: Editable?) {
+                    mNumberCount = editable!!.length // 总长度
+
+                    if (mNumberCount > mNumberCountUp) {
+                        editable.delete(mNumberCountUp, mNumberCount)// 删除多余的字符
+                        mNumberCount = mNumberCountUp
+                    }
+
+                    mBinding.editAboutCount.text = "$mNumberCount/$mNumberCountUp"
+                }
+            })
+            // 点击提交
+            editSubmit.setOnClickListener {
+                mViewModel.onEvent(
+                    HomeEvents.SubmitEdit(
+                        editDetail = EditDetail(
+                            nickName = mBinding.userEditName.text.toString(),
+                            birthday = mBinding.userEditBirthday.text.toString(),
+                            country = mBinding.userEditCountry.text.toString(),
+                            inviteCode = "",
+                            about = mBinding.editAbout.text.toString(),
+                            avatarSrcPath = mAvatarSrcPath
+                        ),
+                        onStartSubmit = {
+                            mLoadingDialog.show()
+                        },
+                        onSuccess = {
+                            Toast.makeText(requireContext(), getString(R.string.Save_information_successfully), Toast.LENGTH_SHORT).show()
+                            mLoadingDialog.dismiss()
+                            findNavController().popBackStack()
+                        },
+                        onFail = {
+                            Toast.makeText(requireContext(), getString(R.string.Failed_to_save_information), Toast.LENGTH_SHORT).show()
+                            mLoadingDialog.dismiss()
+                            findNavController().popBackStack()
+                        }
+                    ))
+            }
+            // 点击退出按钮
+            userEditBack.setOnClickListener {
+                mViewModel.onEvent(HomeEvents.ExitUserEditFragment(findNavController()))
+            }
+        }
+
+        mViewModel.apply {
+            // 初次进入时加载名字，性别，当前头像，个性签名，生日，国家等
+            userInfoMoreDetailed.observe(viewLifecycleOwner) {
+                mBinding.userEditName.setText(it.nickname)
+                mBinding.editHead.load(it.avatarUrl)
+                mBinding.editAbout.setText(it.about)
+                mBinding.userEditBirthday.setText(it.birthday)
+                mBinding.userEditCountry.setText(it.country)
+            }
         }
     }
 
+    /**
+     * 前往相册选择照片
+     */
     private fun getImageFromGallery() {
         if (MobileButlerUtil.checkExternalStorageInAllAndroid(requireContext())) {
             // 去选择照片

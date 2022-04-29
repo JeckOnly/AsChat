@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="viewmodel"
-            type="com.android.aschat.feature_home.presentation.HomeViewModel" />
-    </data>
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -48,7 +42,24 @@
                 app:layout_constraintTop_toTopOf="@id/view"
                 app:layout_constraintBottom_toBottomOf="@id/view" />
 
+            <!--    头像-->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/edit_head"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view"
+                tools:src="@color/black_3"
+                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"/>
 
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_headsetting"
+                app:layout_constraintEnd_toEndOf="@id/edit_head"
+                app:layout_constraintBottom_toBottomOf="@id/edit_head"/>
 
             <!--    name-->
             <TextView
@@ -56,12 +67,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="42.5dp"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="23dp"
                 android:text="@string/name_title"
                 android:textColor="@color/purple"
                 android:textSize="10sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view" />
+                app:layout_constraintTop_toBottomOf="@id/edit_head" />
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_edit_name"
@@ -106,7 +117,6 @@
                 android:cursorVisible="false"
                 android:focusableInTouchMode="false"
                 android:textIsSelectable="false"
-                android:text="@{viewmodel.userEditDetail.birthday}"
                 app:layout_constraintStart_toStartOf="@id/user_edit_birthday_title"
                 app:layout_constraintTop_toBottomOf="@id/user_edit_birthday_title" />
 
@@ -143,7 +153,6 @@
                 android:cursorVisible="false"
                 android:focusableInTouchMode="false"
                 android:textIsSelectable="false"
-                android:text="@{viewmodel.userEditDetail.country}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/user_edit_country_title"
                 app:layout_constraintTop_toBottomOf="@id/user_edit_country_title" />
@@ -157,129 +166,6 @@
                 app:layout_constraintEnd_toEndOf="@id/user_edit_country"
                 app:layout_constraintBottom_toBottomOf="@id/user_edit_country" />
 
-            <!--    邀请码-->
-            <TextView
-                android:id="@+id/user_edit_invite_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="42.5dp"
-                android:layout_marginTop="26dp"
-                android:text="@string/invitation_title"
-                android:textColor="@color/purple"
-                android:textSize="10sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/user_edit_country" />
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/user_edit_invite"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="42.5dp"
-                android:hint="@string/optional"
-                android:maxLength="20"
-                android:singleLine="true"
-                android:textSize="12sp"
-                android:theme="@style/InputStyle"
-                app:hintTextColor="@color/black_2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/user_edit_invite_title"
-                app:layout_constraintTop_toBottomOf="@id/user_edit_invite_title" />
-
-            <!--    男女选择-->
-            <TextView
-                android:id="@+id/user_edit_gender_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="42.5dp"
-                android:layout_marginTop="26dp"
-                android:text="@string/gender_title"
-                android:textColor="@color/purple"
-                android:textSize="10sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/user_edit_invite" />
-
-            <RadioGroup
-                android:id="@+id/user_edit_radiogroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="@id/user_edit_gender_title"
-                app:layout_constraintTop_toBottomOf="@id/user_edit_gender_title">
-
-                <RadioButton
-                    android:id="@+id/user_edit_gender_man"
-                    style="@style/CustomRadioTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:button="@null"
-                    android:checked="true"
-                    android:drawablePadding="5dp"
-                    android:text="@string/man" />
-
-                <RadioButton
-                    android:id="@+id/user_edit_gender_woman"
-                    style="@style/CustomRadioTheme"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="50dp"
-                    android:button="@null"
-                    android:drawablePadding="5dp"
-                    android:text="@string/woman" />
-            </RadioGroup>
-
-            <!--    头像-->
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/edit_head0"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintStart_toStartOf="@id/user_edit_radiogroup"
-                app:layout_constraintTop_toBottomOf="@id/user_edit_radiogroup"
-                android:layout_marginTop="35dp"
-                android:background="@{viewmodel.userEditDetail.head == 0 ? @drawable/shape_purple_circle : @drawable/shape_gray_circle}"
-                tools:src="@color/black_3"
-                app:contentPadding="2dp"
-                app:shapeAppearanceOverlay="@style/roundedImageViewRounded"/>
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/ic_headsetting"
-                app:layout_constraintEnd_toEndOf="@id/edit_head0"
-                app:layout_constraintBottom_toBottomOf="@id/edit_head0"/>
-
-            <ImageView
-                android:id="@+id/edit_head1"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
-                android:layout_marginStart="15dp"
-                app:layout_constraintStart_toEndOf="@id/edit_head0"
-                app:layout_constraintTop_toTopOf="@id/edit_head0"
-                android:background="@{viewmodel.userEditDetail.head == 1 ? @drawable/shape_purple_circle : @drawable/shape_gray_circle}"
-                android:padding="1dp"
-                android:src="@mipmap/ic_head_1" />
-
-            <ImageView
-                android:id="@+id/edit_head2"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
-                android:layout_marginStart="15dp"
-                app:layout_constraintStart_toEndOf="@id/edit_head1"
-                app:layout_constraintTop_toTopOf="@id/edit_head1"
-                android:background="@{viewmodel.userEditDetail.head == 2 ? @drawable/shape_purple_circle : @drawable/shape_gray_circle}"
-                android:src="@mipmap/ic_head_2"
-                android:padding="1dp" />
-
-            <ImageView
-                android:id="@+id/edit_head3"
-                android:layout_width="43dp"
-                android:layout_height="43dp"
-                android:layout_marginStart="15dp"
-                app:layout_constraintStart_toEndOf="@id/edit_head2"
-                app:layout_constraintTop_toTopOf="@id/edit_head2"
-                android:background="@{viewmodel.userEditDetail.head == 3 ? @drawable/shape_purple_circle : @drawable/shape_gray_circle}"
-                android:padding="1dp"
-                android:src="@mipmap/ic_head_3" />
 
 <!--            个性签名-->
             <EditText
@@ -295,9 +181,9 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="13dp"
                 android:textSize="12sp"
-                app:layout_constraintEnd_toEndOf="@id/user_edit_invite"
-                app:layout_constraintStart_toStartOf="@id/user_edit_invite"
-                app:layout_constraintTop_toBottomOf="@id/edit_head0" />
+                app:layout_constraintEnd_toEndOf="@id/user_edit_country"
+                app:layout_constraintStart_toStartOf="@id/user_edit_country"
+                app:layout_constraintTop_toBottomOf="@id/user_edit_country" />
 
             <TextView
                 android:id="@+id/edit_about_count"

@@ -60,4 +60,8 @@
     <string name="copy">copy</string>
     <string name="autotrans">Auto Translate</string>
     <string name="copy_success">Copy Successfully</string>
+    <string name="Save_information_successfully">Save information successfully</string>
+    <string name="Failed_to_save_information">Failed to save information</string>
+    <string name="Save_avatar_successfully">Save the avatar successfully</string>
+    <string name="Failed_to_save_avatar">Failed to save avatar</string>
 </resources>

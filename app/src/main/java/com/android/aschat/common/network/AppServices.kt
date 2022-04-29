@@ -5,6 +5,7 @@ import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.blocked.CancelBlock
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
+import com.android.aschat.feature_home.domain.model.mine.SaveUserInfo
 import com.android.aschat.feature_home.domain.model.mine.UpdateAvatar
 import com.android.aschat.feature_home.domain.model.mine.UpdateAvatarResult
 import com.android.aschat.feature_home.domain.model.wall.subtag.GetHostInfo
@@ -90,4 +91,7 @@ interface AppServices {
 
    @POST(ApiUrls.UpdateAvatar)
    suspend fun updateAvatar(@Body updateAvatar: UpdateAvatar): Response<UpdateAvatarResult>
+
+   @POST(ApiUrls.SaveUserBasicInfo)
+   suspend fun saveUserBasicInfo(@Body saveUserInfo: SaveUserInfo): Response<Boolean>
 }

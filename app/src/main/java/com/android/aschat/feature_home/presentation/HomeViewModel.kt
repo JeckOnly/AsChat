@@ -6,13 +6,16 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.*
 import com.android.aschat.R
 import com.android.aschat.common.Constants
+import com.android.aschat.common.network.UploadUtil
 import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend
 import com.android.aschat.feature_home.domain.model.follow.GetFriendList
-import com.android.aschat.feature_home.domain.model.mine.EditDetail
 import com.android.aschat.feature_home.domain.model.mine.HomeUserListItem
+import com.android.aschat.feature_home.domain.model.mine.SaveUserInfo
+import com.android.aschat.feature_home.domain.model.mine.UpdateAvatar
 import com.android.aschat.feature_home.domain.repo.HomeRepo
 import com.android.aschat.feature_home.domain.rv.ListState
+import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_host.presentation.HostActivity
 import com.android.aschat.feature_login.domain.model.coin.CoinGood
 import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
@@ -20,9 +23,9 @@ import com.android.aschat.feature_login.domain.model.login.UserInfo
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
 import com.android.aschat.util.*
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -35,13 +38,19 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     private val _userInfo: MutableLiveData<UserInfo> = MutableLiveData(JsonUtil.json2Any(SpUtil.get(context, SpConstants.USERINFO, "") as String, UserInfo::class.java))
     val userInfo: LiveData<UserInfo> = _userInfo
 
-    val avatarUrl: LiveData<String> = Transformations.map(_userInfo){
+    /**
+     * 这是一个更为详细的userInfo
+     */
+    private val _userInfoMoreDetailed: MutableLiveData<HostInfo> = MutableLiveData(HostInfo())
+    val userInfoMoreDetailed: LiveData<HostInfo> = _userInfoMoreDetailed
+
+    val avatarUrl: LiveData<String> = Transformations.map(_userInfoMoreDetailed){
         it.avatarUrl
     }
-    val coin: LiveData<String> = Transformations.map(_userInfo) {
+    val coin: LiveData<String> = Transformations.map(_userInfoMoreDetailed) {
         it.availableCoins.toString()
     }
-    val nickName: LiveData<String> = Transformations.map(_userInfo) {
+    val nickName: LiveData<String> = Transformations.map(_userInfoMoreDetailed) {
         it.nickname
     }
 
@@ -65,13 +74,6 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
         )
     )
     val userItemList: LiveData<List<HomeUserListItem>> = _userItemList
-
-    // 个人资料编辑页------
-
-    private val _userEditDetail: MutableLiveData<EditDetail> = MutableLiveData(
-        EditDetail()
-    )
-    val userEditDetail: LiveData<EditDetail> = _userEditDetail
 
     // 主播墙界面------
 
@@ -132,6 +134,11 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 this!![0].cornText = it
             })
         }
+
+        // 拉取用户的详细信息
+        viewModelScope.launch {
+            getHostInfo()
+        }
     }
 
     fun onEvent(event: HomeEvents) {
@@ -139,21 +146,67 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             is HomeEvents.ToEditFragment -> {
                 event.navController.navigate(R.id.action_userFragment_to_userEditFragment)
             }
-            is HomeEvents.ShowTimePicker -> {
-                PickerUtil.showTimePicker(event.fm) {datePickerDialog: DatePickerDialog, y: Int, m: Int, d: Int ->
-                    _userEditDetail.postValue(_userEditDetail.value!!.copy(birthday = "$y-$m-$d"))
-                }
-            }
-            is HomeEvents.ShowCountryPicker -> {
-                PickerUtil.showCountryPicker(context = context, fm = event.fm) { name,  code,  dialCode,  flagDrawableResID ->
-                    _userEditDetail.postValue(_userEditDetail.value!!.copy(country = name))
-                }
-            }
-            is HomeEvents.ChangeHead -> {
-                _userEditDetail.postValue(_userEditDetail.value!!.copy(head = event.head))
-            }
             is HomeEvents.ExitUserEditFragment -> {
                 event.navController.popBackStack()
+            }
+            is HomeEvents.SubmitEdit -> {
+                viewModelScope.launch {
+                    event.onStartSubmit()
+                    var avatarUpdateSuccess = false
+                    var baseInfoUpdateSuccess = false
+
+                    val editDetail = event.editDetail
+                    supervisorScope {
+                        // 1)更新头像
+                        val jobAvatar = launch {
+                            if (editDetail.avatarSrcPath.isNotEmpty()) {
+                                val host = UploadUtil.getOssHost(context)
+                                val response = repo.uploadFile(
+                                    host,
+                                    UploadUtil.getUploadAvatarBody(
+                                        context,
+                                        editDetail.avatarSrcPath
+                                    ).parts
+                                )
+                                if (response.code == 0) {
+                                    val ossData = response.data
+                                    ossData?.let {
+                                        val response = repo.updateAvatar(UpdateAvatar(it.filename))
+                                        if (response.code == 0) {
+                                            avatarUpdateSuccess = true
+                                        }
+                                    }
+                                }
+                            }else {
+                                // 头像没有更新就直接让任务成功
+                                avatarUpdateSuccess = true
+                            }
+                        }
+                        // 2）更新基本信息
+                        val jobBasic = launch {
+                            val response = repo.saveUserBasicInfo(
+                                SaveUserInfo(
+                                    about = editDetail.about,
+                                    birthday = editDetail.birthday,
+                                    country = editDetail.country,
+                                    nickname = editDetail.nickName
+                                )
+                            )
+                            if (response.code == 0) {
+                                baseInfoUpdateSuccess = true
+                            }
+                        }
+                        jobAvatar.join()
+                        jobBasic.join()
+                        if (avatarUpdateSuccess && baseInfoUpdateSuccess) {
+                            event.onSuccess()
+                        }else {
+                            event.onFail()
+                        }
+                        // 3) 更新用户所有信息
+                        getHostInfo()
+                    }
+                }
             }
             is HomeEvents.ClickHost -> {
                 val hostData = event.hostData
@@ -164,7 +217,33 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 }
                 context.startActivity(intent)
             }
-            // 关注页------
+            is HomeEvents.UploadImageToOss -> {
+                viewModelScope.launch {
+                    event.onStartSubmit()
+                    val host = UploadUtil.getOssHost(context)
+                    val response = repo.uploadFile(
+                        host,
+                        UploadUtil.getUploadAvatarBody(
+                            context,
+                            event.filePath
+                        ).parts
+                    )
+                    if (response.code == 0) {
+                        val ossData = response.data
+                        ossData?.let {
+                            val response = repo.updateAvatar(UpdateAvatar(it.filename))
+                            if (response.code == 0) {
+                                event.onSuccess()
+                            }else {
+                                event.onFail()
+                            }
+                        }
+                    }else {
+                        event.onFail()
+                    }
+                    getHostInfo()
+                }
+            }
             is HomeEvents.FollowWantInit -> {
                 viewModelScope.launch {
                     followListState = ListState.REPLACE
@@ -330,6 +409,13 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 return@sortWith 1
             }
             return@sortWith -o1.nickname.compareTo(o2.nickname)
+        }
+    }
+
+    private suspend fun getHostInfo() {
+        val response = repo.getHostInfo(_userInfo.value!!.userId)
+        if (response.code == 0) {
+            _userInfoMoreDetailed.postValue(response.data)
         }
     }
 }

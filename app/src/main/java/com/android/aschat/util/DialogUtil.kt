@@ -1,5 +1,6 @@
 package com.android.aschat.util
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.Window
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.android.aschat.R
@@ -133,5 +135,25 @@ object DialogUtil {
             bottomSheetBehavior.peekHeight = bottomSheet.height
             coordinatorLayout.parent.requestLayout()
         }
+    }
+
+    /**
+     * loading--dialog
+     *
+     * @param acty
+     * @return
+     */
+    fun createLoadingDialog(context: Context): Dialog {
+        val dialog: Dialog = Dialog(context)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+
+        val contentView = View.inflate(context, R.layout.dialog_loading, null)
+        dialog.setContentView(contentView)
+
+        val progressBar = contentView.findViewById<ProgressBar>(R.id.dialog_loading_progress)
+
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog
     }
 }

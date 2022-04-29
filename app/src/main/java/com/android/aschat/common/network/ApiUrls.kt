@@ -102,4 +102,9 @@ object ApiUrls {
      * 把在oss服务器的头像的相对路径上传到livechat服务器
      */
     const val UpdateAvatar = "$BASE_URL/user/updateAvatar"
+
+    /**
+     * 保存用户基本信息
+     */
+    const val SaveUserBasicInfo = "$BASE_URL/user/saveUserInfo"
 }

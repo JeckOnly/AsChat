@@ -10,12 +10,13 @@ import com.android.aschat.feature_login.domain.model.coin.CoinGood
 
 sealed class HomeEvents {
     // 个人资料编辑页
-    class SubmitEdit(val navController: NavController, val editDetail: EditDetail): HomeEvents()
+    class SubmitEdit(val editDetail: EditDetail, val onStartSubmit: () -> Unit, val onSuccess: () -> Unit,  val onFail: () -> Unit): HomeEvents()
     class ToEditFragment(val navController: NavController): HomeEvents()
-    class ShowTimePicker(val fm: FragmentManager): HomeEvents()
-    class ShowCountryPicker(val fm: FragmentManager): HomeEvents()
-    class ChangeHead(val head:Int): HomeEvents()
     class ExitUserEditFragment(val navController: NavController): HomeEvents()
+
+    // 个人资料页
+    // 点击头像
+    class UploadImageToOss(val filePath: String, val onStartSubmit: () -> Unit, val onSuccess: () -> Unit,  val onFail: () -> Unit): HomeEvents()
 
     // 首页
     data class ClickHost(val hostData: HostData): HomeEvents()
