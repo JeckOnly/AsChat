@@ -80,8 +80,12 @@ fun setGiftNumber(textView: TextView, giftNumber: String?) {
 
 @BindingAdapter("setHostTag")
 fun setHostTag(textView: TextView, tags: List<String>?) {
-    if (tags == null || tags.isEmpty()) return
-    textView.text = tags[0]
+    if (tags == null || tags.isEmpty()) {
+        textView.visibility = View.INVISIBLE
+    }else {
+        textView.text = tags[0]
+        textView.visibility = View.VISIBLE
+    }
 }
 
 @BindingAdapter("setHostStatus")
@@ -108,6 +112,22 @@ fun setHostStatus(imageView: ImageView, status: String?) {
         }
         else -> {
             imageView.setBackgroundResource(R.drawable.shape_gray_fill)
+        }
+    }
+}
+
+@BindingAdapter("setHostCallDrawable")
+fun setHostCallDrawable(imageView: ImageView, status: String?) {
+    if (status == null) {
+        imageView.setImageResource(R.drawable.ic_videocall_gray)
+        return
+    }
+    when (status) {
+        Constants.Online -> {
+            imageView.setImageResource(R.drawable.ic_videocall)
+        }
+        else -> {
+            imageView.setImageResource(R.drawable.ic_videocall_gray)
         }
     }
 }

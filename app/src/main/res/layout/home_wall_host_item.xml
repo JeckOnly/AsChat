@@ -45,6 +45,7 @@
             android:id="@+id/host_video_call"
             app:layout_constraintEnd_toEndOf="@id/host_avatar"
             app:layout_constraintBottom_toBottomOf="@id/host_avatar"
+            setHostCallDrawable="@{model.status}"
             android:layout_marginEnd="9dp"
             android:layout_marginBottom="8dp"
             android:src="@drawable/ic_videocall"

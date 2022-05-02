@@ -22,6 +22,7 @@ import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.login.UserInfo
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
+import com.android.aschat.feature_rank.presentation.RankActivity
 import com.android.aschat.util.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -101,27 +102,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
     private var countDownTimeTotalStamp: Long = 0L// 需要倒计时的时间
 
     private val _timer: Timer = Timer()
-    private val _timerTask: TimerTask = object :TimerTask() {
-        override fun run() {
-            val temp = _coinGoods.value
-            // 一开始列表为空不要去影响原值
-            if (temp!!.isEmpty()) return
-            var hasPromotion = false
-            temp.forEachIndexed { index, coinGood ->
-                // 只会有一个item满足
-                if (coinGood.isPromotion) {
-                    // 剩余的时间 = 总的时间 - 过去的时间
-                    coinGood.surplusMillisecond = countDownTimeTotalStamp - (System.currentTimeMillis() - promotionTimeStamp)
-                    hasPromotion = true
-                }
-            }
-            // 若是不更改，就不更新了
-            if (hasPromotion) {
-                val old = countTimeWorkingFlag.value
-                countTimeWorkingFlag.postValue(old!!.not())
-            } else return
-        }
-    }
+    private var _timerTask: TimerTask = createTimerTask()
 
     // 屏蔽页-----
     private val _blockList: MutableLiveData<List<BlockedItem>> = MutableLiveData(mutableListOf())
@@ -333,12 +314,21 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                 if (hasPromotion) {
                     // 取出倒计时对应的时间戳
                     promotionTimeStamp = SpUtil.get(context, SpConstants.COIN_GOODS_PROMOTION_TEMP_STAMP, 0L) as Long
-                    _timer.schedule(_timerTask, 0L, 1000L)
+                    try {
+                        _timerTask = createTimerTask()
+                        _timer.schedule(_timerTask, 0L, 1000L)
+                    }catch (e: Exception) {
+
+                    }
                 }
             }
 
             is HomeEvents.EndTimer -> {
-                _timerTask.cancel()
+                try {
+                    _timerTask.cancel()
+                } catch (e: Exception) {
+
+                }
             }
 
             is HomeEvents.ExitCoinGoods -> {
@@ -372,6 +362,13 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
 
             is HomeEvents.ExitSetting -> {
                 event.navController.popBackStack()
+            }
+
+            is HomeEvents.ClickRank -> {
+                val intent = Intent(context, RankActivity::class.java).apply {
+                    this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+                context.startActivity(intent)
             }
         }
     }
@@ -416,6 +413,30 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
         val response = repo.getHostInfo(_userInfo.value!!.userId)
         if (response.code == 0) {
             _userInfoMoreDetailed.postValue(response.data)
+        }
+    }
+
+    private fun createTimerTask(): TimerTask {
+        return object :TimerTask() {
+            override fun run() {
+                val temp = _coinGoods.value
+                // 一开始列表为空不要去影响原值
+                if (temp!!.isEmpty()) return
+                var hasPromotion = false
+                temp.forEachIndexed { index, coinGood ->
+                    // 只会有一个item满足
+                    if (coinGood.isPromotion) {
+                        // 剩余的时间 = 总的时间 - 过去的时间
+                        coinGood.surplusMillisecond = countDownTimeTotalStamp - (System.currentTimeMillis() - promotionTimeStamp)
+                        hasPromotion = true
+                    }
+                }
+                // 若是不更改，就不更新了
+                if (hasPromotion) {
+                    val old = countTimeWorkingFlag.value
+                    countTimeWorkingFlag.postValue(old!!.not())
+                } else return
+            }
         }
     }
 }

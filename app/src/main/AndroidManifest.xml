@@ -52,6 +52,8 @@
         <activity android:name=".feature_host.presentation.HostActivity"
             android:exported="true"
             android:launchMode="singleTask"/>
+        <activity android:name=".feature_rank.presentation.RankActivity" android:exported="true"
+            android:launchMode="singleTask"/>
 
     </application>
 

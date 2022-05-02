@@ -18,6 +18,7 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/ic_information_gray.xml" value="0.238" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/ic_jump.xml" value="0.3665" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/ic_ranking.xml" value="0.17" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/ic_videocall_gray.xml" value="0.2175" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/ic_videoer_information.xml" value="0.1935" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/selector_setting_switch_track.xml" value="0.2175" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_button_gray_white.xml" value="0.1375" />
@@ -40,6 +41,7 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_purple_circle.xml" value="0.3333333333333333" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_purple_white.xml" value="0.1" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_radius_ten_dp.xml" value="0.17" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_rank_item_bg.xml" value="0.2175" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_red_fill.xml" value="0.17" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_report_bg.xml" value="0.216" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/drawable/shape_report_tv.xml" value="0.263" />
@@ -61,7 +63,7 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_coin_goods_item.xml" value="0.22" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_calls_fragment.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_followed_fragment.xml" value="0.365625" />
-        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_followed_item.xml" value="0.6666666666666666" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_followed_item.xml" value="0.541029207232267" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_fragment.xml" value="0.22" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_message_fragment.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/home_message_tag.xml" value="0.5" />
@@ -94,6 +96,12 @@
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/login_login_fragment.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/login_registerdetail_fragment.xml" value="0.3333333333333333" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/login_splash_fragment.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/rank_acty.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/rank_charm_fragment.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/rank_main_fragment.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/rank_rich_fragment.xml" value="0.365625" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/rank_rv_item.xml" value="0.5" />
+        <entry key="..\:/work/projects/hellohi/app/src/main/res/layout/rank_tab.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/menu/home_bottom_nav.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/xml/file_paths.xml" value="0.365625" />
         <entry key="..\:/work/projects/hellohi/app/src/main/res/xml/network_security_config.xml" value="0.365625" />

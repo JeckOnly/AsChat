@@ -23,6 +23,11 @@ import com.android.aschat.feature_login.domain.model.login.LoginData
 import com.android.aschat.feature_login.domain.model.osspolicy.OssPolicy
 import com.android.aschat.feature_login.domain.model.osspolicy.OssResult
 import com.android.aschat.feature_login.domain.model.strategy.StrategyData
+import com.android.aschat.feature_rank.domain.model.GetRankData
+import com.android.aschat.feature_rank.domain.model.charm.RankCharmData
+import com.android.aschat.feature_rank.domain.model.rich.RankRichData
+import com.android.aschat.feature_rank.domain.model.rich.RankRichItem
+import com.android.aschat.feature_rank.presentation.charm.RankCharmFragment
 import com.google.android.exoplayer2.text.span.TextAnnotation
 import okhttp3.MultipartBody
 import retrofit2.http.*
@@ -94,4 +99,10 @@ interface AppServices {
 
    @POST(ApiUrls.SaveUserBasicInfo)
    suspend fun saveUserBasicInfo(@Body saveUserInfo: SaveUserInfo): Response<Boolean>
+
+   @POST(ApiUrls.RankCharmData)
+   suspend fun getRankCharmData(@Body getRankData: GetRankData): Response<RankCharmData>
+
+   @POST(ApiUrls.RankRichData)
+   suspend fun getRankRichData(@Body getRankData: GetRankData): Response<RankRichData>
 }

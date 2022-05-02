@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.android.aschat.R
 import com.android.aschat.databinding.HomeWallFragmentBinding
+import com.android.aschat.feature_home.presentation.HomeEvents
 import com.android.aschat.feature_home.presentation.HomeViewModel
 import com.android.aschat.feature_home.presentation.wall.category.TagHolder
 import com.android.aschat.feature_home.presentation.wall.category.WallCategoryFragment
@@ -52,22 +53,29 @@ class WallFragment: Fragment() {
         mWallPagerAdapter = WallPagerAdapter(this)
         mBinding.wallPager.adapter = mWallPagerAdapter
 
-        // 设值tab
-        mBinding.wallTab.addOnTabSelectedListener(object :TabLayout.OnTabSelectedListener{
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                if (tab == null) return
-                setTabSelected(tabHolders[tab.position], tab.position)
-            }
+        mBinding.apply {
+            // 设值tab
+            wallTab.addOnTabSelectedListener(object :TabLayout.OnTabSelectedListener{
+                override fun onTabSelected(tab: TabLayout.Tab?) {
+                    if (tab == null) return
+                    setTabSelected(tabHolders[tab.position], tab.position)
+                }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                if (tab == null) return
-                setTabUnSelected(tabHolders[tab.position], tab.position)
-            }
+                override fun onTabUnselected(tab: TabLayout.Tab?) {
+                    if (tab == null) return
+                    setTabUnSelected(tabHolders[tab.position], tab.position)
+                }
 
-            override fun onTabReselected(tab: TabLayout.Tab?) {
+                override fun onTabReselected(tab: TabLayout.Tab?) {
 
+                }
+            })
+
+            // 跳转rank
+            wallRanking.setOnClickListener {
+                mViewModel.onEvent(HomeEvents.ClickRank)
             }
-        })
+        }
         TabLayoutMediator(mBinding.wallTab, mBinding.wallPager) { tab, position ->
             tab.setCustomView(R.layout.home_wall_tab)
             val tabHolder = TagHolder(tab.customView!!)

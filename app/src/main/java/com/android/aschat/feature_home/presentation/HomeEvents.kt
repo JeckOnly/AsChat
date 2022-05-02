@@ -20,6 +20,7 @@ sealed class HomeEvents {
 
     // 首页
     data class ClickHost(val hostData: HostData): HomeEvents()
+    object ClickRank: HomeEvents()
 
     // 关注页
     object FollowWantInit: HomeEvents()

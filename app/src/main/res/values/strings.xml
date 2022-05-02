@@ -65,4 +65,6 @@
     <string name="Failed_to_save_information">Failed to save information</string>
     <string name="Save_avatar_successfully">Save the avatar successfully</string>
     <string name="Failed_to_save_avatar">Failed to save avatar</string>
+    <string name="charm">Charm</string>
+    <string name="rich">Rich</string>
 </resources>

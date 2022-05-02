@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.aschat.R
 import com.android.aschat.databinding.HomeWallTagFragmentBinding
@@ -105,9 +106,6 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
         mRvAdapter = mBinding.wallTagFragmentRv.grid(
             spanCount = 2
         ).apply {
-//           this.addItemDecoration(
-//               MainSpaceDecoration(requireContext(), 6)
-//           )
             this.addItemDecoration(object :RecyclerView.ItemDecoration(){
                 override fun getItemOffsets(
                     outRect: Rect,
@@ -126,6 +124,11 @@ class WallCategoryFragment(private val broadcasterWallTag: BroadcasterWallTag): 
                 override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
                     val old = oldItem as HostData
                     val new = newItem as HostData
+                    if (old == new) {
+                        LogUtil.d("相同${old.userId}")
+                    }else {
+                        LogUtil.d("不相同${old.userId}/${new.userId}")
+                    }
                     return old == new
                 }
 

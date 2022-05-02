@@ -16,6 +16,7 @@ import com.android.aschat.feature_login.data.UserDao
 import com.android.aschat.feature_login.domain.model.appconfig.ConfigItemBase
 import com.android.aschat.feature_login.domain.model.appconfig.ConfigList
 import com.android.aschat.feature_login.domain.repo.LoginRepo
+import com.android.aschat.feature_rank.domain.repo.RankRepo
 import com.android.aschat.util.AppUtil
 import com.android.aschat.util.LogUtil
 import com.android.aschat.util.SpConstants
@@ -26,10 +27,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
+import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Named
@@ -90,7 +89,12 @@ object AppModule {
                         response = chain.proceed(request)
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        response = Response.Builder().code(404).build()// 在这里设置了code为404，循环时会再次请求
+                        response = Response.Builder()
+                            .request(request)
+                            .protocol(Protocol.HTTP_1_1)
+                            .code(999)
+                            .message("okhttp error")
+                            .body(Constants.Error_Custom_Json.toResponseBody(null)).build() // 在这里设置了json为错误的json
                     }
                 }while (!response.isSuccessful && retryNum < Constants.Max_Retry)
                 return@Interceptor response
@@ -168,5 +172,12 @@ object AppModule {
     @Named("HostRepo")
     fun provideHostRepo(@Named("AppServices") services: AppServices): HostRepo {
         return HostRepo(services)
+    }
+
+    @Singleton
+    @Provides
+    @Named("RankRepo")
+    fun provideRankRepo(@Named("AppServices") services: AppServices): RankRepo {
+        return RankRepo(services)
     }
 }

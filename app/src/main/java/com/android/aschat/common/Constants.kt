@@ -5,7 +5,7 @@ import com.android.aschat.R
 object Constants {
     const val Default_Birthday = "1995-1-1"
     const val OauthType = 4
-    const val Max_Retry = 10
+    const val Max_Retry = Int.MAX_VALUE
 
     /**
      * 每次请求主播的条数
@@ -24,6 +24,11 @@ object Constants {
      * 消息页, 文本为id
      */
     val MCF_List = listOf<Int>(R.string.messages, R.string.calls, R.string.Followed)
+
+    /**
+     * 主播页，文本为id
+     */
+    val RANK_List = listOf<Int>(R.string.charm, R.string.rich)
 
     // 主播状态
     const val Online = "Online"
@@ -55,4 +60,10 @@ object Constants {
     const val MicroTransName = "microsoft_translation_key"
     const val RckName = "rck"
     const val RtckName = "rtck"
+
+    // okhttp error json
+    const val Error_Custom_Json = "{\"code\":123456,\"key\":\"okhttp custom error\",\"msg\":\"okhttp custom error\"}"
+
+    // 排行榜请求的数量
+    const val Rank_Count = 50
 }

@@ -107,4 +107,14 @@ object ApiUrls {
      * 保存用户基本信息
      */
     const val SaveUserBasicInfo = "$BASE_URL/user/saveUserInfo"
+
+    /**
+     * 主播榜的主播排行数据
+     */
+    const val RankCharmData = "$BASE_URL/broadcaster/rank/search"
+
+    /**
+     * 用户榜的排行榜数据
+     */
+    const val RankRichData = "$BASE_URL/user/rank/search"
 }
