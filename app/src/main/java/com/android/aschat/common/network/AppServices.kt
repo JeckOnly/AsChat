@@ -105,4 +105,7 @@ interface AppServices {
 
    @POST(ApiUrls.RankRichData)
    suspend fun getRankRichData(@Body getRankData: GetRankData): Response<RankRichData>
+
+   @GET(ApiUrls.GetUserStatusList)
+   suspend fun getUserStatusList(@Query("userIds") userIdList: List<String>): Response<Map<String, String>>
 }

@@ -11,4 +11,6 @@ sealed class SubTagEvents {
     data class ChangeTab(val tag: String): SubTagEvents()
     object WantMore: SubTagEvents()
     object WantRefresh: SubTagEvents()
+
+    class RefreshHost(val startIndex: Int, val endIndex: Int, val doAfterGetNewData: () -> Unit): SubTagEvents()
 }

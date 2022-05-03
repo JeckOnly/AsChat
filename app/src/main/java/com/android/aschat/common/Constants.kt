@@ -66,4 +66,7 @@ object Constants {
 
     // 排行榜请求的数量
     const val Rank_Count = 50
+
+    // 列表刷新时间戳，10s
+    const val Host_Refresh_Stamp = 10 * 1000L
 }

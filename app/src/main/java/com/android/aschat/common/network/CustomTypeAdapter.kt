@@ -56,7 +56,7 @@ class AppConfigDeserializer: JsonDeserializer<ConfigList> {
                         itemList.add(gson.fromJson(item, ConfigItemStrStr::class.java))
                     }
                 }catch (e: Exception) {
-                    // 有item解析错误，说明后台加了新的实体，直接跳过解析错误的
+                    // NOTE 有item解析错误，说明后台加了新的实体，直接跳过解析错误的
                     LogUtil.e(item.toString())
                 }
             }

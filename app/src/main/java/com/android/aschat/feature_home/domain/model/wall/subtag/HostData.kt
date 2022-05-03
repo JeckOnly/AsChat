@@ -12,7 +12,7 @@ data class HostData(
     val isFriend: Boolean,
     val isMultiple: Boolean,
     val nickname: String,
-    val status: String,
+    var status: String,
     val unit: String,
     val userId: String,
     val videoMapPaths: List<String>

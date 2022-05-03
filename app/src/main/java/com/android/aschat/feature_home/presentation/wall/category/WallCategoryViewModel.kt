@@ -10,6 +10,7 @@ import com.android.aschat.feature_home.domain.model.wall.subtag.HostData
 import com.android.aschat.feature_home.domain.repo.HomeRepo
 import com.android.aschat.feature_home.domain.rv.ListState
 import com.android.aschat.feature_login.domain.model.strategy.BroadcasterWallTag
+import com.android.aschat.util.LogUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -52,6 +53,11 @@ class WallCategoryViewModel @Inject constructor(@Named("HomeRepo") private val r
      */
     var mListState: ListState = ListState.REPLACE
     private set
+
+    /**
+     * 存储用户id和上次刷新时间的map
+     */
+    private val mHostRefreshMap: MutableMap<String, Long> = mutableMapOf()
 
     fun onEvent(event: SubTagEvents) {
         when(event) {
@@ -137,6 +143,10 @@ class WallCategoryViewModel @Inject constructor(@Named("HomeRepo") private val r
                     // 加在旧数据后面
                     mTagHostsMap[mTag]!!.apply {
                         addAll(newHostData)
+
+//                        forEachIndexed { index, hostData ->
+//                            LogUtil.d("$index ${hostData.userId}")
+//                        }
                     }
                     // 去重， 留给rv去做
 //                    mTagHostsMap[mTag] = mTagHostsMap[mTag]!!.distinctBy {
@@ -145,6 +155,71 @@ class WallCategoryViewModel @Inject constructor(@Named("HomeRepo") private val r
                     _nowTagHosts.postValue(mTagHostsMap[mTag]!!)
                 }
             }
+
+            is SubTagEvents.RefreshHost -> {
+                viewModelScope.launch {
+                    val startIndex = event.startIndex
+                    val endIndex = event.endIndex
+                    var idList = mutableListOf<String>()
+                    // 得到需要更新的userId的集合
+                    for (i in startIndex..endIndex) {
+                        try {
+                            idList.add(mTagHostsMap[mTag]!![i].userId)
+                        } catch (e: ArrayIndexOutOfBoundsException) {
+                            LogUtil.e("WallCategoryViewModel数组越界")
+                        } catch (e: Exception) {
+
+                        }
+                    }
+                    idList = idList.filter {
+                        checkNeedRefresh(it)
+                    }.toMutableList()
+                    // NOTE 返回的userId的map是无序的
+                    val response = repo.getUserStatusList(idList)
+                    if (response.code == 0) {
+                        val statusMap = response.data
+                        statusMap!!.forEach { entry ->
+                            val userId = entry.key
+                            val status = entry.value
+                            // 找出第一个满足的userId然后更新状态
+                            mTagHostsMap[mTag]!!.first { hostData ->
+                                hostData.userId == userId
+                            }.status = status
+                            // 更新时间戳
+                            updateHostRefreshTimeStamp(userId)
+                        }
+                        event.doAfterGetNewData()
+                    }
+//                    // NOTE 模拟数据改变
+//                    mTagHostsMap[mTag]!!.apply {
+//                        for (i in startIndex..endIndex) {
+//                            get(i).nickname = "xiejunyan"
+//                        }
+//                    }
+                }
+            }
         }
+    }
+
+    /**
+     * 判断当前id对应的主播是否需要刷新
+     *
+     * 如果当前已存在主播的时间戳，就判断是否 > 10s
+     * 不存在就返回true
+     * @return true表示需要刷新，false不需要刷新
+     */
+    private fun checkNeedRefresh(hostId: String): Boolean {
+        if (mHostRefreshMap.containsKey(hostId)) {
+            return System.currentTimeMillis() - mHostRefreshMap[hostId]!!.toLong() > Constants.Host_Refresh_Stamp
+        }else {
+            return true
+        }
+    }
+
+    /**
+     * 把当前主播刷新的时间戳更新 NOTE 没有key会写入
+     */
+    private fun updateHostRefreshTimeStamp(hostId: String) {
+        mHostRefreshMap[hostId] = System.currentTimeMillis()
     }
 }

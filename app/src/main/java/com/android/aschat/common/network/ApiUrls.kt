@@ -117,4 +117,9 @@ object ApiUrls {
      * 用户榜的排行榜数据
      */
     const val RankRichData = "$BASE_URL/user/rank/search"
+
+    /**
+     * 查询一批用户的在线状态
+     */
+    const val GetUserStatusList = "$BASE_URL/user/getUserListOnlineStatus"
 }

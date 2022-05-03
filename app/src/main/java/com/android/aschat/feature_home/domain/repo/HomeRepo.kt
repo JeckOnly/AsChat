@@ -84,4 +84,12 @@ class HomeRepo(private val services: AppServices) {
         var response: Response<Boolean> = services.saveUserBasicInfo(saveUserInfo)
         return response
     }
+
+    /**
+     * 获取一批用户的状态
+     */
+    suspend fun getUserStatusList(userIdList: List<String>): Response<Map<String, String>> {
+        val response: Response<Map<String, String>> = services.getUserStatusList(userIdList)
+        return response
+    }
 }
