@@ -42,7 +42,7 @@ class ShowShortVideoFragment: Fragment() {
     }
 
     private fun initBinding() {
-        mBinding.hostData = mViewModel.hostData.value!!
+        mBinding.viewmodel = mViewModel
     }
 
     private fun initWidget() {

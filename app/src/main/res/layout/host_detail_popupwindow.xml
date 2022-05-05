@@ -10,7 +10,7 @@
             android:id="@+id/popupwindow_report"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/shape_report_tv"
+            android:background="@drawable/shape_radius_five_dp"
             android:text="@string/shielding_report"
             android:textSize="10sp"
             app:layout_constraintTop_toTopOf="parent"

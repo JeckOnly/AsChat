@@ -42,6 +42,7 @@ object Constants {
     const val FromWall = 0
     const val FromFollow = 1
     const val FromBlock = 2
+    const val FromRank = 3
 
     const val PayChannel = "GP"
 

@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="hostData"
-            type="com.android.aschat.feature_home.domain.model.wall.subtag.HostData" />
+            name="viewmodel"
+            type="com.android.aschat.feature_host.presentation.HostViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -53,7 +53,7 @@
                 android:layout_width="31.5dp"
                 android:layout_height="31.5dp"
                 android:id="@+id/video_avatar"
-                setImageUrl="@{hostData.avatar}"
+                setImageUrl="@{viewmodel.hostInfo.avatar}"
                 tools:src="@color/black_3"
                 app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
                 app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="Sama"
-                android:text="@{hostData.nickname}"
+                android:text="@{viewmodel.hostInfo.nickname}"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:layout_marginStart="6.5dp"
@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="19"
-                setTextViewInt="@{hostData.age}"
+                setTextViewInt="@{viewmodel.hostInfo.age}"
                 android:background="@drawable/shape_videoshow_age"
                 android:textColor="@color/white"
                 android:textSize="8sp"
@@ -92,7 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="America"
-                android:text="@{hostData.country}"
+                android:text="@{viewmodel.hostInfo.country}"
                 android:background="@drawable/shape_videoshow_country"
                 android:textColor="@color/white"
                 android:textSize="8sp"

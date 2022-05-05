@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.android.aschat.R
 import com.android.aschat.feature_rank.domain.model.charm.RankCharmItem
+import com.android.aschat.feature_rank.domain.model.rich.RankRichItem
 import com.android.aschat.feature_rank.presentation.RankEvents
 import com.android.aschat.feature_rank.presentation.RankViewModel
 import com.android.aschat.util.DensityUtil
@@ -78,10 +79,13 @@ class RankCharmFragment : Fragment() {
                     text = model.nickname
                 }
             }
+            onClick(R.id.rank_rv_item) {
+                mViewModel.onEvent(RankEvents.ClickHost(requireContext(), this.getModel<RankCharmItem>().userId))
+            }
         }
 
         mViewModel.rankCharmData.observe(viewLifecycleOwner) {
-            mAdapter.models = it.rankCharmItems
+            mAdapter.models = it.rankData
         }
     }
 }

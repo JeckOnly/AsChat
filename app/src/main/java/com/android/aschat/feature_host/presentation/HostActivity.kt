@@ -31,6 +31,10 @@ class HostActivity : BaseActivity() {
                 val blockData = JsonUtil.json2Any(intent.getStringExtra("blockData")!!, BlockedItem::class.java)
                 mViewModel.onEvent(HostEvents.SendBlockData(blockData))
             }
+            Constants.FromRank -> {
+                val userId = intent.getStringExtra("userId")!!
+                mViewModel.onEvent(HostEvents.SendUserId(userId))
+            }
         }
     }
 

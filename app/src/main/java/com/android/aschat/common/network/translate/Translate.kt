@@ -1,4 +1,4 @@
-package com.android.aschat.common.network
+package com.android.aschat.common.network.translate
 
 import com.google.gson.JsonParser
 import okhttp3.*

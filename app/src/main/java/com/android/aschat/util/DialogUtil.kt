@@ -7,10 +7,7 @@ import android.content.DialogInterface
 import android.view.KeyEvent
 import android.view.View
 import android.view.Window
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.android.aschat.R
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -154,6 +151,23 @@ object DialogUtil {
         val progressBar = contentView.findViewById<ProgressBar>(R.id.dialog_loading_progress)
 
         dialog.setCanceledOnTouchOutside(false)
+        return dialog
+    }
+
+
+    /**
+     * 提示网络不正常
+     */
+    fun createWrongNetworkDialog(context: Context, clickOkay: (Dialog) -> Unit): Dialog {
+        val dialog = Dialog(context)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.dialog_wrong_network)
+        val okayBtn: Button = dialog.findViewById(R.id.dialog_wrong_network_btn)
+        okayBtn.setOnClickListener {
+           clickOkay(dialog)
+        }
+        dialog.setCanceledOnTouchOutside(true)
         return dialog
     }
 }

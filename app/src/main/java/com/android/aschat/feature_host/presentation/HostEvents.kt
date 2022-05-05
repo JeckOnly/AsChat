@@ -12,6 +12,7 @@ sealed class HostEvents {
     class SendHostData(val hostData: HostData): HostEvents()
     class SendFriendData(val friendData: FollowFriend): HostEvents()
     class SendBlockData(val blockData: BlockedItem): HostEvents()
+    class SendUserId(val userId: String): HostEvents()
     class ExitHostDetail(val activity: HostActivity): HostEvents()
     class JumpFullScreenImage(val navController: NavController, val position: Int): HostEvents()
     class JumpFullScreenVideo(val navController: NavController, val position: Int): HostEvents()

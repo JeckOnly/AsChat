@@ -1,6 +1,7 @@
 package com.android.aschat.feature_rank.presentation.rich
 
 import android.graphics.Rect
+import android.media.Image
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import com.android.aschat.feature_rank.presentation.RankViewModel
 import com.android.aschat.util.DensityUtil
 import com.android.aschat.util.FontUtil
 import com.android.aschat.util.equilibriumAssignmentOfLinear
+import com.android.aschat.util.setImageUrl
 import com.drake.brv.BindingAdapter
 import com.drake.brv.utils.linear
 import com.drake.brv.utils.setup
@@ -28,6 +30,9 @@ class RankRichFragment : Fragment() {
     private val mViewModel: RankViewModel by activityViewModels()
     private lateinit var mRv: RecyclerView
     private lateinit var mAdapter: BindingAdapter
+    private lateinit var mRankMeSort: TextView
+    private lateinit var mRankMeAvatar: ImageView
+    private lateinit var mRankMeNickname: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +50,10 @@ class RankRichFragment : Fragment() {
 
     private fun initWidget() {
         mRv = requireView().findViewById(R.id.rich_rv)
+        mRankMeSort = requireView().findViewById(R.id.rank_me_sort)
+        mRankMeAvatar = requireView().findViewById(R.id.rank_me_avatar)
+        mRankMeNickname = requireView().findViewById(R.id.rank_me_nickname)
+
         mAdapter = mRv.linear().apply {
             addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(
@@ -81,8 +90,26 @@ class RankRichFragment : Fragment() {
             }
         }
 
-        mViewModel.rankRichData.observe(viewLifecycleOwner) {
-            mAdapter.models = it.rankRichItems
+        mViewModel.apply {
+            rankRichData.observe(viewLifecycleOwner) {
+                mAdapter.models = it.rankData
+                if (it.sortNo == "" || it.sortNo.toLong() > 50) {
+                    mRankMeSort.text = "50+"
+                }else {
+                    mRankMeSort.text = it.sortNo
+                    if (it.sortNo.toLong() <= 3) {
+                        mRankMeSort.setTextColor(resources.getColor(R.color.purple, null))
+                    }else {
+                        mRankMeSort.setTextColor(resources.getColor(R.color.black_3, null))
+                    }
+                }
+                mRankMeSort.typeface = FontUtil.getTypeface(requireContext())
+            }
+
+            userInfoMoreDetailed.observe(viewLifecycleOwner) {
+                setImageUrl(mRankMeAvatar, it.avatarUrl)
+                mRankMeNickname.text = it.nickname
+            }
         }
     }
 }

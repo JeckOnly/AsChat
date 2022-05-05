@@ -367,6 +367,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
             is HomeEvents.ClickRank -> {
                 val intent = Intent(context, RankActivity::class.java).apply {
                     this.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    this.putExtra("hostInfo", JsonUtil.any2Json(_userInfoMoreDetailed.value!!))
                 }
                 context.startActivity(intent)
             }

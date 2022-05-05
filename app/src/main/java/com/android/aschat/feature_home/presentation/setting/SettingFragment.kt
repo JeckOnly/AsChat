@@ -9,18 +9,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.android.aschat.R
-import com.android.aschat.common.network.Translate
 import com.android.aschat.databinding.HomeSettingFragmentBinding
 import com.android.aschat.feature_home.presentation.HomeEvents
 import com.android.aschat.feature_home.presentation.HomeViewModel
 import com.android.aschat.util.*
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SettingFragment : Fragment() {

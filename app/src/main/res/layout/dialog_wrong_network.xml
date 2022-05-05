@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/shape_radius_ten_dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/dialog_wrong_network_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/abnormal_network"
+        android:textColor="#282828"
+        android:layout_marginTop="43dp"
+        android:layout_marginBottom="39dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dialog_wrong_network_btn"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/dialog_wrong_network_btn"
+        android:layout_width="236dp"
+        android:layout_height="48dp"
+        android:text="@string/okay"
+        android:textColor="@color/white"
+        android:layout_marginBottom="19dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginEnd="11dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/shape_button_red_purple"
+        app:layout_constraintTop_toBottomOf="@id/dialog_wrong_network_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="18sp"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

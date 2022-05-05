@@ -30,7 +30,7 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
 
     // 主播详细资料界面
 
-    // 当前查看的主播
+    // 当前查看的主播 NOTE 这个字段已经没有功能了，单纯地提供userId而已
     private val _hostData: MutableLiveData<HostData> = MutableLiveData()
     val hostData: LiveData<HostData> = _hostData
 
@@ -202,6 +202,27 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                     status = "",
                     unit = "min",
                     userId = blockItem.broadcasterId,
+                    videoMapPaths = emptyList()
+                )
+                _hostData.postValue(hostData)
+            }
+            is HostEvents.SendUserId -> {
+                val userId = event.userId
+                val hostData = HostData(
+                    age = 0,
+                    applicableTags = emptyList(),
+                    avatar = "",
+                    avatarMapPath = "",
+                    callCoins = 0,
+                    country = "",
+                    followNum = 0,
+                    gender = 2,
+                    isFriend = true,
+                    isMultiple = false,
+                    nickname = "",
+                    status = "",
+                    unit = "min",
+                    userId = userId,
                     videoMapPaths = emptyList()
                 )
                 _hostData.postValue(hostData)

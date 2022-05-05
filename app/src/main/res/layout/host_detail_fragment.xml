@@ -83,7 +83,7 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/host_detail_status"
-                        setHostStatus="@{viewmodel.hostData.status}"
+                        setHostStatus="@{viewmodel.status}"
                         android:layout_width="6dp"
                         android:layout_height="6dp"
                         android:layout_marginStart="7dp"
@@ -102,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="2dp"
                         android:layout_marginEnd="7dp"
-                        android:text="@{viewmodel.hostData.status}"
+                        android:text="@{viewmodel.status}"
                         android:textColor="@color/white"
                         android:textSize="8sp"
                         app:layout_constraintBottom_toBottomOf="@id/host_detail_status"
@@ -139,7 +139,7 @@
                     android:layout_marginTop="12dp"
                     android:ellipsize="end"
                     android:maxLength="10"
-                    android:text="@{viewmodel.hostData.nickname}"
+                    android:text="@{viewmodel.hostInfo.nickname}"
                     android:textColor="@color/tab_black"
                     android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -148,7 +148,7 @@
 
                 <TextView
                     android:id="@+id/host_detail_age"
-                    setTextViewInt="@{viewmodel.hostData.age}"
+                    setTextViewInt="@{viewmodel.hostInfo.age}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="6dp"
@@ -170,7 +170,7 @@
                     android:background="@drawable/shape_videoshow_country"
                     android:paddingHorizontal="4dp"
                     android:paddingVertical="2dp"
-                    android:text="@{viewmodel.hostData.country}"
+                    android:text="@{viewmodel.hostInfo.country}"
                     android:textColor="@color/white"
                     android:textSize="8sp"
                     app:layout_constraintBottom_toBottomOf="@id/host_detail_age"
@@ -251,7 +251,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:text="@{viewmodel.hostData.unit}"
+                        android:text="min"
                         android:textColor="@color/white"
                         android:textSize="8sp"
                         app:layout_constraintBottom_toBottomOf="@id/host_detail_coin_middle"

@@ -66,4 +66,6 @@
     <string name="Failed_to_save_avatar">Failed to save avatar</string>
     <string name="charm">Charm</string>
     <string name="rich">Rich</string>
+    <string name="abnormal_network">Abnormal network status</string>
+    <string name="okay">okay</string>
 </resources>
