@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_userFragment_to_settingFragment"
             app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_userFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/userEditFragment"
@@ -46,4 +49,8 @@
         android:id="@+id/settingFragment"
         android:name="com.android.aschat.feature_home.presentation.setting.SettingFragment"
         android:label="SettingFragment" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.android.aschat.feature_home.presentation.about.AboutFragment"
+        android:label="AboutFragment" />
 </navigation>

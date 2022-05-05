@@ -67,7 +67,7 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                   it.navigate(R.id.action_userFragment_to_blockFragment)
             },
             HomeUserListItem(imageId = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_about, null), text = context.getString(R.string.about)) {
-                //
+                  it.navigate(R.id.action_userFragment_to_aboutFragment)
             },
             HomeUserListItem(imageId = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_setting, null), text = context.getString(R.string.setting)) {
                 it.navigate(R.id.action_userFragment_to_settingFragment)
@@ -370,6 +370,10 @@ class HomeViewModel @Inject constructor(@Named("HomeRepo") private val repo: Hom
                     this.putExtra("hostInfo", JsonUtil.any2Json(_userInfoMoreDetailed.value!!))
                 }
                 context.startActivity(intent)
+            }
+
+            is HomeEvents.ExitAbout -> {
+                event.navController.popBackStack()
             }
         }
     }

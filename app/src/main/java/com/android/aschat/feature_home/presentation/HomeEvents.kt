@@ -41,4 +41,7 @@ sealed class HomeEvents {
 
     // 设置页
     class ExitSetting(val navController: NavController): HomeEvents()
+
+    // 关于页
+    class ExitAbout(val navController: NavController): HomeEvents()
 }
