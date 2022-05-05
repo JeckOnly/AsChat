@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.aschat.R
 import com.android.aschat.common.Constants
+import com.android.aschat.common.services.socketio.CheckServicesAliveService
 import com.android.aschat.feature_home.presentation.HomeActivity
 import com.android.aschat.feature_login.domain.model.appconfig.ConfigItemStrStr
 import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
@@ -170,6 +171,9 @@ class LoginViewModel @Inject constructor(
                             jobCoinGoods.join()
                             jobAppConfig.join()
                             jobOss.join()
+
+                            // NOTE 启动后台的长链检查服务
+                            event.context.startService(Intent(event.context, CheckServicesAliveService::class.java))
 
                             // end)跳转
                             if (loginResponse.data.isFirstRegister) {

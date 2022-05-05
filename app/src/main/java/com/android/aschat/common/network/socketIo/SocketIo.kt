@@ -89,28 +89,30 @@ object SocketIo {
                 when (key) {
                     "onCall" -> {
                         val onCallModel = gson.fromJson(jsonObjectData, OnCallModel::class.java)
+                        LogUtil.d("收到onCall: $onCallModel")
                     }
                     "onHangUp" -> {
                         val onHangUpModel = gson.fromJson(jsonObjectData, OnHangUpModel::class.java)
-
+                        LogUtil.d("收到onHangUp: $onHangUpModel")
                     }
                     "onPickUp" -> {
                         val onPickUpModel = gson.fromJson(jsonObjectData, OnPickUpModel::class.java)
-
+                        LogUtil.d("收到onPickUp: $onPickUpModel")
                     }
                     "estimatedHangUpTime" -> {
                         val estimatedHangUpTimeModel = gson.fromJson(jsonObjectData, EstimatedHangUpTimeModel::class.java)
-
+                        LogUtil.d("收到estimatedHangUpTime: $estimatedHangUpTimeModel")
                     }
                     "availableCoins" -> {
                         val availableCoinsModel = gson.fromJson(jsonObjectData, AvailableCoinsModel::class.java)
-
+                        LogUtil.d("收到availableCoins: $availableCoinsModel")
                     }
                     "onChat" -> {
 
                     }
                     "messageEvent" -> {
                         val messageEventModel = gson.fromJson(jsonObjectData, MessageEventModel::class.java)
+                        LogUtil.d("收到messageEvent: $messageEventModel")
                     }
                 }
             } catch (e: Exception) {
