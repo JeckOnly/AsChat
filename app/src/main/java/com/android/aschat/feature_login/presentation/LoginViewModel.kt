@@ -1,26 +1,42 @@
 package com.android.aschat.feature_login.presentation
 
+import android.content.Context
 import android.content.Intent
+import android.view.View
+import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.aschat.R
 import com.android.aschat.common.Constants
+import com.android.aschat.common.MyApplication
 import com.android.aschat.common.services.socketio.CheckServicesAliveService
 import com.android.aschat.feature_home.presentation.HomeActivity
+import com.android.aschat.feature_host.presentation.HostActivity
 import com.android.aschat.feature_login.domain.model.appconfig.ConfigItemStrStr
 import com.android.aschat.feature_login.domain.model.coin.CoinGoodPromotion
 import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.model.osspolicy.OssPolicy
 import com.android.aschat.feature_login.domain.repo.LoginRepo
-import com.android.aschat.util.AppUtil
-import com.android.aschat.util.JsonUtil
-import com.android.aschat.util.SpConstants
-import com.android.aschat.util.SpUtil
+import com.android.aschat.feature_rongyun.MyConversationActivity
+import com.android.aschat.feature_rongyun.rongyun.MyUserInfoProvider
+import com.android.aschat.util.*
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.rong.imkit.GlideKitImageEngine
+import io.rong.imkit.RongIM
+import io.rong.imkit.config.ConversationListBehaviorListener
+import io.rong.imkit.config.RongConfigCenter
+import io.rong.imkit.conversationlist.model.BaseUiConversation
+import io.rong.imkit.utils.RouteUtils
+import io.rong.imlib.RongIMClient
+import io.rong.imlib.model.Conversation
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
 import javax.inject.Named
+
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -102,9 +118,11 @@ class LoginViewModel @Inject constructor(
                                 if (configResponse.code == 0) {
                                     // 成功
                                     // 保存配置
+                                    // NOTE 后台如果有新数据就会进去
                                     if (configResponse.data != null) {
                                         // 返回的list是空，就不写入，否则覆盖写入
                                         val list = configResponse.data.items
+                                        // NOTE 如果上面那个if进来了这个if一般都会进去
                                         if (list.isNotEmpty()) {
                                             // 存储配置版本号
                                             SpUtil.putAndApply(
@@ -148,6 +166,7 @@ class LoginViewModel @Inject constructor(
                                         }
                                     }
                                 }
+                                initRongyun(event.context, loginResponse.data.userInfo.rongcloudToken)
                             }
 
 //                            6) 获取oss服务器相关
@@ -198,5 +217,108 @@ class LoginViewModel @Inject constructor(
                 event.context.startActivity(intent)
             }
         }
+    }
+
+    private fun initRongyun(context: Context, token: String) {
+        // NOTE 初始化融云
+        try {
+            val rckKey = SpUtil.get(context, SpConstants.Rck_Key, "") as String
+            RongIM.init(MyApplication.application, rckKey)
+            LogUtil.d("融云初始化胜利")
+        }catch (e: Exception) {
+            LogUtil.d("融云初始化失败   ${e.stackTrace}")
+        }
+
+        // NOTE 连接融云
+        try {
+            // SDK 本身有重连机制，在一个应用生命周期内不须多次调用connect() 。否则可能触发多个回调，触发导致回调被清除。
+            RongIM.connect(token, object : RongIMClient.ConnectCallback() {
+                override fun onSuccess(p0: String?) {
+                    LogUtil.d("融云连接成功回调   $p0")
+                    // TODO: 设置长链断开的消息监听
+                }
+
+                override fun onError(p0: RongIMClient.ConnectionErrorCode?) {
+                    // 连接失败并返回对应的连接错误码，开发者需要参考连接相关错误码进行不同业务处理。
+                    LogUtil.d("融云连接失败回调   ${p0.toString()}")
+                }
+
+                override fun onDatabaseOpened(p0: RongIMClient.DatabaseOpenStatus?) {
+                    // 本地数据库打开状态回调。当回调 DATABASE_OPEN_SUCCESS 时，说明本地数据库打开，此时可以拉取本地历史会话及消息，适用于离线登录场景。
+                    LogUtil.d("融云onDatabaseopened回调   ${p0.toString()}")
+                }
+
+            })
+            LogUtil.d("融云连接胜利")
+        }catch (e: Exception) {
+            LogUtil.d("融云连接失败   ${e.stackTrace}")
+        }
+
+        // NOTE 设置融云如何获取用户头像等信息
+        RongIM.setUserInfoProvider(
+            MyUserInfoProvider
+            {
+                repo.getHostInfo(it)
+            },
+            true
+        )
+
+        // NOTE 设置融云会话列表的回调监听
+        RongIM.setConversationListBehaviorListener(object : ConversationListBehaviorListener {
+            // 点击头像回调
+            override fun onConversationPortraitClick(
+                context: Context,
+                p1: Conversation.ConversationType?,
+                userId: String?
+            ): Boolean {
+                LogUtil.d("融云会话列表点击头像 userId $userId")
+                val intent = Intent(context, HostActivity::class.java).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    putExtra(Constants.WhereFrom, Constants.FromRongyunList)
+                    putExtra("userId", userId)
+                }
+                context.startActivity(intent)
+                return true
+            }
+
+            override fun onConversationPortraitLongClick(
+                p0: Context?,
+                p1: Conversation.ConversationType?,
+                p2: String?
+            ): Boolean {
+                return false
+            }
+
+            override fun onConversationLongClick(
+                p0: Context?,
+                p1: View?,
+                p2: BaseUiConversation?
+            ): Boolean {
+                return false
+            }
+
+            override fun onConversationClick(
+                p0: Context?,
+                p1: View?,
+                p2: BaseUiConversation?
+            ): Boolean {
+                return false
+            }
+        })
+
+//        // NOTE 注册自定义会话列表
+//        RouteUtils.registerActivity(RouteUtils.RongActivityType.ConversationListActivity, HomeActivity::class.java)
+        // NOTE 注册自定义会话界面
+        RouteUtils.registerActivity(RouteUtils.RongActivityType.ConversationActivity, MyConversationActivity::class.java)
+
+        // NOTE 会话界面你圆角
+        RongConfigCenter.featureConfig().kitImageEngine = object : GlideKitImageEngine() {
+            fun loadConversationPortrait(context: Context, url: String, imageView: ImageView) {
+                Glide.with(imageView).load(url)
+                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
+                    .into(imageView)
+            }
+        }
+
     }
 }

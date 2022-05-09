@@ -114,7 +114,14 @@ dependencies {
     implementation 'com.google.android.exoplayer:exoplayer-core:2.17.1'
     implementation 'com.google.android.exoplayer:exoplayer-ui:2.17.1'
 
+    // socketIO长连接
     implementation('io.socket:socket.io-client:1.0.0') {
         exclude group: 'org.json', module: 'json'
     }
+
+    // 融云
+//    implementation "cn.rongcloud.sdk:im_kit:5.1.3"
+
+    implementation project(":IMKit")
+    implementation project(":IMLib")
 }

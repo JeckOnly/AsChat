@@ -9,6 +9,10 @@ import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.MaterialHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import dagger.hilt.android.HiltAndroidApp
+import io.rong.imkit.RongIM
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * 使用hilt需要加这个注释
@@ -17,7 +21,7 @@ import dagger.hilt.android.HiltAndroidApp
 class MyApplication :Application(){
     override fun onCreate() {
         super.onCreate()
-
+        application = this
         ClassicsFooter.REFRESH_FOOTER_PULLING = getString(R.string.footer_pulling);//"上拉加载更多";
         ClassicsFooter.REFRESH_FOOTER_RELEASE = getString(R.string.footer_release);//"释放立即加载";
         ClassicsFooter.REFRESH_FOOTER_REFRESHING = getString(R.string.footer_refreshing);//"正在刷新...";
@@ -30,6 +34,12 @@ class MyApplication :Application(){
         SmartRefreshLayout.setDefaultRefreshHeaderCreator { context, layout -> MaterialHeader(this) }
         SmartRefreshLayout.setDefaultRefreshFooterCreator { context, layout -> ClassicsFooter(this) }
 
+        // 设置brv框架databinding的数据类型
         BRV.modelId = BR.model
+    }
+
+    companion object {
+        lateinit var application: Application
+        private set
     }
 }

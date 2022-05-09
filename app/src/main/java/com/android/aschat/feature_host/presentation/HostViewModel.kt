@@ -20,6 +20,8 @@ import com.android.aschat.util.JsonUtil
 import com.android.aschat.util.SpConstants
 import com.android.aschat.util.SpUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.rong.imkit.utils.RouteUtils
+import io.rong.imlib.model.Conversation
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject

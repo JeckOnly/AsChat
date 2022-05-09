@@ -3,6 +3,7 @@ package com.android.aschat.feature_login.domain.repo
 import com.android.aschat.common.network.AppServices
 import com.android.aschat.common.network.Response
 import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInfo
+import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_login.data.UserDao
 import com.android.aschat.feature_login.domain.model.appconfig.ConfigList
 import com.android.aschat.feature_login.domain.model.coin.CoinGood
@@ -15,6 +16,7 @@ import com.android.aschat.feature_login.domain.model.strategy.StrategyData
 import com.android.aschat.util.LogUtil
 
 class LoginRepo(private val services: AppServices, private val dao: UserDao) {
+
     suspend fun login(oauthType: Int,token: String): Response<LoginData> {
         var response: Response<LoginData> = services.login(oauthType, token)
         while (response.code != 0) {
@@ -67,6 +69,14 @@ class LoginRepo(private val services: AppServices, private val dao: UserDao) {
      */
     suspend fun getOssPolicy(): Response<OssPolicy> {
         val response: Response<OssPolicy> = services.getOssPolicy()
+        return response
+    }
+
+    /**
+     * 获得单个user信息
+     */
+    suspend fun getHostInfo(userId: String): Response<HostInfo> {
+        var response: Response<HostInfo> = services.getUserInfo(userId)
         return response
     }
 

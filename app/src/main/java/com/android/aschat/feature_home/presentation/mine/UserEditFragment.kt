@@ -27,9 +27,6 @@ import com.android.aschat.feature_home.presentation.HomeViewModel
 import com.android.aschat.util.*
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 
-/**
- * 这个界面的数据observe有些混乱，country birthday 紫色选择框，是观察的viewmodel里的字段，其他字段数值留在view层
- */
 class UserEditFragment: Fragment() {
 
     private lateinit var mBinding: HomeUserEditFragmentBinding

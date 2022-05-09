@@ -15,3 +15,5 @@
 //}
 rootProject.name = "HelloHi"
 include ':app'
+include ':IMKit'
+include ':IMLib'

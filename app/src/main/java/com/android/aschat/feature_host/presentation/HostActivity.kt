@@ -35,6 +35,10 @@ class HostActivity : BaseActivity() {
                 val userId = intent.getStringExtra("userId")!!
                 mViewModel.onEvent(HostEvents.SendUserId(userId))
             }
+            Constants.FromRongyunList -> {
+                val userId = intent.getStringExtra("userId")!!
+                mViewModel.onEvent(HostEvents.SendUserId(userId))
+            }
         }
     }
 

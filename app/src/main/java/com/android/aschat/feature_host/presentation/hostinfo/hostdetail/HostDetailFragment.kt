@@ -31,6 +31,8 @@ import com.drake.brv.utils.grid
 import com.drake.brv.utils.setup
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
+import io.rong.imkit.utils.RouteUtils
+import io.rong.imlib.model.Conversation
 import razerdp.basepopup.BasePopupWindow
 
 class HostDetailFragment : Fragment() {
@@ -148,6 +150,16 @@ class HostDetailFragment : Fragment() {
             hostDetailVideoCallBar.typeface = FontUtil.getTypeface(requireContext())
             hostDetailFollow.setOnClickListener {
                 mViewModel.onEvent(HostEvents.ClickFollow)
+            }
+            hostDetailChatbar.setOnClickListener {
+                // NOTE 跳转私聊页
+                val hostInfo = mViewModel.hostInfo.value
+                if (hostInfo == null) {
+
+                }else {
+                    // TODO: https://docs.rongcloud.cn/im/imlib/web/conversation/structure/会话类型要做区分：系统和用户 
+                    RouteUtils.routeToConversationActivity(context, Conversation.ConversationType.PRIVATE, hostInfo.userId)
+                }
             }
         }
         // 礼物列表设置

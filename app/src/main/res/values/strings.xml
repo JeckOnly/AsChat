@@ -72,4 +72,7 @@
     <string name="TermsConditions"><![CDATA[Terms & Conditions]]></string>
     <string name="PrivcayPolicy">Privcay Policy</string>
     <string name="RateUs">Rate Us</string>
+    <string name="is_typing">Typing</string>
+    <string name="is_speaking">Speaking</string>
+    <string name="rc_mention_messages">\@ %s</string>
 </resources>

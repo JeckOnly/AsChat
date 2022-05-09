@@ -43,6 +43,7 @@ object Constants {
     const val FromFollow = 1
     const val FromBlock = 2
     const val FromRank = 3
+    const val FromRongyunList = 4
 
     const val PayChannel = "GP"
 

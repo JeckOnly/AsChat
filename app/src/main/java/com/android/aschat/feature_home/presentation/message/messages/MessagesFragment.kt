@@ -19,6 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
+@Deprecated("用了融云那边的UI，这个不用了")
 class MessagesFragment: Fragment() {
 
     private lateinit var mBinding: HomeMessageMessageFragmentBinding

@@ -36,6 +36,7 @@ allprojects {
         google()
         jcenter()
         maven { url "https://jitpack.io" }
+        maven { url "https://maven.rongcloud.cn/repository/maven-releases/"}
         mavenCentral()
     }
 }

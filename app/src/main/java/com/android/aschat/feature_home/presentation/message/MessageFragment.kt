@@ -1,5 +1,6 @@
 package com.android.aschat.feature_home.presentation.message
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +16,15 @@ import com.android.aschat.feature_home.presentation.message.calls.CallsFragment
 import com.android.aschat.feature_home.presentation.message.followed.FollowedFragment
 import com.android.aschat.feature_home.presentation.message.messages.MessagesFragment
 import com.android.aschat.util.FontUtil
+import com.android.aschat.util.LogUtil
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import io.rong.imkit.RongIM
+import io.rong.imkit.config.ConversationListBehaviorListener
+import io.rong.imkit.conversationlist.ConversationListFragment
+import io.rong.imkit.conversationlist.model.BaseUiConversation
+import io.rong.imlib.model.Conversation
 
 
 @AndroidEntryPoint
@@ -105,7 +112,8 @@ class MessageFragment: Fragment() {
         override fun createFragment(position: Int): Fragment {
             when (position){
                 0 -> {
-                    return MessagesFragment()
+//                    return MessagesFragment()
+                    return ConversationListFragment()
                 }
                 1 -> {
                     return CallsFragment()
@@ -115,7 +123,7 @@ class MessageFragment: Fragment() {
                 }
             }
             // 不会来到这一步
-            return MessagesFragment()
+            return ConversationListFragment()
         }
     }
 }

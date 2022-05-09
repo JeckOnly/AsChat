@@ -27,7 +27,7 @@ data class UserInfo(
     val level: Int,
     val nickname: String,
     val praiseNum: Int,
-    val rongcloudToken: String,
+    val rongcloudToken: String, // 融云的token
     val tagDetails: List<TagDetail>,
     val tagsList: List<String>,
     @PrimaryKey val userId: String,
