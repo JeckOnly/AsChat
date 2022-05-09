@@ -1,0 +1,190 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "f2984ad243195ce96f84e1dac3f3bb61",
+    "entities": [
+      {
+        "tableName": "UserInfo",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`age` INTEGER NOT NULL, `auditStatus` INTEGER NOT NULL, `availableCoins` INTEGER NOT NULL, `avatar` TEXT NOT NULL, `avatarMiddleThumbUrl` TEXT NOT NULL, `avatarThumbUrl` TEXT NOT NULL, `avatarUrl` TEXT NOT NULL, `birthday` TEXT NOT NULL, `country` TEXT NOT NULL, `followNum` INTEGER NOT NULL, `gender` INTEGER NOT NULL, `isAnswer` INTEGER NOT NULL, `isBlock` INTEGER NOT NULL, `isHavePassword` INTEGER NOT NULL, `isInternal` INTEGER NOT NULL, `isRecharge` INTEGER NOT NULL, `isSwitchNotDisturbCall` INTEGER NOT NULL, `isSwitchNotDisturbIm` INTEGER NOT NULL, `isVip` INTEGER NOT NULL, `level` INTEGER NOT NULL, `nickname` TEXT NOT NULL, `praiseNum` INTEGER NOT NULL, `rongcloudToken` TEXT NOT NULL, `tagDetails` TEXT NOT NULL, `tagsList` TEXT NOT NULL, `userId` TEXT NOT NULL, `userType` INTEGER NOT NULL, PRIMARY KEY(`userId`))",
+        "fields": [
+          {
+            "fieldPath": "age",
+            "columnName": "age",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "auditStatus",
+            "columnName": "auditStatus",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "availableCoins",
+            "columnName": "availableCoins",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avatar",
+            "columnName": "avatar",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avatarMiddleThumbUrl",
+            "columnName": "avatarMiddleThumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avatarThumbUrl",
+            "columnName": "avatarThumbUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "avatarUrl",
+            "columnName": "avatarUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "birthday",
+            "columnName": "birthday",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "followNum",
+            "columnName": "followNum",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gender",
+            "columnName": "gender",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isAnswer",
+            "columnName": "isAnswer",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isBlock",
+            "columnName": "isBlock",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isHavePassword",
+            "columnName": "isHavePassword",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isInternal",
+            "columnName": "isInternal",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isRecharge",
+            "columnName": "isRecharge",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSwitchNotDisturbCall",
+            "columnName": "isSwitchNotDisturbCall",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isSwitchNotDisturbIm",
+            "columnName": "isSwitchNotDisturbIm",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isVip",
+            "columnName": "isVip",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "level",
+            "columnName": "level",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nickname",
+            "columnName": "nickname",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "praiseNum",
+            "columnName": "praiseNum",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "rongcloudToken",
+            "columnName": "rongcloudToken",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tagDetails",
+            "columnName": "tagDetails",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tagsList",
+            "columnName": "tagsList",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userType",
+            "columnName": "userType",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "userId"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f2984ad243195ce96f84e1dac3f3bb61')"
+    ]
+  }
+}
