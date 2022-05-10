@@ -39,10 +39,6 @@ import kotlin.collections.LinkedHashMap
 
 class MyTextMessageProvider:  BaseMessageItemProvider<TextMessage>(){
 
-    private val mHasTranslateMap: LinkedHashMap<String, String> by lazy {
-        LinkedHashMap(50)
-    }
-
     override fun getSummarySpannable(p0: Context?, message: TextMessage?): Spannable {
         return if (message != null && !TextUtils.isEmpty(message.content)) {
             var content: String = message.content
@@ -162,10 +158,8 @@ class MyTextMessageProvider:  BaseMessageItemProvider<TextMessage>(){
                 }
             }else {
                 // 不自动翻译
-                if (mHasTranslateMap.containsKey(originalText)) {
-                    // 已经翻译过
+                translateTv.setOnClickListener {
                     CoroutineScope(Dispatchers.Main).launch {
-                        translateTv.visibility = View.GONE
                         val translatedText = withContext(Dispatchers.IO) {
                             try {
                                 return@withContext Translate.getTrans(contentTv.text.toString())
@@ -173,22 +167,8 @@ class MyTextMessageProvider:  BaseMessageItemProvider<TextMessage>(){
                                 return@withContext contentTv.text.toString()
                             }
                         }
+                        translateTv.visibility = View.GONE
                         contentTv.text = translatedText
-                    }
-                }else {
-                    // 没有翻译过
-                    translateTv.setOnClickListener {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            val translatedText = withContext(Dispatchers.IO) {
-                                try {
-                                    return@withContext Translate.getTrans(contentTv.text.toString())
-                                }catch (e: Exception) {
-                                    return@withContext contentTv.text.toString()
-                                }
-                            }
-                            translateTv.visibility = View.GONE
-                            contentTv.text = translatedText
-                            }
                         }
                     }
                 }
