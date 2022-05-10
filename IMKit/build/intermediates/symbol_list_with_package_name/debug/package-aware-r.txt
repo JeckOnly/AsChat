@@ -1737,6 +1737,9 @@ style RCTheme_Message_TextView
 style RCTheme_TextView
 style SmartRefreshStyle
 style TextStyle_Alignment
+style Theme_AppCompat_Empty
+style Theme_AppCompat_Light_NoActionBar
+style Theme_AppCompat_NoActionBar
 style dialogFullscreen
 style picture_WeChat_style
 style rc_pb_file_download_progress

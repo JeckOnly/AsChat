@@ -18,4 +18,18 @@
         android:textSize="12sp"
         android:maxWidth="223dp" />
 
+    <TextView
+        android:id="@+id/translate_tv"
+        style="@style/TextStyle.Alignment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/translate_this"
+        android:textColor="@color/purple"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="5dp"
+        android:textColorLink="@color/rc_main_theme"
+        android:textSize="12sp"
+        android:maxWidth="223dp" />
 </LinearLayout>

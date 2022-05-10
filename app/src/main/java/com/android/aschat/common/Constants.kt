@@ -71,4 +71,7 @@ object Constants {
 
     // 列表刷新时间戳，10s
     const val Host_Refresh_Stamp = 10 * 1000L
+
+    // 翻译最大的缓存数量
+    const val Max_Save_Size = 10
 }

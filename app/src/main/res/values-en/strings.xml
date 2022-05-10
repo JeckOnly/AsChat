@@ -74,4 +74,5 @@
     <string name="is_typing">Typing</string>
     <string name="is_speaking">Speaking</string>
     <string name="rc_mention_messages">\@ %s</string>
+    <string name="translate_this">Click to translate</string>
 </resources>

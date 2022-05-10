@@ -1736,6 +1736,9 @@ int style RCTheme_Message_TextView 0x0
 int style RCTheme_TextView 0x0
 int style SmartRefreshStyle 0x0
 int style TextStyle_Alignment 0x0
+int style Theme_AppCompat_Empty 0x0
+int style Theme_AppCompat_Light_NoActionBar 0x0
+int style Theme_AppCompat_NoActionBar 0x0
 int style dialogFullscreen 0x0
 int style picture_WeChat_style 0x0
 int style rc_pb_file_download_progress 0x0

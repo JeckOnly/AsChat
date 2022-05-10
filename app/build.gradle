@@ -123,5 +123,5 @@ dependencies {
 //    implementation "cn.rongcloud.sdk:im_kit:5.1.3"
 
     implementation project(":IMKit")
-    implementation project(":IMLib")
+//    api project(":IMLib")
 }

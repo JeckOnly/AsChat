@@ -16,6 +16,7 @@ import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_host.domain.repo.HostRepo
+import com.android.aschat.feature_rongyun.rongyun.common.NowHost
 import com.android.aschat.util.JsonUtil
 import com.android.aschat.util.SpConstants
 import com.android.aschat.util.SpUtil
@@ -162,9 +163,11 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
         when (event) {
             is HostEvents.SendHostData -> {
                 // 更改数据
+                NowHost.hostId = event.hostData.userId
                 _hostData.postValue(event.hostData)
             }
             is HostEvents.SendFriendData -> {
+                NowHost.hostId = event.friendData.userId
                 // 更改数据
                 val friend = event.friendData
                 // 从关注列表过来，也只好凑一个host data了
@@ -188,6 +191,7 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                 _hostData.postValue(hostData)
             }
             is HostEvents.SendBlockData -> {
+                NowHost.hostId = event.blockData.broadcasterId
                 val blockItem = event.blockData
                 val hostData = HostData(
                     age = blockItem.age,
@@ -210,6 +214,7 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
             }
             is HostEvents.SendUserId -> {
                 val userId = event.userId
+                NowHost.hostId = userId
                 val hostData = HostData(
                     age = 0,
                     applicableTags = emptyList(),

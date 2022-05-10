@@ -1,4 +1,4 @@
-package com.android.aschat.feature_rongyun.rongyun
+package com.android.aschat.feature_rongyun.rongyun.ui
 
 import android.net.Uri
 import com.android.aschat.common.network.Response

@@ -1,14 +1,21 @@
 package com.android.aschat.feature_rongyun
 
+import android.app.Dialog
 import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.android.aschat.R
 import com.android.aschat.common.BaseActivity
+import com.android.aschat.common.Constants
+import com.android.aschat.feature_host.presentation.HostEvents
+import com.android.aschat.feature_host.presentation.HostViewModel
+import com.android.aschat.util.DialogUtil
 import com.android.aschat.util.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 import io.rong.imkit.conversation.ConversationFragment
 import io.rong.imkit.conversation.ConversationViewModel
 import io.rong.imkit.model.TypingInfo.TypingUserInfo
@@ -19,17 +26,23 @@ import java.util.*
 /**
  * 自定义的ConversationActivity会话界面
  */
+@AndroidEntryPoint
 class MyConversationActivity : BaseActivity() {
     private var mTargetId: String? = null
     private var mConversationType: Conversation.ConversationType? = null
     private var mConversationFragment: ConversationFragment? = null
     private var conversationViewModel: ConversationViewModel? = null
 
+    private val mViewModel: HostViewModel by viewModels()
+
     private lateinit var mBackImg: ImageView
     private lateinit var mTitleTv: TextView
     private lateinit var mTypingTv: TextView
     private lateinit var mVideoImg: ImageView
     private lateinit var mMoreImg: ImageView
+
+    private lateinit var mFirstBlockDialog: Dialog
+    private lateinit var mSecondBlockDialog: Dialog
 
     override fun provideLayoutId() = R.layout.rongyun_conversation_acty
 
@@ -46,11 +59,15 @@ class MyConversationActivity : BaseActivity() {
         }
         loadFragment()
         setCustomTitleBar()
-        initViewModel()
+        if (mTargetId == null) finish()
+        initViewModel(mTargetId!!)
     }
 
 
-    private fun initViewModel() {
+    private fun initViewModel(userId: String) {
+        // 初始化viewmodel
+        mViewModel.onEvent(HostEvents.SendUserId(userId))
+
         conversationViewModel = ViewModelProvider(this).get(
             ConversationViewModel::class.java
         )
@@ -119,7 +136,58 @@ class MyConversationActivity : BaseActivity() {
         }
 
         mMoreImg.setOnClickListener {
-
+            // 打开举报屏蔽弹窗
+            mSecondBlockDialog = DialogUtil.createSecondBlockDialog(
+                this,
+                mViewModel.blocked.value?:false,
+                {
+                    mViewModel.onEvent(HostEvents.ClickReport(Constants.Politiclsensitive))
+                    it.dismiss()
+                },
+                {
+                    mViewModel.onEvent(HostEvents.ClickReport(Constants.Falsegender))
+                    it.dismiss()
+                },
+                {
+                    mViewModel.onEvent(HostEvents.ClickReport(Constants.Fraud))
+                    it.dismiss()
+                },
+                {
+                    mViewModel.onEvent(HostEvents.ClickBlock)
+                    it.dismiss()
+                },
+                {
+                    mViewModel.onEvent(HostEvents.ClickReport())
+                    it.dismiss()
+                },
+                {
+                    it.dismiss()
+                },
+            )
+            mFirstBlockDialog = DialogUtil.createFirstBlockDialog(
+                this,
+                mViewModel.follow.value?:false,// 一般来说不为null
+                mViewModel.blocked.value?:false,
+                {
+                    // 点击关注
+                    mViewModel.onEvent(HostEvents.ClickFollow)
+                    it.dismiss()
+                },
+                {
+                    // 屏蔽
+                    mViewModel.onEvent(HostEvents.ClickBlock)
+                    it.dismiss()
+                },
+                {
+                    // report
+                    it.dismiss()
+                    mSecondBlockDialog.show()
+                },
+                {
+                    it.dismiss()
+                }).apply {
+                show()
+            }
         }
 
     }

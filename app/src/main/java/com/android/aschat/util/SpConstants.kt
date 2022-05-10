@@ -71,4 +71,14 @@ object SpConstants {
      * oss服务器相关
      */
     const val Oss_Policy = "oss_policy"
+
+    /**
+     * 微软翻译的key
+     */
+    const val Translate_Map = "translate_map"
+
+    /**
+     * 是否自动翻译
+     */
+    const val Auto_Translate = "auto_translate"
 }

@@ -3,12 +3,12 @@ package com.android.aschat.feature_login.presentation
 import android.content.Context
 import android.content.Intent
 import android.view.View
-import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.aschat.R
 import com.android.aschat.common.Constants
 import com.android.aschat.common.MyApplication
+import com.android.aschat.common.network.translate.Translate
 import com.android.aschat.common.services.socketio.CheckServicesAliveService
 import com.android.aschat.feature_home.presentation.HomeActivity
 import com.android.aschat.feature_host.presentation.HostActivity
@@ -18,16 +18,14 @@ import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.model.osspolicy.OssPolicy
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.feature_rongyun.MyConversationActivity
-import com.android.aschat.feature_rongyun.rongyun.MyUserInfoProvider
+import com.android.aschat.feature_rongyun.rongyun.ui.MyTextMessageProvider
+import com.android.aschat.feature_rongyun.rongyun.ui.MyUserInfoProvider
 import com.android.aschat.util.*
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CircleCrop
-import com.bumptech.glide.request.RequestOptions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.rong.imkit.GlideKitImageEngine
 import io.rong.imkit.RongIM
 import io.rong.imkit.config.ConversationListBehaviorListener
 import io.rong.imkit.config.RongConfigCenter
+import io.rong.imkit.conversation.messgelist.provider.TextMessageItemProvider
 import io.rong.imkit.conversationlist.model.BaseUiConversation
 import io.rong.imkit.utils.RouteUtils
 import io.rong.imlib.RongIMClient
@@ -191,6 +189,9 @@ class LoginViewModel @Inject constructor(
                             jobAppConfig.join()
                             jobOss.join()
 
+                            // NOTE 翻译模块初始化
+                            Translate.initTranslate()
+
                             // NOTE 启动后台的长链检查服务
                             event.context.startService(Intent(event.context, CheckServicesAliveService::class.java))
 
@@ -311,14 +312,6 @@ class LoginViewModel @Inject constructor(
         // NOTE 注册自定义会话界面
         RouteUtils.registerActivity(RouteUtils.RongActivityType.ConversationActivity, MyConversationActivity::class.java)
 
-        // NOTE 会话界面你圆角
-        RongConfigCenter.featureConfig().kitImageEngine = object : GlideKitImageEngine() {
-            fun loadConversationPortrait(context: Context, url: String, imageView: ImageView) {
-                Glide.with(imageView).load(url)
-                    .apply(RequestOptions.bitmapTransform(CircleCrop()))
-                    .into(imageView)
-            }
-        }
-
+        RongConfigCenter.conversationConfig().replaceMessageProvider(TextMessageItemProvider::class.java, MyTextMessageProvider())
     }
 }

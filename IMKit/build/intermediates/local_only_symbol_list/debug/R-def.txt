@@ -1738,6 +1738,9 @@ style RCTheme.Message.TextView
 style RCTheme.TextView
 style SmartRefreshStyle
 style TextStyle.Alignment
+style Theme.AppCompat.Empty
+style Theme.AppCompat.Light.NoActionBar
+style Theme.AppCompat.NoActionBar
 style dialogFullscreen
 style picture.WeChat.style
 style rc_pb_file_download_progress
