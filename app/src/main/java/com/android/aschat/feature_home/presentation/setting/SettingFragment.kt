@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.android.aschat.R
+import com.android.aschat.common.MyApplication
 import com.android.aschat.common.network.translate.Translate
 import com.android.aschat.databinding.HomeSettingFragmentBinding
 import com.android.aschat.feature_home.presentation.HomeEvents
@@ -58,10 +59,13 @@ class SettingFragment : Fragment() {
             settingBack.setOnClickListener {
                 mViewModel.onEvent(HomeEvents.ExitSetting(findNavController()))
             }
-            settingTranslateSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-                // 写入是否自动翻译
-                SpUtil.putAndApply(requireContext(), SpConstants.Auto_Translate, isChecked)
-                MyTextMessageProvider.setNeedAutoTranslate(isChecked)
+            settingTranslateSwitch.apply {
+                setOnCheckedChangeListener { buttonView, isChecked ->
+                    // 写入是否自动翻译
+                    SpUtil.putAndApply(requireContext(), SpConstants.Auto_Translate, isChecked)
+                    MyTextMessageProvider.setNeedAutoTranslate(isChecked)
+                }
+                isChecked = SpUtil.get(MyApplication.application, SpConstants.Auto_Translate, false) as Boolean
             }
         }
     }
