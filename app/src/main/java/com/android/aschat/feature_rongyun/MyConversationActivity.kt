@@ -6,6 +6,7 @@ import android.view.KeyEvent
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.android.aschat.R
@@ -13,6 +14,7 @@ import com.android.aschat.common.BaseActivity
 import com.android.aschat.common.Constants
 import com.android.aschat.feature_host.presentation.HostEvents
 import com.android.aschat.feature_host.presentation.HostViewModel
+import com.android.aschat.feature_rongyun.rongyun.model.ExtraInfo
 import com.android.aschat.util.DialogUtil
 import com.android.aschat.util.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +45,10 @@ class MyConversationActivity : BaseActivity() {
 
     private lateinit var mFirstBlockDialog: Dialog
     private lateinit var mSecondBlockDialog: Dialog
+
+    private val mLoadingDialog: Dialog by lazy {
+        DialogUtil.createLoadingDialog(this)
+    }
 
     override fun provideLayoutId() = R.layout.rongyun_conversation_acty
 
@@ -198,5 +204,22 @@ class MyConversationActivity : BaseActivity() {
             .replace(R.id.rongyun_conversation_fragment, mConversationFragment!!, mConversationFragment!!::class.java.simpleName)
             .addToBackStack(mConversationFragment!!::class.java.simpleName)
             .commitAllowingStateLoss()
+    }
+
+    fun whenClickRechargeLink(extraInfo: ExtraInfo?) {
+        mViewModel.onEvent(HostEvents.SubmitRecharge(
+            activity = this,
+            extraInfo = extraInfo,
+            onStartSubmit = {
+                mLoadingDialog.show()
+            },
+            onSuccess = {
+                mLoadingDialog.dismiss()
+            },
+            onFail = {
+                Toast.makeText(this, getString(R.string.abnormal_network), Toast.LENGTH_SHORT).show()
+                mLoadingDialog.dismiss()
+            }
+        ))
     }
 }

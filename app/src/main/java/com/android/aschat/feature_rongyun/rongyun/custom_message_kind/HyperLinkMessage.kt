@@ -15,9 +15,9 @@ import java.nio.charset.Charset
 @MessageTag(value = "LC:HyperLinkMsg", flag = MessageTag.ISCOUNTED)
 class HyperLinkMessage() : MessageContent() {
 
-    private var content = ""// 文本内容
-    private var contentType = "" // 内容类型   "recharge_link" -> 充值链接消息
-    private var extraInfo = ""// 额外数据
+    var content = ""// 文本内容
+    var contentType = "" // 内容类型   "recharge_link" -> 充值链接消息
+    var extraInfo = ""// 额外数据
 
     constructor(parcel: Parcel) : this() {
         content = ParcelUtils.readFromParcel(parcel)
@@ -53,8 +53,8 @@ class HyperLinkMessage() : MessageContent() {
                 if (jsonObj.has("contentType")) {
                     contentType = jsonObj.optString("contentType")
                 }
-                if (jsonObj.has("extraInfo")) {
-                    extraInfo = jsonObj.optString("extraInfo")
+                if (jsonObj.has("extra")) {
+                    extraInfo = jsonObj.optString("extra")
                 }
             } catch (var4: JSONException) {
                 RLog.e("TextMessage", "JSONException " + var4.message)
@@ -82,7 +82,7 @@ class HyperLinkMessage() : MessageContent() {
                 jsonObj.put("contentType", contentType)
             }
             if (!TextUtils.isEmpty(extraInfo)) {
-                jsonObj.put("extraInfo", extraInfo)
+                jsonObj.put("extra", extraInfo)
             }
         } catch (var4: JSONException) {
 

@@ -56,6 +56,8 @@
             android:launchMode="singleTask"/>
         <activity android:name=".feature_rongyun.MyConversationActivity" android:exported="true"
             android:launchMode="singleTask"/>
+        <activity android:name=".feature_recharge.presentation.RechargeCoinStoreActivity" android:exported="true"
+            android:launchMode="singleTask"/>
         <service android:name=".common.services.socketio.CheckServicesAliveService"
             android:enabled="true"
             android:exported="false"/>

@@ -26,9 +26,8 @@ import com.android.aschat.feature_login.domain.model.strategy.StrategyData
 import com.android.aschat.feature_rank.domain.model.GetRankData
 import com.android.aschat.feature_rank.domain.model.charm.RankCharmData
 import com.android.aschat.feature_rank.domain.model.rich.RankRichData
-import com.android.aschat.feature_rank.domain.model.rich.RankRichItem
-import com.android.aschat.feature_rank.presentation.charm.RankCharmFragment
-import com.google.android.exoplayer2.text.span.TextAnnotation
+import com.android.aschat.feature_rongyun.rongyun.model.GetRechargeInfo
+import com.android.aschat.feature_rongyun.rongyun.model.RechargeInfo
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
@@ -108,4 +107,10 @@ interface AppServices {
 
    @GET(ApiUrls.GetUserStatusList)
    suspend fun getUserStatusList(@Query("userIds") userIdList: List<String>): Response<Map<String, String>>
+
+   @GET(ApiUrls.CheckRechargeRight)
+   suspend fun checkRechargeRight(@Query("invitationId") invitationId: String): Response<Boolean>
+
+   @POST(ApiUrls.GetRechargeInfo)
+   suspend fun getRechargeInfo(@Body getRechargeInfo: GetRechargeInfo): Response<List<RechargeInfo>>
 }

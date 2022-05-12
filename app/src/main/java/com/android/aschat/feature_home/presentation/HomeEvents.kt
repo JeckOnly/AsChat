@@ -1,6 +1,5 @@
 package com.android.aschat.feature_home.presentation
 
-import androidx.fragment.app.FragmentManager
 import androidx.navigation.NavController
 import com.android.aschat.feature_home.domain.model.blocked.BlockedItem
 import com.android.aschat.feature_home.domain.model.follow.FollowFriend

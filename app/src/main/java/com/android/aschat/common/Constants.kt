@@ -74,4 +74,7 @@ object Constants {
 
     // 翻译最大的缓存数量
     const val Max_Save_Size = 10
+
+    // 是否是充值消息的判断文本
+    const val Recharge_Link = "recharge_link"
 }

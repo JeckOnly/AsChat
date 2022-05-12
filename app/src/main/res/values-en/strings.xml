@@ -75,4 +75,8 @@
     <string name="is_speaking">Speaking</string>
     <string name="rc_mention_messages">\@ %s</string>
     <string name="translate_this">Click to translate</string>
+    <string name="recharge_successfully">recharge successfully</string>
+    <string name="Failed_to_recharge">recharge failed</string>
+    <string name="doyoulike">"Do you like "</string>
+    <string name="rechargecallback">Recharge to call back!</string>
 </resources>

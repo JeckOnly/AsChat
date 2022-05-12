@@ -122,4 +122,14 @@ object ApiUrls {
      * 查询一批用户的在线状态
      */
     const val GetUserStatusList = "$BASE_URL/user/getUserListOnlineStatus"
+
+    /**
+     * 判断充值链接有效性
+     */
+    const val CheckRechargeRight = "$BASE_URL/coin/recharge/checkBroadcasterInvitation"
+
+    /**
+     * 获取主播推的充值信息
+     */
+    const val GetRechargeInfo = "$BASE_URL/coin/goods/broadcasterInvitation"
 }

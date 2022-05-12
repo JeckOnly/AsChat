@@ -18,6 +18,8 @@ import com.android.aschat.feature_login.domain.model.coin.GetCoinGood
 import com.android.aschat.feature_login.domain.model.osspolicy.OssPolicy
 import com.android.aschat.feature_login.domain.repo.LoginRepo
 import com.android.aschat.feature_rongyun.MyConversationActivity
+import com.android.aschat.feature_rongyun.rongyun.custom_message_kind.HyperLinkMessage
+import com.android.aschat.feature_rongyun.rongyun.ui.MyHyperLinkMessageProvider
 import com.android.aschat.feature_rongyun.rongyun.ui.MyTextMessageProvider
 import com.android.aschat.feature_rongyun.rongyun.ui.MyUserInfoProvider
 import com.android.aschat.util.*
@@ -230,31 +232,6 @@ class LoginViewModel @Inject constructor(
             LogUtil.d("融云初始化失败   ${e.stackTrace}")
         }
 
-        // NOTE 连接融云
-        try {
-            // SDK 本身有重连机制，在一个应用生命周期内不须多次调用connect() 。否则可能触发多个回调，触发导致回调被清除。
-            RongIM.connect(token, object : RongIMClient.ConnectCallback() {
-                override fun onSuccess(p0: String?) {
-                    LogUtil.d("融云连接成功回调   $p0")
-                    // TODO: 设置长链断开的消息监听
-                }
-
-                override fun onError(p0: RongIMClient.ConnectionErrorCode?) {
-                    // 连接失败并返回对应的连接错误码，开发者需要参考连接相关错误码进行不同业务处理。
-                    LogUtil.d("融云连接失败回调   ${p0.toString()}")
-                }
-
-                override fun onDatabaseOpened(p0: RongIMClient.DatabaseOpenStatus?) {
-                    // 本地数据库打开状态回调。当回调 DATABASE_OPEN_SUCCESS 时，说明本地数据库打开，此时可以拉取本地历史会话及消息，适用于离线登录场景。
-                    LogUtil.d("融云onDatabaseopened回调   ${p0.toString()}")
-                }
-
-            })
-            LogUtil.d("融云连接胜利")
-        }catch (e: Exception) {
-            LogUtil.d("融云连接失败   ${e.stackTrace}")
-        }
-
         // NOTE 设置融云如何获取用户头像等信息
         RongIM.setUserInfoProvider(
             MyUserInfoProvider
@@ -311,7 +288,35 @@ class LoginViewModel @Inject constructor(
 //        RouteUtils.registerActivity(RouteUtils.RongActivityType.ConversationListActivity, HomeActivity::class.java)
         // NOTE 注册自定义会话界面
         RouteUtils.registerActivity(RouteUtils.RongActivityType.ConversationActivity, MyConversationActivity::class.java)
-
+        // NOTE 注册自定义文本消息UI
         RongConfigCenter.conversationConfig().replaceMessageProvider(TextMessageItemProvider::class.java, MyTextMessageProvider())
+        // NOTE 注册自定义消息
+        RongIMClient.registerMessageType(listOf(HyperLinkMessage::class.java))
+        RongConfigCenter.conversationConfig().addMessageProvider(MyHyperLinkMessageProvider())
+
+        // NOTE 连接融云
+        try {
+            // SDK 本身有重连机制，在一个应用生命周期内不须多次调用connect() 。否则可能触发多个回调，触发导致回调被清除。
+            RongIM.connect(token, object : RongIMClient.ConnectCallback() {
+                override fun onSuccess(p0: String?) {
+                    LogUtil.d("融云连接成功回调   $p0")
+                    // TODO: 设置长链断开的消息监听
+                }
+
+                override fun onError(p0: RongIMClient.ConnectionErrorCode?) {
+                    // 连接失败并返回对应的连接错误码，开发者需要参考连接相关错误码进行不同业务处理。
+                    LogUtil.d("融云连接失败回调   ${p0.toString()}")
+                }
+
+                override fun onDatabaseOpened(p0: RongIMClient.DatabaseOpenStatus?) {
+                    // 本地数据库打开状态回调。当回调 DATABASE_OPEN_SUCCESS 时，说明本地数据库打开，此时可以拉取本地历史会话及消息，适用于离线登录场景。
+                    LogUtil.d("融云onDatabaseopened回调   ${p0.toString()}")
+                }
+
+            })
+            LogUtil.d("融云连接胜利")
+        }catch (e: Exception) {
+            LogUtil.d("融云连接失败   ${e.stackTrace}")
+        }
     }
 }

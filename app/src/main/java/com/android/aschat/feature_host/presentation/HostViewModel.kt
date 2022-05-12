@@ -1,6 +1,7 @@
 package com.android.aschat.feature_host.presentation
 
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.lifecycle.*
 import com.android.aschat.R
@@ -16,13 +17,17 @@ import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
 import com.android.aschat.feature_host.domain.repo.HostRepo
+import com.android.aschat.feature_recharge.presentation.RechargeCoinStoreActivity
 import com.android.aschat.feature_rongyun.rongyun.common.NowHost
+import com.android.aschat.feature_rongyun.rongyun.model.GetRechargeInfo
 import com.android.aschat.util.JsonUtil
+import com.android.aschat.util.LogUtil
 import com.android.aschat.util.SpConstants
 import com.android.aschat.util.SpUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.rong.imkit.utils.RouteUtils
 import io.rong.imlib.model.Conversation
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import javax.inject.Inject
@@ -303,6 +308,48 @@ class HostViewModel @Inject constructor(@Named("HostRepo") private val repo: Hos
                     if (response.code == 0 && response.data == true) {
                         _blocked.postValue(true)
                         Toast.makeText(context, context.getString(R.string.Report_successfully), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            is HostEvents.SubmitRecharge -> {
+                // 点击主播发的充值链接
+                viewModelScope.launch {
+                    event.onStartSubmit()
+                    if (event.extraInfo == null) {
+                        event.onFail()
+                        return@launch
+                    }
+                    val invitationId = event.extraInfo.invitationId
+                    LogUtil.d("invitationId   $invitationId")
+                    val response = repo.checkRechargeRight(invitationId)
+                    if (response.code == 0) {
+                        val response2 = repo.getRechargeInfo(GetRechargeInfo(invitationId = invitationId))
+                        if (response2.code == 0) {
+                            LogUtil.d("充值信息获取成功")
+                            // NOTE 跳转充值画面
+                            val hostInfo = _hostInfo.value
+                            val goodsList = response2.data
+                            if (hostInfo != null && goodsList != null) {
+                                val intent = Intent(
+                                    event.activity,
+                                    RechargeCoinStoreActivity::class.java
+                                ).apply {
+                                    putExtra("hostInfo", JsonUtil.any2Json(hostInfo))
+                                    putExtra("goodsList", JsonUtil.any2Json(goodsList))
+                                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                }
+                                event.onSuccess()
+                                event.activity.startActivity(intent)
+                            }else {
+                                event.onFail()
+                            }
+                        }else {
+                            LogUtil.d("充值信息获取失败")
+                            event.onFail()
+                        }
+                    }else {
+                        LogUtil.d("充值码校验失败")
+                        event.onFail()
                     }
                 }
             }

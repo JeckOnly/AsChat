@@ -9,6 +9,8 @@ import com.android.aschat.feature_host.domain.model.hostdetail.extrainfo.GiftInf
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.AddFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.friend.CancelFriend
 import com.android.aschat.feature_host.domain.model.hostdetail.userinfo.HostInfo
+import com.android.aschat.feature_rongyun.rongyun.model.GetRechargeInfo
+import com.android.aschat.feature_rongyun.rongyun.model.RechargeInfo
 import com.android.aschat.util.LogUtil
 
 class HostRepo(private val services: AppServices) {
@@ -79,5 +81,19 @@ class HostRepo(private val services: AppServices) {
      */
     suspend fun getUserStatus(userId: String): Response<String> {
         return services.getUserStatus(userId)
+    }
+
+    /**
+     * 验证信息是否合法
+     */
+    suspend fun checkRechargeRight(invitationId: String): Response<Boolean> {
+        return services.checkRechargeRight(invitationId)
+    }
+
+    /**
+     * 获取充值信息
+     */
+    suspend fun getRechargeInfo(getRechargeInfo: GetRechargeInfo): Response<List<RechargeInfo>> {
+        return services.getRechargeInfo(getRechargeInfo)
     }
 }
